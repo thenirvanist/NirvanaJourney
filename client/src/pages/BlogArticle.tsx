@@ -2,6 +2,8 @@ import { useParams, Link } from "wouter";
 import { Clock, Calendar, User, ArrowLeft, Share2, Twitter, Facebook, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import type { BlogPost } from "@shared/schema";
@@ -206,10 +208,36 @@ export default function BlogArticle() {
 
               {/* Article Content */}
               <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-                <div 
-                  className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-[hsl(75,64%,49%)] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-em:text-gray-600"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
+                <div className="prose prose-lg max-w-none">
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      img: ({node, ...props}) => (
+                        <img 
+                          {...props} 
+                          className="rounded-lg shadow-md my-6 max-w-full h-auto" 
+                          loading="lazy"
+                        />
+                      ),
+                      h1: ({node, ...props}) => <h1 className="text-3xl font-bold mt-8 mb-4 text-gray-900" {...props} />,
+                      h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900" {...props} />,
+                      h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2 text-gray-900" {...props} />,
+                      p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4" {...props} />,
+                      ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
+                      ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
+                      blockquote: ({node, ...props}) => (
+                        <blockquote className="border-l-4 border-[hsl(75,64%,49%)] pl-4 italic my-4 text-gray-600" {...props} />
+                      ),
+                      a: ({node, ...props}) => (
+                        <a className="text-[hsl(75,64%,49%)] hover:underline" {...props} />
+                      ),
+                      strong: ({node, ...props}) => <strong className="text-gray-900 font-bold" {...props} />,
+                      em: ({node, ...props}) => <em className="text-gray-600" {...props} />,
+                    }}
+                  >
+                    {post.content}
+                  </ReactMarkdown>
+                </div>
               </div>
 
               {/* Related Articles */}

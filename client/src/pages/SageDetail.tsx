@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, MapPin, Sparkles, Heart, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useSage } from "@/hooks/useSupabaseQuery";
@@ -122,9 +124,29 @@ export default function SageDetail() {
                 Life & Teachings
               </h2>
               <div className="prose prose-lg max-w-none">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    img: ({node, ...props}) => (
+                      <img 
+                        {...props} 
+                        className="rounded-lg shadow-md my-6 max-w-full h-auto" 
+                        loading="lazy"
+                      />
+                    ),
+                    h1: ({node, ...props}) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
+                    blockquote: ({node, ...props}) => (
+                      <blockquote className="border-l-4 border-[hsl(75,64%,49%)] pl-4 italic my-4 text-gray-600" {...props} />
+                    ),
+                  }}
+                >
                   {sage.biography}
-                </p>
+                </ReactMarkdown>
               </div>
             </CardContent>
           </Card>
