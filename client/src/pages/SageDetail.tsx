@@ -16,6 +16,14 @@ export default function SageDetail() {
 
   const { data: sage, isLoading, error } = useSage(sageId);
 
+  // Debug: Log the raw biography data
+  if (sage?.biography) {
+    console.log("=== Biography Data Debug ===");
+    console.log("Raw biography:", sage.biography);
+    console.log("Biography type:", typeof sage.biography);
+    console.log("First 200 chars:", sage.biography.substring(0, 200));
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen">
@@ -123,6 +131,19 @@ export default function SageDetail() {
                 <Heart className="w-6 h-6 text-[hsl(75,64%,49%)] mr-3" />
                 Life & Teachings
               </h2>
+              
+              {/* Debug: Test with hardcoded markdown */}
+              {false && (
+                <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded">
+                  <h3 className="font-bold mb-2">Debug: Hardcoded Markdown Test</h3>
+                  <div className="prose">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {`# Test Heading\n\nThis is **bold** and this is *italic*.\n\n## Subheading\n\nA simple paragraph.`}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              )}
+              
               <div className="prose prose-lg max-w-none">
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
