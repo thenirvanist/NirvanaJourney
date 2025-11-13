@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Clock, DollarSign, Users, Calendar, Star } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -164,7 +164,7 @@ export default function JourneyDetail() {
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-3xl font-bold mb-6 text-center">Full Journey Description</h2>
                 <div className="prose prose-lg max-w-none">
-                  <ReactMarkdown 
+                  <Markdown 
                     remarkPlugins={[remarkGfm]}
                     components={{
                       img: ({node, ...props}) => (
@@ -186,7 +186,7 @@ export default function JourneyDetail() {
                     }}
                   >
                     {journey.fullDescription || journey.description}
-                  </ReactMarkdown>
+                  </Markdown>
                 </div>
               </div>
             </TabsContent>
@@ -197,7 +197,7 @@ export default function JourneyDetail() {
                 <Card>
                   <CardContent className="p-8">
                     <div className="prose prose-lg max-w-none">
-                      <ReactMarkdown 
+                      <Markdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
                           img: ({node, ...props}) => (
@@ -219,7 +219,7 @@ export default function JourneyDetail() {
                         }}
                       >
                         {journey.itinerary || "Detailed itinerary will be provided upon booking. Our carefully crafted journey includes daily activities, spiritual practices, cultural experiences, and moments for reflection and growth."}
-                      </ReactMarkdown>
+                      </Markdown>
                     </div>
                   </CardContent>
                 </Card>

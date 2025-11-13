@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { BookOpen, MapPin, Sparkles, Heart, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -137,15 +137,15 @@ export default function SageDetail() {
                 <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded">
                   <h3 className="font-bold mb-2">Debug: Hardcoded Markdown Test</h3>
                   <div className="prose">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    <Markdown remarkPlugins={[remarkGfm]}>
                       {`# Test Heading\n\nThis is **bold** and this is *italic*.\n\n## Subheading\n\nA simple paragraph.`}
-                    </ReactMarkdown>
+                    </Markdown>
                   </div>
                 </div>
               )}
               
               <div className="prose prose-lg max-w-none">
-                <ReactMarkdown 
+                <Markdown 
                   remarkPlugins={[remarkGfm]}
                   components={{
                     img: ({node, ...props}) => (
@@ -167,7 +167,7 @@ export default function SageDetail() {
                   }}
                 >
                   {sage.biography}
-                </ReactMarkdown>
+                </Markdown>
               </div>
             </CardContent>
           </Card>

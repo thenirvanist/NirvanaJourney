@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, Globe, Star, Heart, Leaf, ArrowLeft, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -125,7 +125,7 @@ export default function AshramDetail() {
                 About This Sacred Space
               </h2>
               <div className="prose prose-lg max-w-none">
-                <ReactMarkdown 
+                <Markdown 
                   remarkPlugins={[remarkGfm]}
                   components={{
                     img: ({node, ...props}) => (
@@ -147,7 +147,7 @@ export default function AshramDetail() {
                   }}
                 >
                   {ashram.description}
-                </ReactMarkdown>
+                </Markdown>
               </div>
             </CardContent>
           </Card>

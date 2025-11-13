@@ -2,7 +2,7 @@ import { useParams, Link } from "wouter";
 import { Clock, Calendar, User, ArrowLeft, Share2, Twitter, Facebook, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -209,7 +209,7 @@ export default function BlogArticle() {
               {/* Article Content */}
               <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
                 <div className="prose prose-lg max-w-none">
-                  <ReactMarkdown 
+                  <Markdown 
                     remarkPlugins={[remarkGfm]}
                     components={{
                       img: ({node, ...props}) => (
@@ -236,7 +236,7 @@ export default function BlogArticle() {
                     }}
                   >
                     {post.content}
-                  </ReactMarkdown>
+                  </Markdown>
                 </div>
               </div>
 
