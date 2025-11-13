@@ -126,7 +126,7 @@ export default function SageDetail() {
               </h2>
               
               {/* Debug: Test with hardcoded markdown */}
-              {false && (
+              {true && (
                 <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded">
                   <h3 className="font-bold mb-2">Debug: Hardcoded Markdown Test</h3>
                   <div className="prose">
