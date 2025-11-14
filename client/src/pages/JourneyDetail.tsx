@@ -163,7 +163,7 @@ export default function JourneyDetail() {
             <TabsContent value="description" className="space-y-8">
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-3xl font-bold mb-6 text-center">Full Journey Description</h2>
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-lg max-w-none break-words">
                   <Markdown 
                     remarkPlugins={[remarkGfm]}
                     components={{
@@ -177,7 +177,8 @@ export default function JourneyDetail() {
                       h1: ({node, ...props}) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                       h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3" {...props} />,
                       h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
-                      p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4" {...props} />,
+                      p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4 break-words" {...props} />,
+                      a: ({node, ...props}) => <a className="text-[hsl(75,64%,49%)] hover:underline break-all" {...props} />,
                       ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
                       ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
                       blockquote: ({node, ...props}) => (
@@ -196,7 +197,7 @@ export default function JourneyDetail() {
                 <h2 className="text-3xl font-bold mb-6 text-center">Journey Itinerary</h2>
                 <Card>
                   <CardContent className="p-8">
-                    <div className="prose prose-lg max-w-none">
+                    <div className="prose prose-lg max-w-none break-words">
                       <Markdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
@@ -210,7 +211,8 @@ export default function JourneyDetail() {
                           h1: ({node, ...props}) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                           h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3" {...props} />,
                           h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
-                          p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4" {...props} />,
+                          p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-4 break-words" {...props} />,
+                          a: ({node, ...props}) => <a className="text-[hsl(75,64%,49%)] hover:underline break-all" {...props} />,
                           ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
                           ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
                           blockquote: ({node, ...props}) => (
