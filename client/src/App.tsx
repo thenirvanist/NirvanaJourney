@@ -4,6 +4,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import SkipLink from "@/components/SkipLink";
+import SchemaOrg, { websiteSchema, organizationSchema } from "@/components/SchemaOrg";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Journeys from "@/pages/Journeys";
@@ -62,11 +64,15 @@ function Router() {
 function App() {
   return (
     <div className="min-h-screen bg-background">
+      <SchemaOrg schema={[websiteSchema, organizationSchema]} />
+      <SkipLink />
       <QueryClientProvider client={queryClient}>
         <LanguageProvider>
           <TooltipProvider>
             <Toaster />
-            <Router />
+            <main id="main-content" role="main">
+              <Router />
+            </main>
             <Chatbot />
           </TooltipProvider>
         </LanguageProvider>
