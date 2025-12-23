@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, User, LogOut, Heart, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageDropdown } from "./LanguageDropdown";
+import usePreviewMode from "@/hooks/usePreviewMode";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,13 +17,19 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
+  const isPreviewMode = usePreviewMode();
 
-  const navItems = [
-    { href: "/journeys", label: "Sacred Journeys" },
-    { href: "/meetups", label: "Spiritual Meetups" },
-    { href: "/sages", label: "Sages" },
-    { href: "/ashrams", label: "Ashrams" },
+  const allNavItems = [
+    { href: "/journeys", label: "Sacred Journeys", hidden: true },
+    { href: "/meetups", label: "Spiritual Meetups", hidden: false },
+    { href: "/sages", label: "Sages", hidden: false },
+    { href: "/ashrams", label: "Ashrams", hidden: false },
   ];
+  
+  const navItems = useMemo(() => 
+    allNavItems.filter(item => isPreviewMode || !item.hidden),
+    [isPreviewMode]
+  );
 
   const innerNutritionItems = [
     { href: "/daily-quotes", label: "Daily Quotes" },

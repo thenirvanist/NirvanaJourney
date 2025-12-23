@@ -3,6 +3,7 @@ import Seo from "@/components/Seo";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import InteractiveAbout from "@/components/InteractiveAbout";
+import usePreviewMode from "@/hooks/usePreviewMode";
 // Import critical sections directly to ensure immediate data loading
 import SimpleTourCarousel from "@/components/SimpleTourCarousel";
 import QuotesCarousel from "@/components/QuotesCarousel";
@@ -34,6 +35,8 @@ function SectionSkeleton() {
 }
 
 export default function Home() {
+  const isPreviewMode = usePreviewMode();
+  
   return (
     <div className="min-h-screen">
       <Seo 
@@ -44,21 +47,29 @@ export default function Home() {
       {/* Critical above-the-fold content */}
       <Navigation />
       <HeroSection />
-      <InteractiveAbout />
       
-      {/* Below-the-fold content */}
-      <Suspense fallback={<SectionSkeleton />}>
-        <SpiritualCollage />
-      </Suspense>
+      {/* About Us - Hidden when not in preview mode */}
+      {isPreviewMode && <InteractiveAbout />}
       
-      {/* Critical sections with immediate data loading - Reordered */}
-      <SimpleTourCarousel />
+      {/* Sacred Experiences (Collage) - Hidden when not in preview mode */}
+      {isPreviewMode && (
+        <Suspense fallback={<SectionSkeleton />}>
+          <SpiritualCollage />
+        </Suspense>
+      )}
+      
+      {/* Sacred Journeys - Hidden when not in preview mode */}
+      {isPreviewMode && <SimpleTourCarousel />}
+      
+      {/* Always visible sections */}
       <QuotesCarousel />
       <MeetupsSection />
       <InnerNutritionSection />
       <SimpleSagesSection />
       <SimpleAshramsSection />
-      <TestimonialSection />
+      
+      {/* Testimonials - Hidden when not in preview mode */}
+      {isPreviewMode && <TestimonialSection />}
       
       {/* Non-critical sections with lazy loading */}
       <Suspense fallback={<SectionSkeleton />}>
