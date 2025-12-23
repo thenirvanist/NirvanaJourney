@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema, createArticleSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import type { BlogPost } from "@shared/schema";
@@ -129,8 +131,38 @@ export default function BlogArticle() {
     );
   }
 
+  const articleUrl = `https://www.thenirvanist.com/inner-nutrition/${slug}`;
+  
+  const articleBreadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: "https://www.thenirvanist.com" },
+    { name: "Inner Nutrition", url: "https://www.thenirvanist.com/inner-nutrition" },
+    { name: post.title }
+  ]);
+  
+  const articleSchema = createArticleSchema({
+    title: post.title,
+    description: post.excerpt,
+    image: post.bannerImage || post.image,
+    publishedDate: post.createdAt ? (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt.toISOString()) : undefined,
+    author: post.author,
+    url: articleUrl
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo 
+        title={post.title}
+        description={post.excerpt}
+        ogImage={post.bannerImage || post.image}
+        ogType="article"
+        article={{
+          publishedTime: post.createdAt ? (typeof post.createdAt === 'string' ? post.createdAt : post.createdAt.toISOString()) : undefined,
+          author: post.author,
+          section: post.category,
+          tags: post.tags || undefined
+        }}
+      />
+      <SchemaOrg schema={[articleBreadcrumb, articleSchema]} />
       <Navigation />
       
       {/* Article Header */}
@@ -153,7 +185,7 @@ export default function BlogArticle() {
                 <div className="w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-8 shadow-lg">
                   <img
                     src={post.bannerImage || post.image}
-                    alt={post.title}
+                    alt={`Featured image for ${post.title}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -172,11 +204,11 @@ export default function BlogArticle() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5" />
-                    <span>{new Date(post.createdAt).toLocaleDateString('en-US', {
+                    <span>{post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
-                    })}</span>
+                    }) : 'Unknown date'}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5" />

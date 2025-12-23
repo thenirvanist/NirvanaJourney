@@ -5,9 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BookOpen, Heart, Sparkles, MapPin, Search } from "lucide-react";
 import { Link } from "wouter";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useSages } from "@/hooks/useSupabaseQuery";
+
+const sagesBreadcrumb = createBreadcrumbSchema([
+  { name: "Home", url: "https://www.thenirvanist.com" },
+  { name: "Sages" }
+]);
 
 export default function Sages() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -107,6 +114,11 @@ export default function Sages() {
 
   return (
     <div className="min-h-screen">
+      <Seo 
+        title="Spiritual Sages & Masters - Biographies & Teachings"
+        description="Explore the lives and teachings of enlightened sages and spiritual masters across traditions. Discover Hindu, Buddhist, Sufi, and Jain wisdom from ancient and modern teachers."
+      />
+      <SchemaOrg schema={sagesBreadcrumb} />
       <Navigation />
       
       {/* Hero Section */}

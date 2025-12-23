@@ -2,11 +2,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Globe, Users, Star } from "lucide-react";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import TourCarousel from "@/components/TourCarousel";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import { useJourneys } from "@/hooks/useSupabaseQuery";
+
+const journeysBreadcrumb = createBreadcrumbSchema([
+  { name: "Home", url: "https://www.thenirvanist.com" },
+  { name: "Sacred Journeys" }
+]);
 
 export default function Journeys() {
   const { data: journeys, isLoading, error } = useJourneys();
@@ -67,6 +74,11 @@ export default function Journeys() {
 
   return (
     <div className="min-h-screen">
+      <Seo 
+        title="Sacred Journeys - Spiritual Retreats & Meditation Tours"
+        description="Explore transformative spiritual journeys to sacred destinations. Join meditation retreats, pilgrimage tours, and immersive experiences designed for inner peace and self-discovery."
+      />
+      <SchemaOrg schema={journeysBreadcrumb} />
       <Navigation />
       
       {/* Hero Section */}

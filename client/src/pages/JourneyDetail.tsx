@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Clock, DollarSign, Users, Calendar, Star } from "lucide-react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema, createTripSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useJourney } from "@/hooks/useSupabaseQuery";
@@ -56,8 +58,33 @@ export default function JourneyDetail() {
     );
   }
 
+  const journeyUrl = `https://www.thenirvanist.com/journeys/${journeyId}`;
+  
+  const journeyBreadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: "https://www.thenirvanist.com" },
+    { name: "Sacred Journeys", url: "https://www.thenirvanist.com/journeys" },
+    { name: journey.title }
+  ]);
+  
+  const tripSchema = createTripSchema({
+    name: journey.title,
+    description: journey.description,
+    image: journey.heroImage || journey.image,
+    price: journey.price,
+    duration: journey.duration,
+    location: journey.location,
+    available: journey.available ?? undefined,
+    url: journeyUrl
+  });
+
   return (
     <div className="min-h-screen">
+      <Seo 
+        title={`${journey.title} - Spiritual Journey to ${journey.location}`}
+        description={journey.description || `Experience a transformative spiritual journey: ${journey.title}. ${journey.duration} retreat in ${journey.location}. Book your sacred experience today.`}
+        ogImage={journey.heroImage || journey.image}
+      />
+      <SchemaOrg schema={[journeyBreadcrumb, tripSchema]} />
       <Navigation />
       
       {/* Hero Section */}

@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema, createPersonSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useSage } from "@/hooks/useSupabaseQuery";
@@ -59,8 +61,32 @@ export default function SageDetail() {
     );
   }
 
+  const sageUrl = `https://www.thenirvanist.com/sages/${sageId}`;
+  
+  const sageBreadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: "https://www.thenirvanist.com" },
+    { name: "Sages", url: "https://www.thenirvanist.com/sages" },
+    { name: sage.name }
+  ]);
+  
+  const personSchema = createPersonSchema({
+    name: sage.name,
+    description: sage.description,
+    image: sage.image,
+    birthPlace: sage.location || undefined,
+    teachings: sage.teachings || undefined,
+    url: sageUrl
+  });
+
   return (
     <div className="min-h-screen">
+      <Seo 
+        title={`${sage.name} - Biography & Teachings`}
+        description={sage.description || `Learn about ${sage.name}, their life story, spiritual teachings, and profound wisdom that continues to guide seekers on their spiritual journey.`}
+        ogImage={sage.image}
+        ogType="profile"
+      />
+      <SchemaOrg schema={[sageBreadcrumb, personSchema]} />
       <Navigation />
       
       {/* Hero Section */}
@@ -77,7 +103,7 @@ export default function SageDetail() {
             <div className="md:col-span-1">
               <img 
                 src={sage.image} 
-                alt={sage.name}
+                alt={`Portrait of ${sage.name}, spiritual teacher`}
                 className="w-full h-80 object-cover rounded-xl shadow-lg"
               />
             </div>

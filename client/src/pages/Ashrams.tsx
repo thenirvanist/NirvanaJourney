@@ -5,9 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { MapPin, Phone, Globe, Star, Heart, Leaf, Search, User } from "lucide-react";
 import { Link } from "wouter";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useAshrams } from "@/hooks/useSupabaseQuery";
+
+const ashramsBreadcrumb = createBreadcrumbSchema([
+  { name: "Home", url: "https://www.thenirvanist.com" },
+  { name: "Ashrams" }
+]);
 
 export default function Ashrams() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -104,6 +111,11 @@ export default function Ashrams() {
 
   return (
     <div className="min-h-screen">
+      <Seo 
+        title="Sacred Ashrams in India - Spiritual Retreats & Meditation Centers"
+        description="Discover authentic ashrams across India for spiritual retreats, meditation, yoga, and self-discovery. Find sacred spaces with detailed information on facilities, teachings, and how to visit."
+      />
+      <SchemaOrg schema={ashramsBreadcrumb} />
       <Navigation />
       
       {/* Hero Section */}

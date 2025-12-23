@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import Seo from "@/components/Seo";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import InteractiveAbout from "@/components/InteractiveAbout";
@@ -35,6 +36,11 @@ function SectionSkeleton() {
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <Seo 
+        title="Journey to Inner Peace - Spiritual Retreats & Sacred Journeys"
+        description="Discover transformative spiritual journeys, sage wisdom, ashram retreats, and global meetups with The Nirvanist. Find your path to inner peace and self-discovery."
+        ogType="website"
+      />
       {/* Critical above-the-fold content */}
       <Navigation />
       <HeroSection />

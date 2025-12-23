@@ -4,11 +4,18 @@ import { Search, Clock, Calendar, User, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import type { BlogPost } from "@shared/schema";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { useBlogPosts } from "@/hooks/useSupabaseQuery";
+
+const blogBreadcrumb = createBreadcrumbSchema([
+  { name: "Home", url: "https://www.thenirvanist.com" },
+  { name: "Inner Nutrition" }
+]);
 
 export default function InnerNutrition() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,6 +64,11 @@ export default function InnerNutrition() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo 
+        title="Inner Nutrition - Spiritual Articles & Mindfulness Wisdom"
+        description="Explore profound insights and transformative wisdom to nourish your spiritual journey. Articles on mindfulness, meditation, consciousness, and the path to inner awakening."
+      />
+      <SchemaOrg schema={blogBreadcrumb} />
       <Navigation />
       
       {/* Hero Section */}

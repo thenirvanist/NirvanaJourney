@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema, createPlaceSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useAshram } from "@/hooks/useSupabaseQuery";
@@ -58,8 +60,31 @@ export default function AshramDetail() {
     );
   }
 
+  const ashramUrl = `https://www.thenirvanist.com/ashrams/${ashramId}`;
+  
+  const ashramBreadcrumb = createBreadcrumbSchema([
+    { name: "Home", url: "https://www.thenirvanist.com" },
+    { name: "Ashrams", url: "https://www.thenirvanist.com/ashrams" },
+    { name: ashram.name }
+  ]);
+  
+  const placeSchema = createPlaceSchema({
+    name: ashram.name,
+    description: ashram.description,
+    image: ashram.image,
+    location: ashram.location,
+    telephone: ashram.contact || undefined,
+    url: ashramUrl
+  });
+
   return (
     <div className="min-h-screen">
+      <Seo 
+        title={`${ashram.name} - Ashram in ${ashram.location}`}
+        description={ashram.description || `Visit ${ashram.name}, a sacred ashram in ${ashram.location}. Learn about facilities, spiritual programs, and how to plan your retreat.`}
+        ogImage={ashram.image}
+      />
+      <SchemaOrg schema={[ashramBreadcrumb, placeSchema]} />
       <Navigation />
       
       {/* Hero Section */}
@@ -76,7 +101,7 @@ export default function AshramDetail() {
             <div className="md:col-span-1">
               <img 
                 src={ashram.image} 
-                alt={ashram.name}
+                alt={`${ashram.name} ashram in ${ashram.location}`}
                 className="w-full h-80 object-cover rounded-xl shadow-lg"
               />
             </div>

@@ -10,10 +10,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Video, Users, Globe, Heart, Calendar, Clock } from "lucide-react";
+import Seo from "@/components/Seo";
+import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+
+const meetupsBreadcrumb = createBreadcrumbSchema([
+  { name: "Home", url: "https://www.thenirvanist.com" },
+  { name: "Spiritual Meetups" }
+]);
 
 const registrationSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -112,6 +119,11 @@ export default function Meetups() {
 
   return (
     <div className="min-h-screen">
+      <Seo 
+        title="Spiritual Meetups - Global Online Satsangs & Community"
+        description="Join our global community for weekly online satsangs and spiritual gatherings. Connect with seekers worldwide for meditation, reflection, and spiritual growth."
+      />
+      <SchemaOrg schema={meetupsBreadcrumb} />
       <Navigation />
       
       {/* Hero Section */}
