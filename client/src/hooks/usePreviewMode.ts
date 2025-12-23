@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 
 /**
  * Preview Mode Hook
@@ -14,11 +15,20 @@ import { useMemo } from "react";
  * Example: https://thenirvanist.com/?preview=true
  */
 export function usePreviewMode(): boolean {
-  return useMemo(() => {
-    if (typeof window === "undefined") return false;
+  const [location] = useLocation();
+  const [isPreview, setIsPreview] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      setIsPreview(false);
+      return;
+    }
+    
     const params = new URLSearchParams(window.location.search);
-    return params.get("preview") === "true";
-  }, []);
+    setIsPreview(params.get("preview") === "true");
+  }, [location]);
+
+  return isPreview;
 }
 
 export default usePreviewMode;
