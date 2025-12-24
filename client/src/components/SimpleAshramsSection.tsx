@@ -63,47 +63,52 @@ export default function SimpleAshramsSection() {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {ashrams.slice(0, 3).map((ashram) => (
-            <div key={ashram.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-              <div className="relative">
-                <img 
-                  src={ashram.image} 
-                  alt={ashram.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-3 right-3">
-                  <BookmarkButton 
-                    contentType="ashram" 
-                    contentId={ashram.id} 
-                    size="sm"
+            <Link 
+              key={ashram.id} 
+              href={`/ashrams/${ashram.id}`} 
+              onClick={() => window.scrollTo(0, 0)}
+              className="block"
+            >
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer h-full">
+                <div className="relative">
+                  <img 
+                    src={ashram.image} 
+                    alt={ashram.name}
+                    className="w-full h-48 object-cover"
                   />
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{ashram.name}</h3>
-                <p className="text-gray-600 mb-3">{ashram.description}</p>
-                <p className="text-sm text-gray-500 mb-4">{ashram.location}</p>
-                
-                {ashram.facilities && ashram.facilities.length > 0 && (
-                  <div className="mb-4">
-                    <h4 className="font-medium text-gray-700 mb-2">Key Facilities:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {ashram.facilities.slice(0, 3).map((facility, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="w-2 h-2 bg-[hsl(75,64%,49%)] rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
-                          <span>{facility}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="absolute top-3 right-3" onClick={(e) => e.preventDefault()}>
+                    <BookmarkButton 
+                      contentType="ashram" 
+                      contentId={ashram.id} 
+                      size="sm"
+                    />
                   </div>
-                )}
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-2">{ashram.name}</h3>
+                  <p className="text-gray-600 mb-3">{ashram.description}</p>
+                  <p className="text-sm text-gray-500 mb-4">{ashram.location}</p>
+                  
+                  {ashram.facilities && ashram.facilities.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="font-medium text-gray-700 mb-2">Key Facilities:</h4>
+                      <ul className="text-sm text-gray-600 space-y-1">
+                        {ashram.facilities.slice(0, 3).map((facility, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="w-2 h-2 bg-[hsl(75,64%,49%)] rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
+                            <span>{facility}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
-                <Link href={`/ashrams/${ashram.id}`} onClick={() => window.scrollTo(0, 0)}>
                   <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 rounded-lg font-semibold transition-all duration-300">
                     Learn More
                   </Button>
-                </Link>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
         
