@@ -215,82 +215,82 @@ export default function Sages() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {filteredSages.map((sage) => (
-                <Card key={sage.id} className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 h-[620px] flex flex-col">
-                  <img 
-                    src={sage.image} 
-                    alt={sage.name}
-                    className="w-full h-48 object-cover flex-shrink-0"
-                  />
-                  <div className="p-5 flex flex-col justify-between h-full">
-                    <div>
-                      <h3 className="text-lg font-bold mb-2 line-clamp-1">{sage.name}</h3>
-                      
-                      {sage.location && (
-                        <div className="flex items-center mb-2">
-                          <MapPin className="w-4 h-4 text-gray-500 mr-2" />
-                          <span className="text-sm text-gray-600 line-clamp-1">{sage.location}</span>
+                <Link key={sage.id} href={`/sages/${sage.id}`} className="block">
+                  <Card className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 h-[620px] flex flex-col cursor-pointer">
+                    <img 
+                      src={sage.image} 
+                      alt={sage.name}
+                      className="w-full h-48 object-cover flex-shrink-0"
+                    />
+                    <div className="p-5 flex flex-col justify-between h-full">
+                      <div>
+                        <h3 className="text-lg font-bold mb-2 line-clamp-1">{sage.name}</h3>
+                        
+                        {sage.location && (
+                          <div className="flex items-center mb-2">
+                            <MapPin className="w-4 h-4 text-gray-500 mr-2" />
+                            <span className="text-sm text-gray-600 line-clamp-1">{sage.location}</span>
+                          </div>
+                        )}
+
+                        <p className="text-gray-600 mb-3 line-clamp-2 leading-relaxed text-sm">
+                          {sage.description}
+                        </p>
+
+                        <div className="space-y-2">
+                          {sage.teachings && sage.teachings.length > 0 && (
+                            <div>
+                              <div className="flex items-center mb-1">
+                                <Sparkles className="w-4 h-4 text-[hsl(75,64%,49%)] mr-2" />
+                                <h4 className="font-semibold text-gray-700 text-xs">Core Teachings</h4>
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {sage.teachings.slice(0, 2).map((teaching, index) => (
+                                  <Badge key={index} variant="secondary" className="text-xs">
+                                    {teaching}
+                                  </Badge>
+                                ))}
+                                {sage.teachings.length > 2 && (
+                                  <Badge variant="outline" className="text-xs">
+                                    +{sage.teachings.length - 2}
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {sage.books && sage.books.length > 0 && (
+                            <div>
+                              <div className="flex items-center mb-1">
+                                <BookOpen className="w-4 h-4 text-[hsl(75,64%,49%)] mr-2" />
+                                <h4 className="font-semibold text-gray-700 text-xs">Notable Work</h4>
+                              </div>
+                              <ul className="text-xs text-gray-600 space-y-0.5">
+                                {sage.books.slice(0, 2).map((book, index) => (
+                                  <li key={index} className="flex items-start">
+                                    <span className="w-1 h-1 bg-[hsl(75,64%,49%)] rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
+                                    <span className="line-clamp-1">{book}</span>
+                                  </li>
+                                ))}
+                                {sage.books.length > 2 && (
+                                  <li className="text-[hsl(75,64%,49%)] text-xs">
+                                    + {sage.books.length - 2} more
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
                         </div>
-                      )}
-
-                      <p className="text-gray-600 mb-3 line-clamp-2 leading-relaxed text-sm">
-                        {sage.description}
-                      </p>
-
-                      <div className="space-y-2">
-                        {sage.teachings && sage.teachings.length > 0 && (
-                          <div>
-                            <div className="flex items-center mb-1">
-                              <Sparkles className="w-4 h-4 text-[hsl(75,64%,49%)] mr-2" />
-                              <h4 className="font-semibold text-gray-700 text-xs">Core Teachings</h4>
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {sage.teachings.slice(0, 2).map((teaching, index) => (
-                                <Badge key={index} variant="secondary" className="text-xs">
-                                  {teaching}
-                                </Badge>
-                              ))}
-                              {sage.teachings.length > 2 && (
-                                <Badge variant="outline" className="text-xs">
-                                  +{sage.teachings.length - 2}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {sage.books && sage.books.length > 0 && (
-                          <div>
-                            <div className="flex items-center mb-1">
-                              <BookOpen className="w-4 h-4 text-[hsl(75,64%,49%)] mr-2" />
-                              <h4 className="font-semibold text-gray-700 text-xs">Notable Work</h4>
-                            </div>
-                            <ul className="text-xs text-gray-600 space-y-0.5">
-                              {sage.books.slice(0, 2).map((book, index) => (
-                                <li key={index} className="flex items-start">
-                                  <span className="w-1 h-1 bg-[hsl(75,64%,49%)] rounded-full mr-2 mt-1.5 flex-shrink-0"></span>
-                                  <span className="line-clamp-1">{book}</span>
-                                </li>
-                              ))}
-                              {sage.books.length > 2 && (
-                                <li className="text-[hsl(75,64%,49%)] text-xs">
-                                  + {sage.books.length - 2} more
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-                        )}
                       </div>
-                    </div>
 
-                    <div className="pt-3 border-t border-gray-100 mt-3">
-                      <Link href={`/sages/${sage.id}`}>
+                      <div className="pt-3 border-t border-gray-100 mt-3">
                         <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black py-2.5 text-sm rounded-lg font-semibold transition-all duration-300">
                           Read Full Biography
                         </Button>
-                      </Link>
+                      </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                </Link>
               ))}
             </div>
           )}
