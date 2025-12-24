@@ -54,7 +54,7 @@ export default function SimpleSagesSection() {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-6">Wisdom of the Sages</h2>
+          <h2 className="text-4xl font-bold mb-6">Biographies of the Sages</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
             Spiritual philosophers have left their mark in sands of times. They lived and left this world 
             holding a single aspiration – progress of their fellow human beings in paths of spirituality.
