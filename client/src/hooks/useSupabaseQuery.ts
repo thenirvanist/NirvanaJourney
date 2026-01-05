@@ -212,3 +212,23 @@ export function useBlogPost(slug: string) {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+export function useBlogPostsByAuthor(authorName: string) {
+  return useQuery<BlogPost[]>({
+    queryKey: ["supabase", "blog_posts", "author", authorName],
+    queryFn: async () => {
+      if (!supabase) throw new Error("Supabase not configured");
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .select("*")
+        .eq("published", true)
+        .ilike("author", `%${authorName}%`)
+        .order("created_at", { ascending: false })
+        .limit(3);
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!authorName,
+    staleTime: 5 * 60 * 1000,
+  });
+}

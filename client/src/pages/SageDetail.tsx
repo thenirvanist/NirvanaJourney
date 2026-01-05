@@ -10,13 +10,14 @@ import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema, createPersonSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useSage } from "@/hooks/useSupabaseQuery";
+import { useSage, useBlogPostsByAuthor } from "@/hooks/useSupabaseQuery";
 
 export default function SageDetail() {
   const { id } = useParams<{ id: string }>();
   const sageId = parseInt(id || "0");
 
   const { data: sage, isLoading, error } = useSage(sageId);
+  const { data: sageArticles = [] } = useBlogPostsByAuthor(sage?.name || "");
 
 
   if (isLoading) {
@@ -226,6 +227,38 @@ export default function SageDetail() {
           </div>
         </div>
       </section>
+
+      {/* Articles from this Sage */}
+      {sageArticles.length > 0 && (
+        <section className="py-16">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-2xl font-bold mb-8 text-center">Articles from this Sage</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {sageArticles.slice(0, 3).map((article) => (
+                <Link key={article.id} href={`/inner-nutrition/${article.slug}`} className="block">
+                  <Card className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 h-full cursor-pointer">
+                    <img 
+                      src={article.image} 
+                      alt={article.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="secondary" className="text-xs">{article.category}</Badge>
+                        {article.readTime && (
+                          <span className="text-xs text-gray-500">{article.readTime}</span>
+                        )}
+                      </div>
+                      <h3 className="text-lg font-bold mb-2 line-clamp-2">{article.title}</h3>
+                      <p className="text-gray-600 text-sm line-clamp-2">{article.excerpt}</p>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Inspiration Section */}
       <section className="py-16">
