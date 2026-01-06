@@ -21,9 +21,9 @@ export default function Navigation() {
 
   const allNavItems = [
     { href: "/journeys", label: "Sacred Journeys", hidden: true },
-    { href: "/meetups", label: "Spiritual Meetups", hidden: false },
+    { href: "/meetups", label: "Satsangs", hidden: false },
     { href: "/sages", label: "Sages", hidden: false },
-    { href: "/ashrams", label: "Ashrams", hidden: false },
+    { href: "/ashrams", label: "Ashrams", hidden: true },
   ];
   
   const navItems = useMemo(() => 

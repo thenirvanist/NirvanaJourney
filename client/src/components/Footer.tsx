@@ -23,23 +23,13 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Explore</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/journeys">
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Sacred Journeys</span>
+                <Link href="/meetups" onClick={() => window.scrollTo(0, 0)}>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Satsangs</span>
                 </Link>
               </li>
               <li>
-                <Link href="/meetups">
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Global Meet-ups</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/sages">
+                <Link href="/sages" onClick={() => window.scrollTo(0, 0)}>
                   <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Spiritual Sages</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/ashrams">
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Sacred Ashrams</span>
                 </Link>
               </li>
             </ul>
@@ -50,17 +40,17 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Community</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/register">
+                <Link href="/register" onClick={() => window.scrollTo(0, 0)}>
                   <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Join Us</span>
                 </Link>
               </li>
               <li>
-                <Link href="/login">
+                <Link href="/login" onClick={() => window.scrollTo(0, 0)}>
                   <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Member Login</span>
                 </Link>
               </li>
               <li>
-                <Link href="/contact">
+                <Link href="/contact" onClick={() => window.scrollTo(0, 0)}>
                   <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Contact</span>
                 </Link>
               </li>
@@ -70,7 +60,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="pt-2 border-t border-gray-600">
-                <Link href="/admin">
+                <Link href="/admin" onClick={() => window.scrollTo(0, 0)}>
                   <span className="text-gray-500 hover:text-gray-400 transition-colors text-xs flex items-center cursor-pointer" data-testid="link-admin-access">
                     <Settings className="w-3 h-3 mr-1" />
                     Admin Access

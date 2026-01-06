@@ -19,7 +19,7 @@ import { apiRequest } from "@/lib/queryClient";
 
 const meetupsBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
-  { name: "Spiritual Meetups" }
+  { name: "Satsangs" }
 ]);
 
 const registrationSchema = z.object({
@@ -120,7 +120,7 @@ export default function Meetups() {
   return (
     <div className="min-h-screen">
       <Seo 
-        title="Spiritual Meetups - Global Online Satsangs & Community"
+        title="Satsangs - Global Online Spiritual Gatherings & Community"
         description="Join our global community for weekly online satsangs and spiritual gatherings. Connect with seekers worldwide for meditation, reflection, and spiritual growth."
       />
       <SchemaOrg schema={meetupsBreadcrumb} />
@@ -131,7 +131,7 @@ export default function Meetups() {
                style={{backgroundImage: "url('https://images.unsplash.com/photo-1544931503-6e6466908cec?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800')"}}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-          <h1 className="text-6xl font-bold mb-6">Global Spiritual Meetups</h1>
+          <h1 className="text-6xl font-bold mb-6">Satsangs</h1>
           <h2 className="text-2xl font-semibold mb-4 text-[hsl(70,71%,62%)]">
             Join a Global Circle of Spiritual Seekers
           </h2>

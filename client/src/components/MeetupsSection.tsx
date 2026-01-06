@@ -29,10 +29,10 @@ export default function MeetupsSection() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="scroll-trigger">
-            <h2 className="text-4xl font-bold mb-6">Spiritual Meetups</h2>
+            <h2 className="text-4xl font-bold mb-6">Satsangs</h2>
             <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">Join a Global Circle of Spiritual Seekers</h3>
             <p className="text-lg text-gray-700 mb-6">
-              Weekly online satsangs to pause, reflect, and grow — together. Each Sunday, we gather online to watch a short video from a spiritual master and then join intimate virtual circles of 6-8 people from around the world.
+              Weekly online meetups to pause, reflect, and grow — together. Each Sunday, we gather online to watch a short video from a spiritual master and then join intimate virtual circles of 6-8 people from around the world.
             </p>
             <div className="space-y-4 mb-8">
               <div className="flex items-center space-x-3">

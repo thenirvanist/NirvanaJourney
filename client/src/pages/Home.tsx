@@ -10,7 +10,6 @@ import QuotesCarousel from "@/components/QuotesCarousel";
 import MeetupsSection from "@/components/MeetupsSection";
 import InnerNutritionSection from "@/components/InnerNutritionSection";
 import SimpleSagesSection from "@/components/SimpleSagesSection";
-import SimpleAshramsSection from "@/components/SimpleAshramsSection";
 import TestimonialSection from "@/components/TestimonialSection";
 
 // Only lazy load non-critical sections for better performance
@@ -66,7 +65,6 @@ export default function Home() {
       <MeetupsSection />
       <InnerNutritionSection />
       <SimpleSagesSection />
-      <SimpleAshramsSection />
       
       {/* Testimonials - Hidden when not in preview mode */}
       {isPreviewMode && <TestimonialSection />}
