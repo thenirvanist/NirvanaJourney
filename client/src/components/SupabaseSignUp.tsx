@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Eye, EyeOff, Mail, Lock, User, CheckCircle } from "lucide-react";
+import { useLocation } from "wouter";
+import { Eye, EyeOff, Mail, Lock, User, CheckCircle, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 
@@ -31,9 +33,12 @@ export function SupabaseSignUp({
   showHeader = true,
   className = ""
 }: SupabaseSignUpProps) {
+  const [, navigate] = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("");
+  const [otpValue, setOtpValue] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<SignUpFormData>({
@@ -123,7 +128,74 @@ export function SupabaseSignUp({
     }
   };
 
-  // Email verification success screen
+  const handleVerifyOtp = async () => {
+    if (otpValue.length !== 6) {
+      toast({
+        title: "Invalid Code",
+        description: "Please enter the complete 6-digit verification code.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsVerifying(true);
+
+    try {
+      if (!supabase) {
+        toast({
+          title: "Configuration Error",
+          description: "Authentication service is not properly configured.",
+          variant: "destructive",
+        });
+        setIsVerifying(false);
+        return;
+      }
+
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: userEmail,
+        token: otpValue,
+        type: 'email',
+      });
+
+      if (error) {
+        console.error('OTP verification error:', error);
+        toast({
+          title: "Verification Failed",
+          description: error.message || "Invalid or expired verification code. Please try again.",
+          variant: "destructive",
+        });
+        setIsVerifying(false);
+        return;
+      }
+
+      if (data.session) {
+        toast({
+          title: "Welcome!",
+          description: "Your account has been verified successfully.",
+        });
+        
+        onSuccess?.();
+        navigate('/dashboard');
+      } else {
+        toast({
+          title: "Verification Failed",
+          description: "Could not complete verification. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      console.error('Unexpected OTP verification error:', error);
+      toast({
+        title: "Verification Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  // OTP verification screen
   if (isSignedUp) {
     return (
       <Card className={`shadow-xl border-0 overflow-hidden ${className}`}>
@@ -131,28 +203,52 @@ export function SupabaseSignUp({
         
         <CardContent className="px-8 py-12 text-center">
           <div className="w-16 h-16 bg-[hsl(75,64%,49%)] rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="text-white text-2xl" />
+            <Mail className="text-white w-8 h-8" />
           </div>
           
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Email Verification Required</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Verify Your Email</h2>
           <p className="text-gray-600 mb-6 leading-relaxed">
-            We've sent a verification email to <strong>{userEmail}</strong>.
-            Please check your email and click the verification link to complete your registration.
+            We've sent a 6-digit verification code to <strong>{userEmail}</strong>.
+            Please enter the code below to complete your registration.
           </p>
           
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-blue-900 mb-2">What happens next?</h3>
-            <ol className="text-sm text-blue-800 text-left space-y-1">
-              <li>1. Check your email inbox (and spam folder)</li>
-              <li>2. Click the verification link in the email</li>
-              <li>3. You'll be redirected back to our site</li>
-              <li>4. You can then sign in with your credentials</li>
-            </ol>
+          <div className="flex justify-center mb-6">
+            <InputOTP
+              maxLength={6}
+              value={otpValue}
+              onChange={(value) => setOtpValue(value)}
+              data-testid="input-otp-verification"
+            >
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
           </div>
+
+          <Button
+            onClick={handleVerifyOtp}
+            disabled={isVerifying || otpValue.length !== 6}
+            className="w-full bg-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,59%)] text-white py-3 rounded-lg font-semibold text-lg transition-all duration-300 mb-4"
+            data-testid="button-verify-otp"
+          >
+            {isVerifying ? (
+              <>
+                <Loader className="w-4 h-4 mr-2 animate-spin" />
+                Verifying...
+              </>
+            ) : (
+              "Verify"
+            )}
+          </Button>
           
           <p className="text-xs text-gray-500">
-            Didn't receive the email? Check your spam folder or try registering again.
-            The verification link will expire in 24 hours.
+            Didn't receive the code? Check your spam folder or try registering again.
+            The code will expire in 1 hour.
           </p>
         </CardContent>
       </Card>
