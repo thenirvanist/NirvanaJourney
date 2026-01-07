@@ -37,6 +37,8 @@ export function SupabaseSignUp({
   const [showPassword, setShowPassword] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("");
+  const [userFirstName, setUserFirstName] = useState<string>("");
+  const [userLastName, setUserLastName] = useState<string>("");
   const [otpValue, setOtpValue] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
@@ -100,6 +102,8 @@ export function SupabaseSignUp({
       // Check if user was created and needs email confirmation
       if (authData.user && !authData.user.email_confirmed_at) {
         setUserEmail(data.email);
+        setUserFirstName(data.firstName);
+        setUserLastName(data.lastName);
         setIsSignedUp(true);
         
         toast({
@@ -167,25 +171,55 @@ export function SupabaseSignUp({
         return;
       }
 
-      if (data.session) {
-        // Store the access token so useAuth can find it
-        localStorage.setItem('auth_token', data.session.access_token);
-        
+      if (data.session && data.user) {
         // Set the session in Supabase client
         await supabase.auth.setSession({
           access_token: data.session.access_token,
           refresh_token: data.session.refresh_token,
         });
         
-        toast({
-          title: "Welcome!",
-          description: "Your account has been verified successfully.",
-        });
-        
-        onSuccess?.();
-        
-        // Use window.location to force full page reload, ensuring auth state is fresh
-        window.location.href = '/dashboard';
+        // Exchange Supabase session for internal backend token
+        try {
+          const exchangeResponse = await fetch('/api/auth/supabase-exchange', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: userEmail,
+              firstName: userFirstName,
+              lastName: userLastName,
+              supabaseUserId: data.user.id,
+            }),
+          });
+
+          if (!exchangeResponse.ok) {
+            throw new Error('Failed to exchange session');
+          }
+
+          const exchangeData = await exchangeResponse.json();
+          
+          // Store the internal backend token
+          localStorage.setItem('auth_token', exchangeData.token);
+          
+          toast({
+            title: "Welcome!",
+            description: "Your account has been verified successfully.",
+          });
+          
+          onSuccess?.();
+          
+          // Use window.location to force full page reload, ensuring auth state is fresh
+          window.location.href = '/dashboard';
+        } catch (exchangeError) {
+          console.error('Session exchange error:', exchangeError);
+          toast({
+            title: "Verification Error",
+            description: "Account verified but session setup failed. Please try logging in.",
+            variant: "destructive",
+          });
+          window.location.href = '/login';
+        }
       } else {
         toast({
           title: "Verification Failed",
