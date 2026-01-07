@@ -3,11 +3,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "./ui/button";
 import { useActiveQuotes } from "@/hooks/useSupabaseQuery";
+import { BookmarkButton } from "./BookmarkButton";
 
 export default function QuotesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
+  const [isHovered, setIsHovered] = useState(false);
 
   // Fetch active quotes from Supabase
   const { data: quotes = [], isLoading, isError } = useActiveQuotes();
@@ -137,8 +139,14 @@ export default function QuotesCarousel() {
 
         {/* Carousel Container */}
         <div className="relative max-w-xl mx-auto">
-          {/* Main Quote Card */}
-          <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+          {/* Main Quote Card with hover scale effect */}
+          <div 
+            className={`relative overflow-hidden rounded-2xl shadow-2xl transition-transform duration-300 ease-out ${
+              isHovered ? "scale-105" : "scale-100"
+            }`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             {imageError[currentQuote.id] || !currentQuote.image_url ? (
               // Fallback for missing/broken images
               <div className="aspect-square bg-gradient-to-br from-orange-100 to-pink-100 flex items-center justify-center relative">
@@ -152,6 +160,14 @@ export default function QuotesCarousel() {
                   <span className="text-sm font-medium text-gray-900">
                     {formatDate(currentQuote.display_date)}
                   </span>
+                </div>
+                {/* Bookmark Button */}
+                <div className="absolute top-4 right-16 z-10">
+                  <BookmarkButton 
+                    contentType="quote" 
+                    contentId={currentQuote.id} 
+                    size="md"
+                  />
                 </div>
               </div>
             ) : (
@@ -170,6 +186,14 @@ export default function QuotesCarousel() {
                   <span className="text-sm font-medium text-gray-900">
                     {formatDate(currentQuote.display_date)}
                   </span>
+                </div>
+                {/* Bookmark Button */}
+                <div className="absolute top-4 right-16 z-10">
+                  <BookmarkButton 
+                    contentType="quote" 
+                    contentId={currentQuote.id} 
+                    size="md"
+                  />
                 </div>
               </div>
             )}

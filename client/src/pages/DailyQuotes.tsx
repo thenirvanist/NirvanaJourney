@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useAllDailyWisdom } from "@/hooks/useSupabaseQuery";
+import { BookmarkButton } from "@/components/BookmarkButton";
 
 export default function DailyQuotes() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -181,7 +182,7 @@ export default function DailyQuotes() {
               {filteredQuotes.map((quote) => (
                 <Card 
                   key={quote.id} 
-                  className="group bg-white hover:shadow-2xl transition-all duration-300 overflow-hidden border-0"
+                  className="group bg-white hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden border-0"
                   data-testid={`card-quote-${quote.id}`}
                 >
                   <CardContent className="p-0">
@@ -191,6 +192,14 @@ export default function DailyQuotes() {
                         alt={`Quote by ${quote.author}`}
                         className="w-full h-auto object-cover"
                       />
+                      {/* Bookmark Button */}
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <BookmarkButton 
+                          contentType="quote" 
+                          contentId={quote.id} 
+                          size="sm"
+                        />
+                      </div>
                     </div>
                     <div className="p-4 bg-gradient-to-b from-white to-gray-50">
                       <p className="font-semibold text-gray-900 text-center">

@@ -3,10 +3,10 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Book, Mountain, Compass, User } from "lucide-react";
+import { Heart, Book, Mountain, Compass, User, Quote } from "lucide-react";
 import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import type { Sage, Ashram, BlogPost, Journey } from "@shared/schema";
+import type { Sage, Ashram, BlogPost, Journey, DailyWisdom } from "@shared/schema";
 
 interface Bookmark {
   id: number;
@@ -94,6 +94,17 @@ export default function Dashboard() {
     enabled: !!user && bookmarks.length > 0 && !!supabase,
   });
 
+  const { data: quotes = [] } = useQuery<DailyWisdom[]>({
+    queryKey: ["supabase", "daily_wisdom"],
+    queryFn: async () => {
+      if (!supabase) return [];
+      const { data, error } = await supabase.from("daily_wisdom").select("*");
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user && bookmarks.length > 0 && !!supabase,
+  });
+
   if (authLoading || bookmarksLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
@@ -147,6 +158,7 @@ export default function Dashboard() {
   const bookmarkedAshrams = getBookmarkedContent("ashram", ashrams);
   const bookmarkedBlogs = getBookmarkedContent("blog", blogs);
   const bookmarkedJourneys = getBookmarkedContent("journey", journeys);
+  const bookmarkedQuotes = getBookmarkedContent("quote", quotes);
 
   const totalBookmarks = bookmarks.length;
 
@@ -179,7 +191,7 @@ export default function Dashboard() {
                 <p className="text-gray-600 mb-6 leading-relaxed">
                   Your personal dashboard is ready! Start exploring and bookmarking spiritual content 
                   that resonates with you. Look for the heart icon on any sage, ashram, blog post, 
-                  or journey to save it here.
+                  journey, or daily quote to save it here.
                 </p>
                 <div className="space-y-3">
                   <Link href="/sages">
@@ -364,6 +376,51 @@ export default function Dashboard() {
                           </CardContent>
                         </Card>
                       </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Bookmarked Quotes */}
+              {bookmarkedQuotes.length > 0 && (
+                <section>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                      <Quote className="h-6 w-6 mr-2 text-orange-600" />
+                      Bookmarked Quotes ({bookmarkedQuotes.length})
+                    </h2>
+                    <Link href="/daily-quotes">
+                      <Button variant="outline" size="sm">
+                        View All Quotes
+                      </Button>
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {bookmarkedQuotes.map((quote: DailyWisdom) => (
+                      <Card key={quote.id} className="group hover:shadow-lg hover:scale-105 transition-all duration-300" data-testid={`card-quote-${quote.id}`}>
+                        <div className="relative overflow-hidden">
+                          <img
+                            src={quote.image_url || "/api/placeholder/400/400"}
+                            alt={`Quote by ${quote.author}`}
+                            className="w-full h-auto object-cover"
+                          />
+                          <div className="absolute top-2 right-2">
+                            <Heart className="h-5 w-5 fill-red-500 text-red-500" />
+                          </div>
+                        </div>
+                        <CardContent className="p-4">
+                          <p className="font-semibold text-gray-900 text-center">{quote.author}</p>
+                          {quote.display_date && (
+                            <p className="text-xs text-gray-500 text-center mt-1">
+                              {new Date(quote.display_date + 'T00:00:00Z').toLocaleDateString('en-US', { 
+                                month: 'short', 
+                                day: 'numeric',
+                                year: 'numeric'
+                              })}
+                            </p>
+                          )}
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
                 </section>
