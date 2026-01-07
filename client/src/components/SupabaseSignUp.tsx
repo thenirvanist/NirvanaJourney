@@ -186,10 +186,7 @@ export function SupabaseSignUp({
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              email: userEmail,
-              firstName: userFirstName,
-              lastName: userLastName,
-              supabaseUserId: data.user.id,
+              supabaseAccessToken: data.session.access_token,
             }),
           });
 

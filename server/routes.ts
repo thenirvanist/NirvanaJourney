@@ -799,23 +799,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Exchange Supabase session for internal auth token
   app.post("/api/auth/supabase-exchange", async (req, res) => {
     try {
-      const { email, firstName, lastName, supabaseUserId } = req.body;
+      const { supabaseAccessToken } = req.body;
       
+      if (!supabaseAccessToken) {
+        return res.status(400).json({ message: "Access token is required" });
+      }
+
+      // Verify the Supabase access token by calling Supabase's user endpoint
+      // Use server-side env vars (fall back to VITE_ prefixed for compatibility)
+      const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseAnonKey) {
+        console.error("Supabase configuration missing");
+        return res.status(500).json({ message: "Authentication service configuration error" });
+      }
+
+      const supabaseVerifyResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
+        headers: {
+          'Authorization': `Bearer ${supabaseAccessToken}`,
+          'apikey': supabaseAnonKey,
+        },
+      });
+
+      if (!supabaseVerifyResponse.ok) {
+        console.error("Supabase token verification failed:", supabaseVerifyResponse.status);
+        return res.status(401).json({ message: "Invalid Supabase session" });
+      }
+
+      const supabaseUser = await supabaseVerifyResponse.json();
+      
+      // Extract user data from the verified Supabase response (don't trust client data)
+      const email = supabaseUser.email;
+      const firstName = supabaseUser.user_metadata?.first_name || null;
+      const lastName = supabaseUser.user_metadata?.last_name || null;
+      const supabaseUserId = supabaseUser.id;
+
       if (!email) {
-        return res.status(400).json({ message: "Email is required" });
+        return res.status(401).json({ message: "No email found in Supabase user" });
       }
 
       // Check if user already exists in our database
       let user = await storage.getAuthUserByEmail(email);
       
       if (!user) {
-        // Create new user from Supabase data
-        const hashedPassword = await authService.hashPassword(supabaseUserId || email);
+        // Create new user from verified Supabase data
+        const hashedPassword = await authService.hashPassword(supabaseUserId);
         user = await storage.createAuthUser({
           email,
           password: hashedPassword,
-          firstName: firstName || null,
-          lastName: lastName || null,
+          firstName,
+          lastName,
           emailVerified: true, // Already verified via Supabase OTP
         });
       }
