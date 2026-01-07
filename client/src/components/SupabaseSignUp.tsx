@@ -37,8 +37,6 @@ export function SupabaseSignUp({
   const [showPassword, setShowPassword] = useState(false);
   const [isSignedUp, setIsSignedUp] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("");
-  const [userFirstName, setUserFirstName] = useState<string>("");
-  const [userLastName, setUserLastName] = useState<string>("");
   const [otpValue, setOtpValue] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const { toast } = useToast();
@@ -102,8 +100,6 @@ export function SupabaseSignUp({
       // Check if user was created and needs email confirmation
       if (authData.user && !authData.user.email_confirmed_at) {
         setUserEmail(data.email);
-        setUserFirstName(data.firstName);
-        setUserLastName(data.lastName);
         setIsSignedUp(true);
         
         toast({
@@ -178,45 +174,15 @@ export function SupabaseSignUp({
           refresh_token: data.session.refresh_token,
         });
         
-        // Exchange Supabase session for internal backend token
-        try {
-          const exchangeResponse = await fetch('/api/auth/supabase-exchange', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              supabaseAccessToken: data.session.access_token,
-            }),
-          });
-
-          if (!exchangeResponse.ok) {
-            throw new Error('Failed to exchange session');
-          }
-
-          const exchangeData = await exchangeResponse.json();
-          
-          // Store the internal backend token
-          localStorage.setItem('auth_token', exchangeData.token);
-          
-          toast({
-            title: "Welcome!",
-            description: "Your account has been verified successfully.",
-          });
-          
-          onSuccess?.();
-          
-          // Use window.location to force full page reload, ensuring auth state is fresh
-          window.location.href = '/dashboard';
-        } catch (exchangeError) {
-          console.error('Session exchange error:', exchangeError);
-          toast({
-            title: "Verification Error",
-            description: "Account verified but session setup failed. Please try logging in.",
-            variant: "destructive",
-          });
-          window.location.href = '/login';
-        }
+        toast({
+          title: "Welcome!",
+          description: "Your account has been verified successfully.",
+        });
+        
+        onSuccess?.();
+        
+        // Use window.location to force full page reload, ensuring auth state is fresh
+        window.location.href = '/dashboard';
       } else {
         toast({
           title: "Verification Failed",
