@@ -796,6 +796,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Exchange Supabase session for internal auth token
+  app.post("/api/auth/supabase-exchange", async (req, res) => {
+    try {
+      const { email, firstName, lastName, supabaseUserId } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      // Check if user already exists in our database
+      let user = await storage.getAuthUserByEmail(email);
+      
+      if (!user) {
+        // Create new user from Supabase data
+        const hashedPassword = await authService.hashPassword(supabaseUserId || email);
+        user = await storage.createAuthUser({
+          email,
+          password: hashedPassword,
+          firstName: firstName || null,
+          lastName: lastName || null,
+          emailVerified: true, // Already verified via Supabase OTP
+        });
+      }
+
+      // Generate internal JWT token
+      const token = authService.generateToken(user.id);
+
+      res.json({
+        message: "Session exchange successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          emailVerified: user.emailVerified,
+        },
+        token,
+      });
+    } catch (error: any) {
+      console.error("Supabase exchange error:", error);
+      res.status(500).json({ 
+        message: error.message || "Failed to exchange session" 
+      });
+    }
+  });
+
   // Enhanced newsletter subscription with verification
   app.post("/api/newsletter/subscribe", async (req, res) => {
     try {
