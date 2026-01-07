@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Heart, HeartHandshake } from "lucide-react";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import type { Bookmark } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase";
 
 interface BookmarkButtonProps {
-  contentType: "sage" | "ashram" | "blog" | "journey";
+  contentType: "sage" | "ashram" | "blog" | "journey" | "quote";
   contentId: number;
   size?: "sm" | "md" | "lg";
   className?: string;
+}
+
+interface Bookmark {
+  id: number;
+  user_id: string;
+  content_type: string;
+  content_id: number;
+  created_at: string;
 }
 
 export function BookmarkButton({ 
@@ -22,30 +30,64 @@ export function BookmarkButton({
   const [isHovered, setIsHovered] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, isAuthenticated } = useAuth();
 
-  // Check if item is bookmarked by fetching user's bookmarks
+  // Fetch bookmarks directly from Supabase
   const { data: bookmarks = [] } = useQuery<Bookmark[]>({
-    queryKey: ["/api/bookmarks"],
-    enabled: true, // Only fetch if user is likely logged in
+    queryKey: ["supabase", "bookmarks", user?.id],
+    queryFn: async () => {
+      if (!user?.id || !supabase) return [];
+      
+      const { data, error } = await supabase
+        .from("bookmarks")
+        .select("*")
+        .eq("user_id", user.id);
+      
+      if (error) {
+        console.error("Error fetching bookmarks:", error);
+        return [];
+      }
+      
+      return data || [];
+    },
+    enabled: !!user?.id && !!supabase,
     retry: false
   });
 
   const isBookmarked = bookmarks.some(
     (bookmark: Bookmark) => 
-      bookmark.contentType === contentType && 
-      bookmark.contentId === contentId
-  ) || false;
+      bookmark.content_type === contentType && 
+      bookmark.content_id === contentId
+  );
 
-  // Add bookmark mutation
+  // Add bookmark mutation using Supabase
   const addBookmark = useMutation({
     mutationFn: async () => {
-      return await apiRequest("POST", "/api/bookmarks", {
-        contentType,
-        contentId
-      });
+      if (!supabase || !user?.id) {
+        throw new Error("Not authenticated");
+      }
+      
+      const { data, error } = await supabase
+        .from("bookmarks")
+        .insert({
+          user_id: user.id,
+          content_type: contentType,
+          content_id: contentId
+        })
+        .select()
+        .single();
+      
+      if (error) {
+        if (error.code === "23505") {
+          throw new Error("Already bookmarked");
+        }
+        throw error;
+      }
+      
+      return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/bookmarks"] });
+      queryClient.invalidateQueries({ queryKey: ["supabase", "bookmarks", user?.id] });
       toast({
         title: "Bookmarked!",
         description: "Added to your personal collection.",
@@ -53,13 +95,13 @@ export function BookmarkButton({
       });
     },
     onError: (error: any) => {
-      if (error.message?.includes("401") || error.message?.includes("Unauthorized") || error.message?.includes("Access token required")) {
+      if (error.message === "Not authenticated") {
         toast({
           title: "Please sign in to bookmark",
           description: "You need to be logged in to save content to your collection.",
           variant: "destructive"
         });
-      } else if (error.message?.includes("409")) {
+      } else if (error.message === "Already bookmarked") {
         toast({
           title: "Already Bookmarked",
           description: "This content is already in your collection.",
@@ -67,21 +109,32 @@ export function BookmarkButton({
         });
       } else {
         toast({
-          title: "Please sign in to bookmark",
-          description: "Please try again after signing in.",
+          title: "Error",
+          description: "Failed to add bookmark. Please try again.",
           variant: "destructive"
         });
       }
     }
   });
 
-  // Remove bookmark mutation
+  // Remove bookmark mutation using Supabase
   const removeBookmark = useMutation({
     mutationFn: async () => {
-      return await apiRequest("DELETE", `/api/bookmarks/${contentType}/${contentId}`);
+      if (!supabase || !user?.id) {
+        throw new Error("Not authenticated");
+      }
+      
+      const { error } = await supabase
+        .from("bookmarks")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("content_type", contentType)
+        .eq("content_id", contentId);
+      
+      if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/bookmarks"] });
+      queryClient.invalidateQueries({ queryKey: ["supabase", "bookmarks", user?.id] });
       toast({
         title: "Removed",
         description: "Removed from your collection.",
@@ -89,9 +142,9 @@ export function BookmarkButton({
       });
     },
     onError: (error: any) => {
-      if (error.message?.includes("401") || error.message?.includes("Unauthorized") || error.message?.includes("Access token required")) {
+      if (error.message === "Not authenticated") {
         toast({
-          title: "Please sign in to bookmark",
+          title: "Please sign in",
           description: "You need to be logged in to manage your collection.",
           variant: "destructive"
         });
@@ -108,6 +161,15 @@ export function BookmarkButton({
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to bookmark",
+        description: "You need to be logged in to save content to your collection.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     if (isBookmarked) {
       removeBookmark.mutate();

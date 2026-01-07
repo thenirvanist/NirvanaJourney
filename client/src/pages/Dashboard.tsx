@@ -10,10 +10,10 @@ import type { Sage, Ashram, BlogPost, Journey } from "@shared/schema";
 
 interface Bookmark {
   id: number;
-  userId: string;
-  contentType: string;
-  contentId: number;
-  createdAt: string;
+  user_id: string;
+  content_type: string;
+  content_id: number;
+  created_at: string;
 }
 
 export default function Dashboard() {
@@ -43,13 +43,7 @@ export default function Dashboard() {
         return [];
       }
       
-      return (data || []).map((b: any) => ({
-        id: b.id,
-        userId: b.user_id,
-        contentType: b.content_type,
-        contentId: b.content_id,
-        createdAt: b.created_at,
-      }));
+      return data || [];
     },
     enabled: !!user?.id && !!session && !!supabase,
     retry: false,
@@ -143,8 +137,8 @@ export default function Dashboard() {
   // Get bookmarked content by type
   const getBookmarkedContent = (contentType: string, contentList: any[]) => {
     const bookmarkedIds = bookmarks
-      .filter((bookmark: Bookmark) => bookmark.contentType === contentType)
-      .map((bookmark: Bookmark) => bookmark.contentId);
+      .filter((bookmark: Bookmark) => bookmark.content_type === contentType)
+      .map((bookmark: Bookmark) => bookmark.content_id);
     
     return contentList.filter((item: any) => bookmarkedIds.includes(item.id));
   };
