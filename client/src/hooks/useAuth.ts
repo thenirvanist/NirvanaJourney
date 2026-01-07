@@ -1,83 +1,99 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
+import type { User, Session } from "@supabase/supabase-js";
 
 interface AuthUser {
-  id: number;
+  id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   emailVerified: boolean;
 }
 
-// Custom API request function for authentication
-const authApiRequest = async (url: string, method = "GET", body?: any, headers?: Record<string, string>) => {
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    let errorMessage;
-    try {
-      const errorJson = JSON.parse(errorText);
-      errorMessage = errorJson.message || `${response.status}: ${response.statusText}`;
-    } catch {
-      errorMessage = `${response.status}: ${response.statusText}`;
-    }
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-};
-
 export function useAuth() {
-  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("auth_token");
-    setToken(storedToken);
+    // If supabase is not configured, stop loading
+    if (!supabase) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Get the current session
+    const getSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error("Error getting session:", error);
+          setUser(null);
+          setSession(null);
+        } else if (session?.user) {
+          setSession(session);
+          setUser(mapSupabaseUser(session.user));
+        } else {
+          setUser(null);
+          setSession(null);
+        }
+      } catch (error) {
+        console.error("Session fetch error:", error);
+        setUser(null);
+        setSession(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getSession();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase!.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setSession(session);
+          setUser(mapSupabaseUser(session.user));
+        } else {
+          setUser(null);
+          setSession(null);
+        }
+        setIsLoading(false);
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ["/api/auth/user"],
-    queryFn: async () => {
-      if (!token) return null;
-      
-      try {
-        const response = await authApiRequest("/api/auth/user", "GET", undefined, {
-          Authorization: `Bearer ${token}`,
-        });
-        return response as AuthUser;
-      } catch (error: any) {
-        // If token is invalid, remove it
-        if (error.message.includes("401") || error.message.includes("403")) {
-          localStorage.removeItem("auth_token");
-          setToken(null);
-        }
-        throw error;
-      }
-    },
-    enabled: !!token,
-    retry: false,
-  });
+  const mapSupabaseUser = (supabaseUser: User): AuthUser => {
+    return {
+      id: supabaseUser.id,
+      email: supabaseUser.email || "",
+      firstName: supabaseUser.user_metadata?.first_name || null,
+      lastName: supabaseUser.user_metadata?.last_name || null,
+      emailVerified: !!supabaseUser.email_confirmed_at,
+    };
+  };
 
-  const logout = () => {
+  const logout = async () => {
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
+    setUser(null);
+    setSession(null);
+    // Clean up any legacy tokens
     localStorage.removeItem("auth_token");
-    setToken(null);
     window.location.href = "/";
   };
 
   return {
     user,
-    isLoading: isLoading && !!token,
-    isAuthenticated: !!user && !!token,
-    token,
+    session,
+    isLoading,
+    isAuthenticated: !!user && !!session,
     logout,
-    error,
   };
 }

@@ -1,53 +1,103 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Book, Mountain, Compass, User } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
-import type { Bookmark, Sage, Ashram, BlogPost, Journey } from "@shared/schema";
+import { supabase } from "@/lib/supabase";
+import type { Sage, Ashram, BlogPost, Journey } from "@shared/schema";
+
+interface Bookmark {
+  id: number;
+  userId: string;
+  contentType: string;
+  contentId: number;
+  createdAt: string;
+}
 
 export default function Dashboard() {
-  const { user, isLoading: authLoading } = useAuth();
-  const { toast } = useToast();
+  const { user, isLoading: authLoading, session } = useAuth();
+  const [, navigate] = useLocation();
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated (after loading is complete)
   useEffect(() => {
     if (!authLoading && !user) {
-      toast({
-        title: "Login Required",
-        description: "Please login to access your dashboard.",
-        variant: "destructive"
-      });
+      navigate("/login");
     }
-  }, [authLoading, user, toast]);
+  }, [authLoading, user, navigate]);
 
-  // Fetch bookmarks and all content to display bookmarked items
+  // Fetch bookmarks directly from Supabase
   const { data: bookmarks = [], isLoading: bookmarksLoading } = useQuery<Bookmark[]>({
-    queryKey: ["/api/bookmarks"],
-    enabled: !!user,
-    retry: false
+    queryKey: ["supabase", "bookmarks", user?.id],
+    queryFn: async () => {
+      if (!user?.id || !supabase) return [];
+      
+      const { data, error } = await supabase
+        .from("bookmarks")
+        .select("*")
+        .eq("user_id", user.id);
+      
+      if (error) {
+        console.error("Error fetching bookmarks:", error);
+        return [];
+      }
+      
+      return (data || []).map((b: any) => ({
+        id: b.id,
+        userId: b.user_id,
+        contentType: b.content_type,
+        contentId: b.content_id,
+        createdAt: b.created_at,
+      }));
+    },
+    enabled: !!user?.id && !!session && !!supabase,
+    retry: false,
   });
 
+  // Fetch content directly from Supabase
   const { data: sages = [] } = useQuery<Sage[]>({
-    queryKey: ["/api/sages"],
-    enabled: !!user && bookmarks.length > 0
+    queryKey: ["supabase", "sages"],
+    queryFn: async () => {
+      if (!supabase) return [];
+      const { data, error } = await supabase.from("sages").select("*");
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user && bookmarks.length > 0 && !!supabase,
   });
 
   const { data: ashrams = [] } = useQuery<Ashram[]>({
-    queryKey: ["/api/ashrams"],
-    enabled: !!user && bookmarks.length > 0
+    queryKey: ["supabase", "ashrams"],
+    queryFn: async () => {
+      if (!supabase) return [];
+      const { data, error } = await supabase.from("ashrams").select("*");
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user && bookmarks.length > 0 && !!supabase,
   });
 
   const { data: blogs = [] } = useQuery<BlogPost[]>({
-    queryKey: ["/api/blog"],
-    enabled: !!user && bookmarks.length > 0
+    queryKey: ["supabase", "blog_posts"],
+    queryFn: async () => {
+      if (!supabase) return [];
+      const { data, error } = await supabase.from("blog_posts").select("*");
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user && bookmarks.length > 0 && !!supabase,
   });
 
   const { data: journeys = [] } = useQuery<Journey[]>({
-    queryKey: ["/api/journeys"],
-    enabled: !!user && bookmarks.length > 0
+    queryKey: ["supabase", "journeys"],
+    queryFn: async () => {
+      if (!supabase) return [];
+      const { data, error } = await supabase.from("journeys").select("*");
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user && bookmarks.length > 0 && !!supabase,
   });
 
   if (authLoading || bookmarksLoading) {
@@ -80,7 +130,7 @@ export default function Dashboard() {
               Please login to access your personal dashboard.
             </p>
             <Link href="/login">
-              <Button className="w-full">
+              <Button className="w-full" data-testid="button-login">
                 Login to Continue
               </Button>
             </Link>
@@ -112,7 +162,7 @@ export default function Dashboard() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4" data-testid="text-welcome">
               Welcome, {user.firstName || user.email}
             </h1>
             <p className="text-xl text-gray-600 mb-6">
@@ -120,7 +170,7 @@ export default function Dashboard() {
             </p>
             <div className="flex items-center justify-center space-x-2 text-lg text-amber-700">
               <Heart className="h-6 w-6 fill-red-500 text-red-500" />
-              <span className="font-semibold">
+              <span className="font-semibold" data-testid="text-bookmark-count">
                 {totalBookmarks} {totalBookmarks === 1 ? 'item' : 'items'} bookmarked
               </span>
             </div>
@@ -139,19 +189,19 @@ export default function Dashboard() {
                 </p>
                 <div className="space-y-3">
                   <Link href="/sages">
-                    <Button variant="outline" className="w-full sm:w-auto mr-0 sm:mr-3 mb-3 sm:mb-0">
+                    <Button variant="outline" className="w-full sm:w-auto mr-0 sm:mr-3 mb-3 sm:mb-0" data-testid="button-explore-sages">
                       <Book className="h-4 w-4 mr-2" />
                       Explore Sages
                     </Button>
                   </Link>
                   <Link href="/ashrams">
-                    <Button variant="outline" className="w-full sm:w-auto mr-0 sm:mr-3 mb-3 sm:mb-0">
+                    <Button variant="outline" className="w-full sm:w-auto mr-0 sm:mr-3 mb-3 sm:mb-0" data-testid="button-explore-ashrams">
                       <Mountain className="h-4 w-4 mr-2" />
                       Visit Ashrams
                     </Button>
                   </Link>
                   <Link href="/inner-nutrition">
-                    <Button variant="outline" className="w-full sm:w-auto">
+                    <Button variant="outline" className="w-full sm:w-auto" data-testid="button-explore-articles">
                       <Compass className="h-4 w-4 mr-2" />
                       Read Articles
                     </Button>
@@ -181,7 +231,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {bookmarkedSages.map((sage) => (
                       <Link key={sage.id} href={`/sages/${sage.id}`}>
-                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer" data-testid={`card-sage-${sage.id}`}>
                           <div className="relative overflow-hidden">
                             <img
                               src={sage.image || "/api/placeholder/400/250"}
@@ -221,7 +271,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {bookmarkedAshrams.map((ashram) => (
                       <Link key={ashram.id} href={`/ashrams/${ashram.id}`}>
-                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer" data-testid={`card-ashram-${ashram.id}`}>
                           <div className="relative overflow-hidden">
                             <img
                               src={ashram.image || "/api/placeholder/400/250"}
@@ -261,7 +311,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {bookmarkedBlogs.map((blog) => (
                       <Link key={blog.id} href={`/inner-nutrition/${blog.id}`}>
-                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer" data-testid={`card-blog-${blog.id}`}>
                           <div className="relative overflow-hidden">
                             <img
                               src={blog.image || "/api/placeholder/400/250"}
@@ -301,7 +351,7 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {bookmarkedJourneys.map((journey) => (
                       <Link key={journey.id} href={`/sacred-journeys/${journey.id}`}>
-                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer" data-testid={`card-journey-${journey.id}`}>
                           <div className="relative overflow-hidden">
                             <img
                               src={journey.image || "/api/placeholder/400/250"}
