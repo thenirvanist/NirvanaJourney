@@ -168,13 +168,24 @@ export function SupabaseSignUp({
       }
 
       if (data.session) {
+        // Store the access token so useAuth can find it
+        localStorage.setItem('auth_token', data.session.access_token);
+        
+        // Set the session in Supabase client
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+        
         toast({
           title: "Welcome!",
           description: "Your account has been verified successfully.",
         });
         
         onSuccess?.();
-        navigate('/dashboard');
+        
+        // Use window.location to force full page reload, ensuring auth state is fresh
+        window.location.href = '/dashboard';
       } else {
         toast({
           title: "Verification Failed",
