@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -158,7 +158,7 @@ export function BookmarkButton({
     }
   });
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     
