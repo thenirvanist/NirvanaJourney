@@ -103,12 +103,10 @@ export function SupabaseSignUp({
         setIsSignedUp(true);
         
         toast({
-          title: "Registration Successful!",
-          description: "Please check your email to verify your account.",
+          title: "Verification Code Sent!",
+          description: "Please check your email for the 6-digit verification code.",
         });
-
-        // Call success callback if provided
-        onSuccess?.();
+        // Don't call onSuccess here - wait until OTP verification completes
       } else if (authData.user && authData.user.email_confirmed_at) {
         // User was created and auto-confirmed (unlikely in most setups)
         toast({
@@ -116,6 +114,7 @@ export function SupabaseSignUp({
           description: "Your account has been created successfully.",
         });
         onSuccess?.();
+        navigate('/dashboard');
       }
 
     } catch (error: any) {
@@ -154,7 +153,7 @@ export function SupabaseSignUp({
       const { data, error } = await supabase.auth.verifyOtp({
         email: userEmail,
         token: otpValue,
-        type: 'email',
+        type: 'signup',
       });
 
       if (error) {
