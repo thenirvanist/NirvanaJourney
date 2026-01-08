@@ -1,15 +1,29 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'The Nirvanist <noreply@thenirvanist.com>';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://thenirvanist.com';
+
+if (!RESEND_API_KEY) {
+  console.warn('Warning: RESEND_API_KEY is not set. Email functionality will not work.');
+}
+
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 export const emailService = {
   async sendNewsletterConfirmation(email: string, token: string): Promise<boolean> {
     const confirmUrl = `${FRONTEND_URL}/confirm-newsletter?token=${token}`;
 
+    if (!resend) {
+      console.error('Resend client not initialized - RESEND_API_KEY is missing');
+      return false;
+    }
+
+    console.log('Sending newsletter confirmation email to:', email);
+    console.log('Confirmation URL:', confirmUrl);
+
     try {
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from: FROM_EMAIL,
         to: email,
         subject: 'Welcome to The Nirvanist! Please Confirm Your Subscription',
@@ -50,14 +64,20 @@ export const emailService = {
           </div>
         `,
       });
+      console.log('Newsletter confirmation email sent successfully:', result);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to send newsletter confirmation email:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
       return false;
     }
   },
 
   async sendVerificationEmail(email: string, token: string): Promise<boolean> {
+    if (!resend) {
+      console.error('Resend client not initialized - RESEND_API_KEY is missing');
+      return false;
+    }
     const verificationUrl = `${FRONTEND_URL}/verify-email?token=${token}`;
 
     try {
@@ -110,6 +130,10 @@ export const emailService = {
   },
 
   async sendPasswordResetEmail(email: string, token: string): Promise<boolean> {
+    if (!resend) {
+      console.error('Resend client not initialized - RESEND_API_KEY is missing');
+      return false;
+    }
     const resetUrl = `${FRONTEND_URL}/reset-password?token=${token}`;
 
     try {
