@@ -3,11 +3,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "wouter";
-import { Eye, EyeOff, Mail, Lock, User, CheckCircle, Loader } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
@@ -25,8 +26,8 @@ declare global {
 const signUpSchema = z.object({
   email: z.string().email("Please enter a valid email address").min(1, "Email is required"),
   password: z.string().min(6, "Password must be at least 6 characters").min(1, "Password is required"),
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  fullName: z.string().min(1, "Full name is required"),
+  subscribeNewsletter: z.boolean().default(false),
 });
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
@@ -57,8 +58,8 @@ export function SupabaseSignUp({
     defaultValues: {
       email: "",
       password: "",
-      firstName: "",
-      lastName: "",
+      fullName: "",
+      subscribeNewsletter: false,
     },
   });
 
@@ -92,8 +93,8 @@ export function SupabaseSignUp({
         password: data.password,
         options: {
           data: {
-            first_name: data.firstName,
-            last_name: data.lastName,
+            full_name: data.fullName,
+            subscribe_newsletter: data.subscribeNewsletter,
           },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
           captchaToken: captchaToken,
@@ -305,51 +306,28 @@ export function SupabaseSignUp({
       <CardContent className="px-8 pb-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700 font-semibold">First Name</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <Input
-                          type="text"
-                          placeholder="First name"
-                          className="pl-10 py-3 border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] rounded-lg"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-red-500" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-700 font-semibold">Last Name</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <Input
-                          type="text"
-                          placeholder="Last name"
-                          className="pl-10 py-3 border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] rounded-lg"
-                          {...field}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage className="text-red-500" />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700 font-semibold">Full Name</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <Input
+                        type="text"
+                        placeholder="Enter your full name"
+                        className="pl-10 py-3 border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] rounded-lg"
+                        data-testid="input-fullname"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -401,6 +379,31 @@ export function SupabaseSignUp({
                   <p className="text-xs text-gray-500 mt-1">
                     Minimum 6 characters required
                   </p>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="subscribeNewsletter"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      data-testid="checkbox-newsletter"
+                      className="border-gray-300 data-[state=checked]:bg-[hsl(75,64%,49%)] data-[state=checked]:border-[hsl(75,64%,49%)]"
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="text-gray-700 font-normal cursor-pointer">
+                      Subscribe to the Nirvanist Newsletter
+                    </FormLabel>
+                    <p className="text-xs text-gray-500">
+                      Receive spiritual insights, retreat updates, and exclusive offers.
+                    </p>
+                  </div>
                 </FormItem>
               )}
             />
