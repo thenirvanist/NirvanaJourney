@@ -29,6 +29,7 @@ import SagesAdmin from "@/pages/admin/SagesAdmin";
 import AshramsAdmin from "@/pages/admin/AshramsAdmin";
 import NutritionAdmin from "@/pages/admin/NutritionAdmin";
 import AdminDashboard from "@/pages/AdminDashboard";
+import ConfirmNewsletter from "@/pages/ConfirmNewsletter";
 import Chatbot from "@/components/Chatbot";
 
 function Router() {
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/admin/ashrams" component={AshramsAdmin} />
       <Route path="/admin/nutrition" component={NutritionAdmin} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/confirm-newsletter" component={ConfirmNewsletter} />
       <Route component={NotFound} />
     </Switch>
   );

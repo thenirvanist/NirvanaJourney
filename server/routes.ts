@@ -624,6 +624,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Send newsletter confirmation email via Resend
+  app.post("/api/newsletter/send-confirmation", async (req, res) => {
+    try {
+      const { email, token } = req.body;
+      
+      if (!email || !token) {
+        return res.status(400).json({ message: "Email and token are required" });
+      }
+
+      const { emailService } = await import('./email.js');
+      const sent = await emailService.sendNewsletterConfirmation(email, token);
+      
+      if (sent) {
+        res.json({ success: true, message: "Confirmation email sent" });
+      } else {
+        res.status(500).json({ message: "Failed to send confirmation email" });
+      }
+    } catch (error) {
+      console.error("Newsletter confirmation email error:", error);
+      res.status(500).json({ message: "Failed to send confirmation email" });
+    }
+  });
+
   // AI Chatbot routes
   app.post("/api/chat", async (req, res) => {
     try {
