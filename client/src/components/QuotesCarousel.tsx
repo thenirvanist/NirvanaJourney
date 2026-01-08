@@ -1,18 +1,47 @@
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight, Download, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "./ui/button";
 import { useActiveQuotes } from "@/hooks/useSupabaseQuery";
 import { BookmarkButton } from "./BookmarkButton";
+import html2canvas from "html2canvas";
 
 export default function QuotesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
   const [isHovered, setIsHovered] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const quoteRef = useRef<HTMLDivElement>(null);
 
   // Fetch active quotes from Supabase
   const { data: quotes = [], isLoading, isError } = useActiveQuotes();
+
+  // Handle download quote as image
+  const handleDownloadQuote = async (author: string) => {
+    if (!quoteRef.current) return;
+
+    setIsDownloading(true);
+    
+    try {
+      const canvas = await html2canvas(quoteRef.current, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null,
+        logging: false
+      });
+
+      const link = document.createElement("a");
+      link.download = `Nirvanist-Quote-${author.replace(/\s+/g, '-')}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("Failed to download quote:", error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   // Auto-play functionality
   useEffect(() => {
@@ -169,7 +198,10 @@ export default function QuotesCarousel() {
                 </div>
               </div>
             ) : (
-              <div className="aspect-square relative overflow-hidden">
+              <div 
+                ref={quoteRef}
+                className="aspect-square relative overflow-hidden"
+              >
                 {/* Image with premium zoom effect */}
                 <div 
                   className="absolute inset-0 bg-cover bg-center will-change-transform"
@@ -191,8 +223,29 @@ export default function QuotesCarousel() {
                     {formatDate(currentQuote.display_date)}
                   </span>
                 </div>
-                {/* Bookmark Button */}
-                <div className="absolute top-4 right-16 z-10">
+                {/* Action Buttons */}
+                <div className="absolute top-4 right-4 flex gap-2 z-10">
+                  {/* Download Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDownloadQuote(currentQuote.author || 'Unknown');
+                    }}
+                    disabled={isDownloading}
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+                    title="Download Quote"
+                    data-testid="button-download-carousel-quote"
+                  >
+                    {isDownloading ? (
+                      <Loader2 className="h-5 w-5 text-gray-600 animate-spin" />
+                    ) : (
+                      <Download className="h-5 w-5 text-gray-600 hover:text-[hsl(75,64%,49%)]" />
+                    )}
+                  </Button>
+                  {/* Bookmark Button */}
                   <BookmarkButton 
                     contentType="quote" 
                     contentId={currentQuote.id} 
