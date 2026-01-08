@@ -10,22 +10,6 @@ const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (container: string | HTMLElement, options: {
-        sitekey: string;
-        callback: (token: string) => void;
-        'error-callback'?: () => void;
-        size?: 'invisible' | 'normal' | 'compact';
-      }) => string;
-      reset: (widgetId: string) => void;
-      remove: (widgetId: string) => void;
-    };
-    onTurnstileLoad?: () => void;
-  }
-}
-
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,11 +19,7 @@ export default function Newsletter() {
   const widgetIdRef = useRef<string | null>(null);
   const captchaTokenRef = useRef<string | null>(null);
 
-  const handleSubmit = useCallback(async () => {
-    if (!email || !captchaTokenRef.current) return;
-    
-    setIsSubmitting(true);
-    
+  const submitSubscription = useCallback(async (emailValue: string) => {
     try {
       const confirmToken = crypto.randomUUID();
       
@@ -50,7 +30,7 @@ export default function Newsletter() {
       const { error } = await supabase
         .from('newsletter_subscriber')
         .insert({
-          email: email.toLowerCase().trim(),
+          email: emailValue.toLowerCase().trim(),
           source: 'homepage_guest',
           status: 'pending',
           confirmation_token: confirmToken,
@@ -69,7 +49,7 @@ export default function Newsletter() {
         const response = await fetch('/api/newsletter/send-confirmation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email.toLowerCase().trim(), token: confirmToken }),
+          body: JSON.stringify({ email: emailValue.toLowerCase().trim(), token: confirmToken }),
         });
 
         if (!response.ok) {
@@ -86,8 +66,12 @@ export default function Newsletter() {
       setEmail("");
       captchaTokenRef.current = null;
       
-      if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.reset(widgetIdRef.current);
+      if (widgetIdRef.current && typeof window !== 'undefined' && (window as any).turnstile) {
+        try {
+          (window as any).turnstile.reset(widgetIdRef.current);
+        } catch (e) {
+          // Ignore reset errors
+        }
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
@@ -99,60 +83,56 @@ export default function Newsletter() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [email, toast]);
+  }, [toast]);
 
   useEffect(() => {
     const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
     if (!siteKey || !turnstileRef.current) return;
 
     const initTurnstile = () => {
-      if (window.turnstile && turnstileRef.current && !widgetIdRef.current) {
-        widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-          sitekey: siteKey,
-          size: 'invisible',
-          callback: (token: string) => {
-            captchaTokenRef.current = token;
-            handleSubmit();
-          },
-          'error-callback': () => {
-            toast({
-              title: "Verification failed",
-              description: "Please try again.",
-              variant: "destructive",
-            });
-            setIsSubmitting(false);
-          },
-        });
+      if (typeof window !== 'undefined' && (window as any).turnstile && turnstileRef.current && !widgetIdRef.current) {
+        try {
+          widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
+            sitekey: siteKey,
+            size: 'invisible',
+            callback: (token: string) => {
+              captchaTokenRef.current = token;
+            },
+            'error-callback': () => {
+              // Turnstile failed - proceed without CAPTCHA
+              console.warn('Turnstile verification failed');
+            },
+          });
+        } catch (e) {
+          console.warn('Turnstile initialization failed:', e);
+        }
       }
     };
 
-    if (window.turnstile) {
+    if (typeof window !== 'undefined' && (window as any).turnstile) {
       initTurnstile();
-    } else {
-      window.onTurnstileLoad = initTurnstile;
+    } else if (typeof window !== 'undefined') {
+      (window as any).onTurnstileLoad = initTurnstile;
     }
 
     return () => {
-      if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.remove(widgetIdRef.current);
+      if (widgetIdRef.current && typeof window !== 'undefined' && (window as any).turnstile) {
+        try {
+          (window as any).turnstile.remove(widgetIdRef.current);
+        } catch (e) {
+          // Ignore cleanup errors
+        }
         widgetIdRef.current = null;
       }
     };
-  }, [handleSubmit, toast]);
+  }, []);
 
-  const onFormSubmit = (e: React.FormEvent) => {
+  const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || isSubmitting) return;
     
     setIsSubmitting(true);
-    
-    if (captchaTokenRef.current) {
-      handleSubmit();
-    } else if (widgetIdRef.current && window.turnstile) {
-      window.turnstile.reset(widgetIdRef.current);
-    } else {
-      handleSubmit();
-    }
+    await submitSubscription(email);
   };
 
   if (isSuccess) {
@@ -194,7 +174,7 @@ export default function Newsletter() {
             {isSubmitting ? "Subscribing..." : "Subscribe"}
           </Button>
         </form>
-        <div ref={turnstileRef} className="cf-turnstile mt-4" data-testid="turnstile-widget"></div>
+        <div ref={turnstileRef} className="cf-turnstile mt-4 hidden" data-testid="turnstile-widget"></div>
       </div>
     </section>
   );
