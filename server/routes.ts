@@ -627,17 +627,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const crypto = await import('crypto');
       const confirmationToken = crypto.randomUUID();
 
-      // Use Supabase client to upsert the subscriber
+      // Use Supabase client with service key to bypass RLS
       const { createClient } = await import('@supabase/supabase-js');
       const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-      const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
       
-      if (!supabaseUrl || !supabaseKey) {
-        console.error('Supabase credentials not configured');
+      if (!supabaseUrl) {
+        console.error('SUPABASE_URL not configured');
+        return res.status(500).json({ message: "Server configuration error" });
+      }
+      
+      if (!supabaseServiceKey) {
+        console.error('SUPABASE_SERVICE_KEY not configured - cannot bypass RLS');
         return res.status(500).json({ message: "Server configuration error" });
       }
 
-      const supabase = createClient(supabaseUrl, supabaseKey);
+      console.log('Using Supabase service key for newsletter subscription');
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
       // Check if subscriber exists
       const { data: existingSubscriber } = await supabase
