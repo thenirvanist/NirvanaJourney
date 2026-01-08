@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +15,6 @@ import { supabase } from "@/lib/supabase";
 declare global {
   interface Window {
     turnstile?: {
-      render: (element: string | HTMLElement, options: any) => string;
       getResponse: (widgetId?: string) => string | undefined;
       reset: (widgetId?: string) => void;
     };
@@ -51,20 +50,7 @@ export function SupabaseSignUp({
   const [userEmail, setUserEmail] = useState<string>("");
   const [otpValue, setOtpValue] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
-  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(null);
-  const turnstileRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (turnstileRef.current && window.turnstile && !turnstileWidgetId) {
-      const widgetId = window.turnstile.render(turnstileRef.current, {
-        sitekey: TURNSTILE_SITE_KEY,
-        theme: "light",
-        callback: () => {},
-      });
-      setTurnstileWidgetId(widgetId);
-    }
-  }, [turnstileWidgetId]);
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -88,8 +74,8 @@ export function SupabaseSignUp({
         return;
       }
 
-      // Get Turnstile captcha token
-      const captchaToken = window.turnstile?.getResponse(turnstileWidgetId || undefined);
+      // Get Turnstile captcha token (uses implicit rendering via data-sitekey)
+      const captchaToken = window.turnstile?.getResponse();
       
       if (!captchaToken) {
         toast({
@@ -133,8 +119,8 @@ export function SupabaseSignUp({
         });
         
         // Reset Turnstile widget for retry
-        if (window.turnstile && turnstileWidgetId) {
-          window.turnstile.reset(turnstileWidgetId);
+        if (window.turnstile) {
+          window.turnstile.reset();
         }
         return;
       }
@@ -419,12 +405,12 @@ export function SupabaseSignUp({
               )}
             />
 
-            {/* Cloudflare Turnstile CAPTCHA */}
+            {/* Cloudflare Turnstile CAPTCHA - implicit rendering via data-sitekey */}
             <div className="flex justify-center">
               <div 
-                ref={turnstileRef}
                 className="cf-turnstile"
                 data-sitekey={TURNSTILE_SITE_KEY}
+                data-theme="light"
                 data-testid="turnstile-widget"
               />
             </div>
