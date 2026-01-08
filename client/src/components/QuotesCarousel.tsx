@@ -139,11 +139,9 @@ export default function QuotesCarousel() {
 
         {/* Carousel Container */}
         <div className="relative max-w-xl mx-auto">
-          {/* Main Quote Card with hover scale effect */}
+          {/* Main Quote Card with premium hover zoom effect */}
           <div 
-            className={`relative overflow-hidden rounded-2xl shadow-2xl transition-transform duration-300 ease-out ${
-              isHovered ? "scale-105" : "scale-100"
-            }`}
+            className="relative overflow-hidden rounded-2xl shadow-2xl group cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -171,10 +169,16 @@ export default function QuotesCarousel() {
                 </div>
               </div>
             ) : (
-              <div 
-                className="aspect-square bg-cover bg-center relative"
-                style={{ backgroundImage: `url(${currentQuote.image_url})` }}
-              >
+              <div className="aspect-square relative overflow-hidden">
+                {/* Image with premium zoom effect */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center will-change-transform"
+                  style={{ 
+                    backgroundImage: `url(${currentQuote.image_url})`,
+                    transform: isHovered ? 'scale(1.5)' : 'scale(1)',
+                    transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)'
+                  }}
+                />
                 <img
                   src={currentQuote.image_url}
                   alt={currentQuote.title}

@@ -182,18 +182,22 @@ export default function DailyQuotes() {
               {filteredQuotes.map((quote) => (
                 <Card 
                   key={quote.id} 
-                  className="group bg-white hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden border-0"
+                  className="group bg-white hover:shadow-2xl transition-shadow duration-300 overflow-hidden border-0 cursor-pointer"
                   data-testid={`card-quote-${quote.id}`}
                 >
                   <CardContent className="p-0">
-                    <div className="relative">
+                    <div className="relative overflow-hidden">
+                      {/* Image with premium zoom effect */}
                       <img
                         src={quote.image_url}
                         alt={`Quote by ${quote.author}`}
-                        className="w-full h-auto object-cover"
+                        className="w-full h-auto object-cover will-change-transform group-hover:scale-150"
+                        style={{
+                          transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)'
+                        }}
                       />
                       {/* Bookmark Button */}
-                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                         <BookmarkButton 
                           contentType="quote" 
                           contentId={quote.id} 
