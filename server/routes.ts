@@ -613,7 +613,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Newsletter routes
+  // Newsletter subscription - handles everything server-side
+  app.post("/api/newsletter/subscribe", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ message: "Valid email is required" });
+      }
+
+      const normalizedEmail = email.toLowerCase().trim();
+      const { emailService } = await import('./email.js');
+      const crypto = await import('crypto');
+      const confirmationToken = crypto.randomUUID();
+
+      // Use Supabase client to upsert the subscriber
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+      const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        console.error('Supabase credentials not configured');
+        return res.status(500).json({ message: "Server configuration error" });
+      }
+
+      const supabase = createClient(supabaseUrl, supabaseKey);
+
+      // Check if subscriber exists
+      const { data: existingSubscriber } = await supabase
+        .from('newsletter_subscriber')
+        .select('*')
+        .eq('email', normalizedEmail)
+        .single();
+
+      if (existingSubscriber) {
+        // Update with new token (allows resending confirmation)
+        const { error: updateError } = await supabase
+          .from('newsletter_subscriber')
+          .update({ 
+            confirmation_token: confirmationToken,
+            status: 'pending'
+          })
+          .eq('email', normalizedEmail);
+
+        if (updateError) {
+          console.error('Failed to update subscriber:', updateError);
+          return res.status(500).json({ message: "Failed to process subscription" });
+        }
+
+        console.log('Updated existing subscriber with new token:', normalizedEmail);
+      } else {
+        // Insert new subscriber
+        const { error: insertError } = await supabase
+          .from('newsletter_subscriber')
+          .insert({
+            email: normalizedEmail,
+            source: 'homepage_guest',
+            status: 'pending',
+            confirmation_token: confirmationToken,
+          });
+
+        if (insertError) {
+          console.error('Failed to insert subscriber:', insertError);
+          return res.status(500).json({ message: "Failed to process subscription" });
+        }
+
+        console.log('Inserted new subscriber:', normalizedEmail);
+      }
+
+      // Send confirmation email
+      console.log('Sending confirmation email to:', normalizedEmail);
+      const emailSent = await emailService.sendNewsletterConfirmation(normalizedEmail, confirmationToken);
+      
+      if (emailSent) {
+        console.log('Confirmation email sent successfully');
+        res.json({ 
+          success: true, 
+          message: "Please check your inbox for a confirmation link" 
+        });
+      } else {
+        console.error('Failed to send confirmation email');
+        res.status(500).json({ message: "Subscription saved but email failed to send" });
+      }
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      res.status(500).json({ message: "Failed to process subscription" });
+    }
+  });
+
+  // Legacy endpoint - redirect to new one
   app.post("/api/newsletter", async (req, res) => {
     try {
       const validatedData = insertNewsletterSubscriberSchema.parse(req.body);
@@ -621,29 +709,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(subscriber);
     } catch (error) {
       res.status(400).json({ message: "Failed to subscribe to newsletter" });
-    }
-  });
-
-  // Send newsletter confirmation email via Resend
-  app.post("/api/newsletter/send-confirmation", async (req, res) => {
-    try {
-      const { email, token } = req.body;
-      
-      if (!email || !token) {
-        return res.status(400).json({ message: "Email and token are required" });
-      }
-
-      const { emailService } = await import('./email.js');
-      const sent = await emailService.sendNewsletterConfirmation(email, token);
-      
-      if (sent) {
-        res.json({ success: true, message: "Confirmation email sent" });
-      } else {
-        res.status(500).json({ message: "Failed to send confirmation email" });
-      }
-    } catch (error) {
-      console.error("Newsletter confirmation email error:", error);
-      res.status(500).json({ message: "Failed to send confirmation email" });
     }
   });
 
