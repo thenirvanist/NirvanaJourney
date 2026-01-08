@@ -42,13 +42,12 @@ app.use((req, res, next) => {
 (async () => {
   // Run database migrations first
   const { runMigrations } = await import('./migrate.js');
-  const migrationSuccess = await runMigrations();
+  await runMigrations();
   
-  if (migrationSuccess) {
-    // Seed the database with spiritual content
-    const { seedSupabaseData } = await import('./seed-supabase.js');
-    await seedSupabaseData();
-  }
+  // Note: Seeding is disabled since data is managed directly in Supabase
+  // If you need to seed local data, uncomment the lines below:
+  // const { seedSupabaseData } = await import('./seed-supabase.js');
+  // await seedSupabaseData();
   
   const server = await registerRoutes(app);
 

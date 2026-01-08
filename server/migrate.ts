@@ -42,7 +42,6 @@ export async function runMigrations() {
         location TEXT,
         teachings TEXT[],
         books TEXT[],
-        core_teachings TEXT[],
         notable_work TEXT[],
         category TEXT,
         era TEXT,
