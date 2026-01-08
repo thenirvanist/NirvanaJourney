@@ -1,18 +1,47 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Download, Loader2 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useAllDailyWisdom } from "@/hooks/useSupabaseQuery";
 import { BookmarkButton } from "@/components/BookmarkButton";
+import html2canvas from "html2canvas";
 
 export default function DailyQuotes() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const quoteRefs = useRef<{ [key: number]: HTMLDivElement | null }>({});
 
   const { data: quotes, isLoading, error } = useAllDailyWisdom();
+
+  const handleDownloadQuote = async (quoteId: number, author: string) => {
+    const element = quoteRefs.current[quoteId];
+    if (!element) return;
+
+    setDownloadingId(quoteId);
+    
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: null,
+        logging: false
+      });
+
+      const link = document.createElement("a");
+      link.download = `Nirvanist-Quote-${author.replace(/\s+/g, '-')}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("Failed to download quote:", error);
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   // Extract unique authors for filter buttons
   const filterOptions = useMemo(() => {
@@ -186,7 +215,11 @@ export default function DailyQuotes() {
                   data-testid={`card-quote-${quote.id}`}
                 >
                   <CardContent className="p-0">
-                    <div className="relative overflow-hidden">
+                    {/* Capturable quote area */}
+                    <div 
+                      ref={(el) => { quoteRefs.current[quote.id] = el; }}
+                      className="relative overflow-hidden"
+                    >
                       {/* Image with premium zoom effect */}
                       <img
                         src={quote.image_url}
@@ -196,8 +229,29 @@ export default function DailyQuotes() {
                           transition: 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)'
                         }}
                       />
-                      {/* Bookmark Button */}
-                      <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                      {/* Action buttons overlay */}
+                      <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                        {/* Download Button */}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDownloadQuote(quote.id, quote.author || 'Unknown');
+                          }}
+                          disabled={downloadingId === quote.id}
+                          className="p-1.5 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
+                          title="Download Quote"
+                          data-testid={`button-download-quote-${quote.id}`}
+                        >
+                          {downloadingId === quote.id ? (
+                            <Loader2 className="h-4 w-4 text-gray-600 animate-spin" />
+                          ) : (
+                            <Download className="h-4 w-4 text-gray-600 hover:text-[hsl(75,64%,49%)]" />
+                          )}
+                        </Button>
+                        {/* Bookmark Button */}
                         <BookmarkButton 
                           contentType="quote" 
                           contentId={quote.id} 
