@@ -1,77 +1,42 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
-  const turnstileRef = useRef<HTMLDivElement>(null);
-  const widgetIdRef = useRef<string | null>(null);
-  const captchaTokenRef = useRef<string | null>(null);
 
-  const submitSubscription = useCallback(async (emailValue: string) => {
+  const onFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || isSubmitting) return;
+    
+    setIsSubmitting(true);
+
     try {
-      const confirmToken = crypto.randomUUID();
-      
-      if (!supabase) {
-        throw new Error("Supabase not configured");
-      }
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
+      });
 
-      const { error } = await supabase
-        .from('newsletter_subscriber')
-        .insert({
-          email: emailValue.toLowerCase().trim(),
-          source: 'homepage_guest',
-          status: 'pending',
-          confirmation_token: confirmToken,
-        });
+      const data = await response.json();
 
-      if (error) {
-        if (error.code === '23505') {
-          toast({
-            title: "Already subscribed",
-            description: "This email is already on our list. Check your inbox for the confirmation link.",
-          });
-        } else {
-          throw error;
-        }
-      } else {
-        const response = await fetch('/api/newsletter/send-confirmation', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: emailValue.toLowerCase().trim(), token: confirmToken }),
-        });
-
-        if (!response.ok) {
-          console.error('Failed to send confirmation email');
-        }
-
+      if (response.ok) {
         setIsSuccess(true);
         toast({
           title: "Thank you!",
-          description: "Please check your inbox for a confirmation link to finalize your subscription.",
+          description: data.message || "Please check your inbox for a confirmation link.",
         });
-      }
-      
-      setEmail("");
-      captchaTokenRef.current = null;
-      
-      if (widgetIdRef.current && typeof window !== 'undefined' && (window as any).turnstile) {
-        try {
-          (window as any).turnstile.reset(widgetIdRef.current);
-        } catch (e) {
-          // Ignore reset errors
-        }
+        setEmail("");
+      } else {
+        toast({
+          title: "Subscription failed",
+          description: data.message || "Please try again or contact our support team.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
@@ -83,56 +48,6 @@ export default function Newsletter() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [toast]);
-
-  useEffect(() => {
-    const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
-    if (!siteKey || !turnstileRef.current) return;
-
-    const initTurnstile = () => {
-      if (typeof window !== 'undefined' && (window as any).turnstile && turnstileRef.current && !widgetIdRef.current) {
-        try {
-          widgetIdRef.current = (window as any).turnstile.render(turnstileRef.current, {
-            sitekey: siteKey,
-            size: 'invisible',
-            callback: (token: string) => {
-              captchaTokenRef.current = token;
-            },
-            'error-callback': () => {
-              // Turnstile failed - proceed without CAPTCHA
-              console.warn('Turnstile verification failed');
-            },
-          });
-        } catch (e) {
-          console.warn('Turnstile initialization failed:', e);
-        }
-      }
-    };
-
-    if (typeof window !== 'undefined' && (window as any).turnstile) {
-      initTurnstile();
-    } else if (typeof window !== 'undefined') {
-      (window as any).onTurnstileLoad = initTurnstile;
-    }
-
-    return () => {
-      if (widgetIdRef.current && typeof window !== 'undefined' && (window as any).turnstile) {
-        try {
-          (window as any).turnstile.remove(widgetIdRef.current);
-        } catch (e) {
-          // Ignore cleanup errors
-        }
-        widgetIdRef.current = null;
-      }
-    };
-  }, []);
-
-  const onFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || isSubmitting) return;
-    
-    setIsSubmitting(true);
-    await submitSubscription(email);
   };
 
   if (isSuccess) {
@@ -174,7 +89,6 @@ export default function Newsletter() {
             {isSubmitting ? "Subscribing..." : "Subscribe"}
           </Button>
         </form>
-        <div ref={turnstileRef} className="cf-turnstile mt-4 hidden" data-testid="turnstile-widget"></div>
       </div>
     </section>
   );
