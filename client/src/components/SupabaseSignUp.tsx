@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,6 +11,16 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (element: string | HTMLElement, options: any) => string;
+      getResponse: (widgetId?: string) => string | undefined;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
 
 // Form validation schema
 const signUpSchema = z.object({
@@ -28,6 +38,8 @@ interface SupabaseSignUpProps {
   className?: string;
 }
 
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || "0x4AAAAAACLPYImgii5AF3YM";
+
 export function SupabaseSignUp({ 
   onSuccess,
   showHeader = true,
@@ -39,7 +51,20 @@ export function SupabaseSignUp({
   const [userEmail, setUserEmail] = useState<string>("");
   const [otpValue, setOtpValue] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [turnstileWidgetId, setTurnstileWidgetId] = useState<string | null>(null);
+  const turnstileRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (turnstileRef.current && window.turnstile && !turnstileWidgetId) {
+      const widgetId = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        theme: "light",
+        callback: () => {},
+      });
+      setTurnstileWidgetId(widgetId);
+    }
+  }, [turnstileWidgetId]);
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -63,7 +88,19 @@ export function SupabaseSignUp({
         return;
       }
 
-      // Attempt to sign up the user with Supabase
+      // Get Turnstile captcha token
+      const captchaToken = window.turnstile?.getResponse(turnstileWidgetId || undefined);
+      
+      if (!captchaToken) {
+        toast({
+          title: "Verification Required",
+          description: "Please complete the security check before signing up.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Attempt to sign up the user with Supabase (including captcha token)
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -72,8 +109,8 @@ export function SupabaseSignUp({
             first_name: data.firstName,
             last_name: data.lastName,
           },
-          // Enable email confirmation
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          captchaToken: captchaToken,
         },
       });
 
@@ -94,6 +131,11 @@ export function SupabaseSignUp({
           description: errorMessage,
           variant: "destructive",
         });
+        
+        // Reset Turnstile widget for retry
+        if (window.turnstile && turnstileWidgetId) {
+          window.turnstile.reset(turnstileWidgetId);
+        }
         return;
       }
 
@@ -376,6 +418,16 @@ export function SupabaseSignUp({
                 </FormItem>
               )}
             />
+
+            {/* Cloudflare Turnstile CAPTCHA */}
+            <div className="flex justify-center">
+              <div 
+                ref={turnstileRef}
+                className="cf-turnstile"
+                data-sitekey={TURNSTILE_SITE_KEY}
+                data-testid="turnstile-widget"
+              />
+            </div>
 
             <Button
               type="submit"
