@@ -1,39 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-// Custom API request function for authentication
-const authApiRequest = async (url: string, method = "GET", body?: any, headers?: Record<string, string>) => {
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    let errorMessage;
-    try {
-      const errorJson = JSON.parse(errorText);
-      errorMessage = errorJson.message || `${response.status}: ${response.statusText}`;
-    } catch {
-      errorMessage = `${response.status}: ${response.statusText}`;
-    }
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-};
+import { supabase } from "@/lib/supabase";
 import { loginSchema, type LoginData } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -42,6 +17,7 @@ import { SocialAuth } from "@/components/SocialAuth";
 export default function Login() {
   const [, navigate] = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<LoginData>({
@@ -52,33 +28,67 @@ export default function Login() {
     },
   });
 
-  const loginMutation = useMutation({
-    mutationFn: async (data: LoginData) => {
-      return await authApiRequest("/api/auth/login", "POST", data);
-    },
-    onSuccess: (response) => {
-      // Store token in localStorage
-      localStorage.setItem("auth_token", response.token);
-      
-      toast({
-        title: "Welcome back!",
-        description: "You have been logged in successfully.",
+  const onSubmit = async (data: LoginData) => {
+    setIsLoading(true);
+    
+    try {
+      // Check if Supabase is configured
+      if (!supabase) {
+        toast({
+          title: "Configuration Error",
+          description: "Authentication service is not properly configured. Please contact support.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Use Supabase signInWithPassword
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
 
-      // Redirect to home or intended page
-      navigate("/");
-    },
-    onError: (error: any) => {
+      if (error) {
+        console.error('Supabase login error:', error);
+        
+        let errorMessage = "Invalid email or password.";
+        if (error.message.includes("Email not confirmed")) {
+          errorMessage = "Please verify your email address before logging in.";
+        } else if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "Invalid email or password. Please try again.";
+        } else if (error.message.includes("Too many requests")) {
+          errorMessage = "Too many login attempts. Please wait a moment and try again.";
+        }
+
+        toast({
+          title: "Login Failed",
+          description: errorMessage,
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      if (authData.session && authData.user) {
+        toast({
+          title: "Welcome back!",
+          description: "You have been logged in successfully.",
+        });
+
+        // Use window.location to force full page reload, ensuring auth state is fresh
+        window.location.href = "/";
+      }
+    } catch (error: any) {
+      console.error('Unexpected login error:', error);
       toast({
         title: "Login Failed",
-        description: error.message || "Please check your credentials and try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    },
-  });
-
-  const onSubmit = (data: LoginData) => {
-    loginMutation.mutate(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -189,10 +199,17 @@ export default function Login() {
 
                   <Button
                     type="submit"
-                    disabled={loginMutation.isPending}
+                    disabled={isLoading}
                     className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 rounded-lg font-semibold text-lg transition-all duration-300"
                   >
-                    {loginMutation.isPending ? "Signing in..." : "Sign In"}
+                    {isLoading ? (
+                      <>
+                        <Loader className="w-4 h-4 mr-2 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      "Sign In"
+                    )}
                   </Button>
                 </form>
               </Form>

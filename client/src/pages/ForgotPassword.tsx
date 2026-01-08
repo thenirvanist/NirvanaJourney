@@ -1,45 +1,21 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { Mail, ArrowLeft, CheckCircle, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-// Custom API request function for authentication
-const authApiRequest = async (url: string, method = "GET", body?: any, headers?: Record<string, string>) => {
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    let errorMessage;
-    try {
-      const errorJson = JSON.parse(errorText);
-      errorMessage = errorJson.message || `${response.status}: ${response.statusText}`;
-    } catch {
-      errorMessage = `${response.status}: ${response.statusText}`;
-    }
-    throw new Error(errorMessage);
-  }
-
-  return response.json();
-};
+import { supabase } from "@/lib/supabase";
 import { forgotPasswordSchema, type ForgotPasswordData } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export default function ForgotPassword() {
   const [emailSent, setEmailSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<ForgotPasswordData>({
@@ -49,28 +25,59 @@ export default function ForgotPassword() {
     },
   });
 
-  const forgotPasswordMutation = useMutation({
-    mutationFn: async (data: ForgotPasswordData) => {
-      return await authApiRequest("/api/auth/forgot-password", "POST", data);
-    },
-    onSuccess: () => {
+  const onSubmit = async (data: ForgotPasswordData) => {
+    setIsLoading(true);
+    
+    try {
+      // Check if Supabase is configured
+      if (!supabase) {
+        toast({
+          title: "Configuration Error",
+          description: "Authentication service is not properly configured. Please contact support.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Use Supabase resetPasswordForEmail
+      const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) {
+        console.error('Supabase password reset error:', error);
+        
+        let errorMessage = "Failed to send reset email. Please try again.";
+        if (error.message.includes("Too many requests")) {
+          errorMessage = "Too many reset attempts. Please wait a moment and try again.";
+        }
+
+        toast({
+          title: "Error",
+          description: errorMessage,
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Success - show confirmation screen
       setEmailSent(true);
       toast({
         title: "Reset Email Sent",
         description: "Please check your email for password reset instructions.",
       });
-    },
-    onError: (error: any) => {
+    } catch (error: any) {
+      console.error('Unexpected password reset error:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to send reset email. Please try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-    },
-  });
-
-  const onSubmit = (data: ForgotPasswordData) => {
-    forgotPasswordMutation.mutate(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (emailSent) {
@@ -172,10 +179,17 @@ export default function ForgotPassword() {
 
                   <Button
                     type="submit"
-                    disabled={forgotPasswordMutation.isPending}
+                    disabled={isLoading}
                     className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 rounded-lg font-semibold text-lg transition-all duration-300"
                   >
-                    {forgotPasswordMutation.isPending ? "Sending..." : "Send Reset Instructions"}
+                    {isLoading ? (
+                      <>
+                        <Loader className="w-4 h-4 mr-2 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      "Send Reset Instructions"
+                    )}
                   </Button>
                 </form>
               </Form>
