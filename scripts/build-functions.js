@@ -25,12 +25,14 @@ try {
     outfile: join(functionsDir, 'api.cjs'),
     external: [
       '@neondatabase/serverless',
+      '@supabase/supabase-js',
       'drizzle-orm',
       'express',
       'bcryptjs',
       'jsonwebtoken',
       'nodemailer',
       'openai',
+      'resend',
       'zod',
       'serverless-http'
     ],

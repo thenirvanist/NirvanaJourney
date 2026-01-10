@@ -1,6 +1,73 @@
 // Netlify Functions entry point
 const express = require('express');
 const serverless = require('serverless-http');
+const { Resend } = require('resend');
+const { createClient } = require('@supabase/supabase-js');
+const crypto = require('crypto');
+
+// Initialize Resend
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const FROM_EMAIL = 'The Nirvanist <noreply@thenirvanist.com>';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://thenirvanist.com';
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
+
+// Initialize Supabase with service key for newsletter operations
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const supabaseAdmin = SUPABASE_URL && SUPABASE_SERVICE_KEY 
+  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
+  : null;
+
+// Real email sending function for newsletter confirmation
+async function sendNewsletterConfirmation(email, token) {
+  if (!resend) {
+    console.error('Resend client not initialized - RESEND_API_KEY is missing');
+    return false;
+  }
+
+  const confirmUrl = `${FRONTEND_URL}/confirm-newsletter?token=${token}`;
+  console.log('Sending newsletter confirmation to:', email);
+  console.log('Confirmation URL:', confirmUrl);
+
+  try {
+    const result = await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Welcome to The Nirvanist! Please Confirm Your Subscription',
+      html: `
+        <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
+          <div style="background: linear-gradient(135deg, #70c92e, #4f8638); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to The Nirvanist!</h1>
+            <p style="color: white; margin: 10px 0 0 0; font-size: 16px;">Spiritual Insights & Sacred Journeys</p>
+          </div>
+          <div style="padding: 40px 30px; background: white;">
+            <h2 style="color: #253e1a; margin-bottom: 20px;">Confirm Your Subscription</h2>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">
+              Thank you for subscribing to The Nirvanist newsletter! Please click the button below to confirm your subscription.
+            </p>
+            <div style="text-align: center; margin: 40px 0;">
+              <a href="${confirmUrl}" style="background: #70c92e; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                Confirm Subscription
+              </a>
+            </div>
+            <p style="color: #999; font-size: 14px;">
+              If the button doesn't work, copy and paste this link: <a href="${confirmUrl}" style="color: #70c92e;">${confirmUrl}</a>
+            </p>
+          </div>
+          <div style="background: #f7f2e8; padding: 20px 30px; text-align: center;">
+            <p style="color: #666; margin: 0; font-size: 14px;">© 2025 The Nirvanist. Connecting souls with sacred journeys.</p>
+          </div>
+        </div>
+      `,
+    });
+    console.log('Newsletter email sent successfully:', result);
+    return true;
+  } catch (error) {
+    console.error('Failed to send newsletter email:', error);
+    return false;
+  }
+}
+
 // Simple in-memory storage for Netlify (since we can't import the full storage)
 const storage = {
   journeys: [
@@ -354,30 +421,81 @@ app.get('/api/auth/user', authenticateToken, async (req, res) => {
   }
 });
 
-// Newsletter subscription
+// Newsletter subscription - with real Resend and Supabase integration
 app.post('/api/newsletter/subscribe', async (req, res) => {
+  console.log('=== Newsletter Subscription Request (Netlify) ===');
+  console.log('Request body:', JSON.stringify(req.body));
+  
   try {
     const { email } = req.body;
     
-    // Check if already subscribed
-    const existing = await storage.getNewsletterSubscriberByEmail(email);
-    if (existing && existing.verified) {
-      return res.status(400).json({ message: 'Email is already subscribed to our newsletter' });
+    if (!email || typeof email !== 'string') {
+      return res.status(400).json({ message: 'Valid email is required' });
     }
 
-    const verificationToken = generateToken();
-    
-    if (existing) {
-      // Update existing subscriber
-      await storage.updateNewsletterSubscriber(existing.id, { verificationToken });
+    const normalizedEmail = email.toLowerCase().trim();
+    const confirmationToken = crypto.randomUUID();
+
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      console.error('Supabase not configured - missing URL or service key');
+      return res.status(500).json({ message: 'Server configuration error' });
+    }
+
+    // Check if subscriber exists
+    const { data: existingSubscriber } = await supabaseAdmin
+      .from('newsletter_subscriber')
+      .select('*')
+      .eq('email', normalizedEmail)
+      .single();
+
+    if (existingSubscriber) {
+      // Update with new token
+      const { error: updateError } = await supabaseAdmin
+        .from('newsletter_subscriber')
+        .update({ 
+          confirmation_token: confirmationToken,
+          status: 'pending'
+        })
+        .eq('email', normalizedEmail);
+
+      if (updateError) {
+        console.error('Failed to update subscriber:', updateError);
+        return res.status(500).json({ message: 'Failed to process subscription' });
+      }
+      console.log('Updated existing subscriber:', normalizedEmail);
     } else {
-      // Create new subscriber
-      await storage.createNewsletterSubscriber(email, verificationToken);
+      // Insert new subscriber
+      const { error: insertError } = await supabaseAdmin
+        .from('newsletter_subscriber')
+        .insert({
+          email: normalizedEmail,
+          source: 'homepage_guest',
+          status: 'pending',
+          confirmation_token: confirmationToken,
+        });
+
+      if (insertError) {
+        console.error('Failed to insert subscriber:', insertError);
+        return res.status(500).json({ message: 'Failed to process subscription' });
+      }
+      console.log('Inserted new subscriber:', normalizedEmail);
     }
 
-    await sendVerificationEmail(email, 'Friend', verificationToken, true);
+    // Send confirmation email via Resend
+    console.log('Sending confirmation email to:', normalizedEmail);
+    const emailSent = await sendNewsletterConfirmation(normalizedEmail, confirmationToken);
     
-    res.json({ message: 'Please check your email to confirm your subscription.' });
+    if (emailSent) {
+      console.log('Confirmation email sent successfully');
+      res.json({ 
+        success: true, 
+        message: 'Please check your inbox for a confirmation link' 
+      });
+    } else {
+      console.error('Failed to send confirmation email');
+      res.status(500).json({ message: 'Subscription saved but email failed to send' });
+    }
   } catch (error) {
     console.error('Newsletter subscription error:', error);
     res.status(500).json({ message: 'Subscription failed' });
