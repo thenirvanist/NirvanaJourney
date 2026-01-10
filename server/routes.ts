@@ -615,10 +615,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Newsletter subscription - handles everything server-side
   app.post("/api/newsletter/subscribe", async (req, res) => {
+    console.log('=== Newsletter Subscription Request ===');
+    console.log('Request body:', JSON.stringify(req.body));
+    
     try {
       const { email } = req.body;
       
       if (!email || typeof email !== 'string') {
+        console.log('Invalid email provided');
         return res.status(400).json({ message: "Valid email is required" });
       }
 

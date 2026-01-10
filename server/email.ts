@@ -4,8 +4,17 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = 'The Nirvanist <noreply@thenirvanist.com>';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://thenirvanist.com';
 
+// Log email service initialization status
+console.log('=== Email Service Initialization ===');
+console.log('RESEND_API_KEY present:', !!RESEND_API_KEY);
+console.log('RESEND_API_KEY length:', RESEND_API_KEY?.length || 0);
+console.log('FROM_EMAIL:', FROM_EMAIL);
+console.log('FRONTEND_URL:', FRONTEND_URL);
+
 if (!RESEND_API_KEY) {
-  console.warn('Warning: RESEND_API_KEY is not set. Email functionality will not work.');
+  console.error('ERROR: RESEND_API_KEY is not set. Email functionality will not work.');
+} else {
+  console.log('Resend client initialized successfully');
 }
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
