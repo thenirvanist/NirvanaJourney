@@ -75,30 +75,32 @@ export function SupabaseSignUp({
         return;
       }
 
-      // Get Turnstile captcha token (uses implicit rendering via data-sitekey)
+      // Get Turnstile captcha token if available (optional - for production security)
       const captchaToken = window.turnstile?.getResponse();
       
+      // Note: Captcha is optional in development, required in production with Turnstile configured
       if (!captchaToken) {
-        toast({
-          title: "Verification Required",
-          description: "Please complete the security check before signing up.",
-          variant: "destructive",
-        });
-        return;
+        console.log('Turnstile not available, proceeding without captcha');
       }
 
-      // Attempt to sign up the user with Supabase (including captcha token)
+      // Attempt to sign up the user with Supabase
+      const signUpOptions: any = {
+        data: {
+          full_name: data.fullName,
+          subscribe_newsletter: data.subscribeNewsletter,
+        },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      };
+      
+      // Only include captchaToken if available
+      if (captchaToken) {
+        signUpOptions.captchaToken = captchaToken;
+      }
+
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
-        options: {
-          data: {
-            full_name: data.fullName,
-            subscribe_newsletter: data.subscribeNewsletter,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-          captchaToken: captchaToken,
-        },
+        options: signUpOptions,
       });
 
       if (error) {
