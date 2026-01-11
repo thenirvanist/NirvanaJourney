@@ -52,8 +52,8 @@ export default function MeetupsSection() {
           
           <div className="scroll-trigger">
             <img 
-              src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-              alt="Global spiritual video meetup" 
+              src="/attached_assets/Satsang_2_1768145886759.png" 
+              alt="Satsang: Truth, Love, Community gathering" 
               className="rounded-xl shadow-lg w-full"
             />
           </div>

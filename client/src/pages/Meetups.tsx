@@ -128,7 +128,7 @@ export default function Meetups() {
       
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center bg-cover bg-center bg-no-repeat" 
-               style={{backgroundImage: "url('https://images.unsplash.com/photo-1544931503-6e6466908cec?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800')"}}>
+               style={{backgroundImage: "url('/attached_assets/Satsang_2_1768145886759.png')"}}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
           <h1 className="text-6xl font-bold mb-6">Satsangs</h1>
@@ -222,8 +222,8 @@ export default function Meetups() {
             
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
-                alt="Spiritual video meetup" 
+                src="/attached_assets/Satsang_2_1768145886759.png" 
+                alt="Satsang: Truth, Love, Community gathering" 
                 className="rounded-xl shadow-lg w-full"
               />
             </div>
