@@ -16,6 +16,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import satsangImage from "@assets/Satsang_2_1768145886759.png";
 
 const meetupsBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -128,7 +129,7 @@ export default function Meetups() {
       
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center bg-cover bg-center bg-no-repeat" 
-               style={{backgroundImage: "url('/attached_assets/Satsang_2_1768145886759.png')"}}>
+               style={{backgroundImage: `url(${satsangImage})`}}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
           <h1 className="text-6xl font-bold mb-6">Satsangs</h1>
@@ -222,7 +223,7 @@ export default function Meetups() {
             
             <div>
               <img 
-                src="/attached_assets/Satsang_2_1768145886759.png" 
+                src={satsangImage} 
                 alt="Satsang: Truth, Love, Community gathering" 
                 className="rounded-xl shadow-lg w-full"
               />
