@@ -7,6 +7,7 @@ import { Heart, Book, Mountain, Compass, User, Quote } from "lucide-react";
 import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Sage, Ashram, BlogPost, Journey, DailyWisdom } from "@shared/schema";
+import Navigation from "@/components/Navigation";
 
 interface Bookmark {
   id: number;
@@ -108,7 +109,8 @@ export default function Dashboard() {
   if (authLoading || bookmarksLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
-        <div className="container mx-auto px-4 py-8">
+        <Navigation />
+        <div className="container mx-auto px-4 py-8 pt-24">
           <div className="max-w-6xl mx-auto">
             <div className="animate-pulse space-y-8">
               <div className="h-12 bg-gray-200 rounded w-1/2"></div>
@@ -126,21 +128,24 @@ export default function Dashboard() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50 flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-6 text-center">
-            <User className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-            <h2 className="text-xl font-semibold mb-2">Login Required</h2>
-            <p className="text-gray-600 mb-4">
-              Please login to access your personal dashboard.
-            </p>
-            <Link href="/login">
-              <Button className="w-full" data-testid="button-login">
-                Login to Continue
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
+        <Navigation />
+        <div className="flex items-center justify-center pt-24 min-h-[calc(100vh-6rem)]">
+          <Card className="w-full max-w-md">
+            <CardContent className="p-6 text-center">
+              <User className="h-16 w-16 mx-auto mb-4 text-gray-400" />
+              <h2 className="text-xl font-semibold mb-2">Login Required</h2>
+              <p className="text-gray-600 mb-4">
+                Please login to access your personal dashboard.
+              </p>
+              <Link href="/login">
+                <Button className="w-full" data-testid="button-login">
+                  Login to Continue
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     );
   }
@@ -164,7 +169,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
-      <div className="container mx-auto px-4 py-8">
+      <Navigation />
+      <div className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
