@@ -117,19 +117,18 @@ export default function QuotesCarousel() {
     return (
       <section className="bg-[#F7F2E8] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
               Daily Quotes
             </h2>
-            <div className="w-24 h-1 bg-[#70c92e] mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 whitespace-nowrap">
               Inspirational quotes from spiritual masters and mystics
             </p>
           </div>
           
-          <div className="relative max-w-md mx-auto flex items-center justify-center gap-4">
+          <div className="relative max-w-2xl mx-auto flex items-center justify-center gap-4">
             <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse"></div>
-            <div className="flex-1 aspect-square bg-gray-200 rounded-2xl animate-pulse"></div>
+            <div className="flex-1 max-w-lg aspect-square bg-gray-200 rounded-2xl animate-pulse"></div>
             <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse"></div>
           </div>
         </div>
@@ -142,7 +141,7 @@ export default function QuotesCarousel() {
       <section className="bg-[#F7F2E8] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
               Daily Quotes
             </h2>
             <p className="text-xl text-gray-600">
@@ -160,18 +159,17 @@ export default function QuotesCarousel() {
     <section className="bg-[#F7F2E8] py-16" data-testid="quotes-carousel">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
             Daily Quotes
           </h2>
-          <div className="w-24 h-1 bg-[#70c92e] mx-auto mb-6"></div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Inspirational quotes from spiritual masters and mystics around the world
+          <p className="text-xl text-gray-600 whitespace-nowrap">
+            Inspirational quotes from spiritual masters and mystics
           </p>
         </div>
 
         {/* Carousel Container with arrows outside */}
-        <div className="relative max-w-xl mx-auto flex items-center justify-center gap-4">
+        <div className="relative max-w-2xl mx-auto flex items-center justify-center gap-4">
           {/* Left Navigation Arrow - Outside quote box */}
           <Button
             onClick={goToPrevious}
@@ -183,7 +181,7 @@ export default function QuotesCarousel() {
 
           {/* Main Quote Card - Clean without superimposed elements */}
           <div 
-            className="flex-1 max-w-md overflow-hidden rounded-2xl shadow-2xl group cursor-pointer"
+            className="flex-1 max-w-lg overflow-hidden rounded-2xl shadow-2xl group cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
