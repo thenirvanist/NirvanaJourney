@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Download, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "./ui/button";
 import { useActiveQuotes } from "@/hooks/useSupabaseQuery";
+import type { DailyWisdom } from "@shared/schema";
 import { BookmarkButton } from "./BookmarkButton";
 import html2canvas from "html2canvas";
 
@@ -15,7 +16,8 @@ export default function QuotesCarousel() {
   const quoteRef = useRef<HTMLDivElement>(null);
 
   // Fetch active quotes from Supabase
-  const { data: quotes = [], isLoading, isError } = useActiveQuotes();
+  const { data, isLoading, isError } = useActiveQuotes();
+  const quotes: DailyWisdom[] = data || [];
 
   // Handle download quote as image
   const handleDownloadQuote = async (author: string) => {
@@ -119,14 +121,16 @@ export default function QuotesCarousel() {
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
               Daily Quotes
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-orange-400 to-pink-500 mx-auto mb-6"></div>
+            <div className="w-24 h-1 bg-[#70c92e] mx-auto mb-6"></div>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Inspirational quotes from spiritual masters and mystics
             </p>
           </div>
           
-          <div className="relative max-w-4xl mx-auto">
-            <div className="aspect-square bg-gray-200 rounded-2xl animate-pulse"></div>
+          <div className="relative max-w-md mx-auto flex items-center justify-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse"></div>
+            <div className="flex-1 aspect-square bg-gray-200 rounded-2xl animate-pulse"></div>
+            <div className="w-12 h-12 rounded-full bg-gray-200 animate-pulse"></div>
           </div>
         </div>
       </section>
@@ -160,41 +164,36 @@ export default function QuotesCarousel() {
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             Daily Quotes
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-400 to-pink-500 mx-auto mb-6"></div>
+          <div className="w-24 h-1 bg-[#70c92e] mx-auto mb-6"></div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Inspirational quotes from spiritual masters and mystics around the world
           </p>
         </div>
 
-        {/* Carousel Container */}
-        <div className="relative max-w-xl mx-auto">
-          {/* Main Quote Card with premium hover zoom effect */}
+        {/* Carousel Container with arrows outside */}
+        <div className="relative max-w-xl mx-auto flex items-center justify-center gap-4">
+          {/* Left Navigation Arrow - Outside quote box */}
+          <Button
+            onClick={goToPrevious}
+            className="flex-shrink-0 w-12 h-12 rounded-full bg-white hover:bg-gray-100 text-gray-900 shadow-lg"
+            data-testid="button-previous-quote"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </Button>
+
+          {/* Main Quote Card - Clean without superimposed elements */}
           <div 
-            className="relative overflow-hidden rounded-2xl shadow-2xl group cursor-pointer"
+            className="flex-1 max-w-md overflow-hidden rounded-2xl shadow-2xl group cursor-pointer"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             {imageError[currentQuote.id] || !currentQuote.image_url ? (
               // Fallback for missing/broken images
-              <div className="aspect-square bg-gradient-to-br from-orange-100 to-pink-100 flex items-center justify-center relative">
+              <div className="aspect-square bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center relative">
                 <div className="text-center p-8">
                   <h3 className="text-2xl font-bold text-gray-800 mb-4">{currentQuote.title}</h3>
                   <p className="text-lg text-gray-700 italic">"{currentQuote.quote_text}"</p>
                   <p className="text-md text-gray-600 mt-4">— {currentQuote.author}</p>
-                </div>
-                {/* Date Label */}
-                <div className="absolute top-4 left-4 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full z-10">
-                  <span className="text-sm font-medium text-gray-900">
-                    {formatDate(currentQuote.display_date)}
-                  </span>
-                </div>
-                {/* Bookmark Button */}
-                <div className="absolute top-4 right-16 z-10">
-                  <BookmarkButton 
-                    contentType="quote" 
-                    contentId={currentQuote.id} 
-                    size="md"
-                  />
                 </div>
               </div>
             ) : (
@@ -217,81 +216,64 @@ export default function QuotesCarousel() {
                   className="hidden"
                   onError={() => handleImageError(currentQuote.id)}
                 />
-                {/* Date Label */}
-                <div className="absolute top-4 left-4 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full z-10">
-                  <span className="text-sm font-medium text-gray-900">
-                    {formatDate(currentQuote.display_date)}
-                  </span>
-                </div>
-                {/* Action Buttons */}
-                <div className="absolute top-4 right-4 flex gap-2 z-10">
-                  {/* Download Button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleDownloadQuote(currentQuote.author || 'Unknown');
-                    }}
-                    disabled={isDownloading}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white hover:scale-110 transition-all duration-200 shadow-sm"
-                    title="Download Quote"
-                    data-testid="button-download-carousel-quote"
-                  >
-                    {isDownloading ? (
-                      <Loader2 className="h-5 w-5 text-gray-600 animate-spin" />
-                    ) : (
-                      <Download className="h-5 w-5 text-gray-600 hover:text-[hsl(75,64%,49%)]" />
-                    )}
-                  </Button>
-                  {/* Bookmark Button */}
-                  <BookmarkButton 
-                    contentType="quote" 
-                    contentId={currentQuote.id} 
-                    size="md"
-                  />
-                </div>
               </div>
             )}
           </div>
 
-          {/* Navigation Arrows */}
-          <Button
-            onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-gray-900 shadow-lg z-20"
-            data-testid="button-previous-quote"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </Button>
-          
+          {/* Right Navigation Arrow - Outside quote box */}
           <Button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-gray-900 shadow-lg z-20"
+            className="flex-shrink-0 w-12 h-12 rounded-full bg-white hover:bg-gray-100 text-gray-900 shadow-lg"
             data-testid="button-next-quote"
           >
             <ChevronRight className="w-6 h-6" />
           </Button>
-
-          {/* Autoplay Control */}
-          <Button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="absolute top-4 right-4 px-3 py-2 bg-white/90 hover:bg-white text-gray-900 text-xs rounded-full shadow-lg z-20"
-            data-testid="button-toggle-autoplay"
-          >
-            {isPlaying ? "Pause" : "Play"}
-          </Button>
         </div>
 
-        {/* Dot Indicators */}
-        <div className="flex justify-center items-center mt-8 space-x-3">
+        {/* Date and Action Buttons - Below quote box in black */}
+        <div className="flex justify-center items-center mt-4 gap-4">
+          <span className="text-sm font-medium text-black">
+            {formatDate(currentQuote.display_date)}
+          </span>
+          <div className="flex gap-2">
+            {/* Download Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleDownloadQuote(currentQuote.author || 'Unknown');
+              }}
+              disabled={isDownloading}
+              className="p-2 rounded-full bg-white hover:bg-gray-100 transition-all duration-200 shadow-sm"
+              title="Download Quote"
+              data-testid="button-download-carousel-quote"
+            >
+              {isDownloading ? (
+                <Loader2 className="h-5 w-5 text-black animate-spin" />
+              ) : (
+                <Download className="h-5 w-5 text-black hover:text-[#70c92e]" />
+              )}
+            </Button>
+            {/* Bookmark Button */}
+            <BookmarkButton 
+              contentType="quote" 
+              contentId={currentQuote.id} 
+              size="md"
+            />
+          </div>
+        </div>
+
+        {/* Dot Indicators - Brand green */}
+        <div className="flex justify-center items-center mt-6 space-x-3">
           {quotes.map((_, index) => (
             <button
               key={index}
               onClick={() => goToIndex(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentIndex
-                  ? "bg-gradient-to-r from-orange-400 to-pink-500 scale-125"
+                  ? "bg-[#70c92e] scale-125"
                   : "bg-gray-300 hover:bg-gray-400"
               }`}
               data-testid={`dot-indicator-${index}`}
@@ -299,7 +281,7 @@ export default function QuotesCarousel() {
           ))}
         </div>
 
-        {/* Author Labels */}
+        {/* Author Labels - Brand green */}
         <div className="flex justify-center items-center mt-6 flex-wrap gap-2">
           {quotes.map((quote, index) => (
             <button
@@ -307,7 +289,7 @@ export default function QuotesCarousel() {
               onClick={() => goToIndex(index)}
               className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 ${
                 index === currentIndex
-                  ? "bg-gradient-to-r from-orange-400 to-pink-500 text-white"
+                  ? "bg-[#70c92e] text-white"
                   : "bg-gray-100 hover:bg-gray-200 text-gray-700"
               }`}
               data-testid={`author-label-${index}`}

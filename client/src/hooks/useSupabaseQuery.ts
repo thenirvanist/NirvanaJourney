@@ -154,11 +154,12 @@ export function useActiveQuotes() {
         .eq("active", true)
         .lte("display_date", today)
         .order("display_date", { ascending: false })
-        .limit(10);
+        .limit(5);
       if (error) throw error;
       return data || [];
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 }
 
