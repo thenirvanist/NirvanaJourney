@@ -1,14 +1,21 @@
 import { useState, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, User, LogOut, Heart } from "lucide-react";
+import { Menu, X, User, LogOut, Heart, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageDropdown } from "./LanguageDropdown";
 import usePreviewMode from "@/hooks/usePreviewMode";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [location] = useLocation();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
   const isPreviewMode = usePreviewMode();
@@ -21,6 +28,15 @@ export default function Navigation() {
     { href: "/daily-quotes", label: "Daily Quotes", hidden: false },
     { href: "/inner-nutrition", label: "Insights", hidden: false },
   ];
+
+  const aboutSubItems = [
+    { href: "/about/why-indian-philosophies", label: "Why Indian Philosophies" },
+    { href: "/about/understanding", label: "Understanding Indian Philosophies" },
+    { href: "/about/us", label: "About Us" },
+    { href: "/about/how-we-explore", label: "How Will We Explore" },
+  ];
+
+  const isAboutActive = () => location.startsWith("/about");
   
   const navItems = useMemo(() => 
     allNavItems.filter(item => isPreviewMode || !item.hidden),
@@ -51,6 +67,32 @@ export default function Navigation() {
                 </Button>
               </Link>
             ))}
+            
+            {/* About Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={`text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 ${
+                    isAboutActive() ? "bg-[hsl(70,71%,62%)] text-black" : ""
+                  }`}
+                >
+                  About
+                  <ChevronDown className="ml-1 w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white border shadow-lg rounded-lg mt-2">
+                {aboutSubItems.map((item) => (
+                  <DropdownMenuItem key={item.href} asChild className="cursor-pointer">
+                    <Link href={item.href} className="w-full">
+                      <span className={`w-full px-2 py-1 ${isActive(item.href) ? "text-[#70c92e] font-semibold" : "text-gray-700 hover:text-[#70c92e]"}`}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             {/* Language and Authentication Section */}
             <div className="flex items-center space-x-4 pl-4 border-l border-white/20">
@@ -118,18 +160,60 @@ export default function Navigation() {
           <div className="md:hidden mt-4 pb-4 border-t border-white/20">
             <div className="flex flex-col space-y-2 mt-4">
               {navItems.map((item) => (
-                <Link key={item.href} href={item.href}>
+                <Link 
+                  key={item.href} 
+                  href={item.href}
+                  onClick={() => setTimeout(() => setIsOpen(false), 100)}
+                >
                   <Button
                     variant="ghost"
                     className={`w-full text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 justify-start ${
                       isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
                     }`}
-                    onClick={() => setIsOpen(false)}
                   >
                     {item.label}
                   </Button>
                 </Link>
               ))}
+              
+              {/* Mobile About Section */}
+              <div className="mt-2">
+                <Button
+                  variant="ghost"
+                  className={`w-full text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 justify-between ${
+                    isAboutActive() ? "bg-[hsl(70,71%,62%)] text-black" : ""
+                  }`}
+                  onClick={() => setAboutOpen(!aboutOpen)}
+                >
+                  About
+                  <ChevronDown className={`w-4 h-4 transition-transform ${aboutOpen ? "rotate-180" : ""}`} />
+                </Button>
+                {aboutOpen && (
+                  <div className="ml-4 mt-1 space-y-1">
+                    {aboutSubItems.map((item) => (
+                      <Link 
+                        key={item.href} 
+                        href={item.href}
+                        onClick={() => {
+                          setTimeout(() => {
+                            setIsOpen(false);
+                            setAboutOpen(false);
+                          }, 100);
+                        }}
+                      >
+                        <Button
+                          variant="ghost"
+                          className={`w-full text-white/80 hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 justify-start text-sm ${
+                            isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
+                          }`}
+                        >
+                          {item.label}
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
               
               {/* Mobile Language Selection */}
               <div className="px-4 py-2">

@@ -31,6 +31,10 @@ import NutritionAdmin from "@/pages/admin/NutritionAdmin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import ConfirmNewsletter from "@/pages/ConfirmNewsletter";
 import Chatbot from "@/components/Chatbot";
+import WhyIndianPhilosophies from "@/pages/about/WhyIndianPhilosophies";
+import UnderstandingIndianPhilosophies from "@/pages/about/UnderstandingIndianPhilosophies";
+import AboutUs from "@/pages/about/AboutUs";
+import HowWillWeExplore from "@/pages/about/HowWillWeExplore";
 
 function Router() {
   return (
@@ -58,6 +62,10 @@ function Router() {
       <Route path="/admin/nutrition" component={NutritionAdmin} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/confirm-newsletter" component={ConfirmNewsletter} />
+      <Route path="/about/why-indian-philosophies" component={WhyIndianPhilosophies} />
+      <Route path="/about/understanding" component={UnderstandingIndianPhilosophies} />
+      <Route path="/about/us" component={AboutUs} />
+      <Route path="/about/how-we-explore" component={HowWillWeExplore} />
       <Route component={NotFound} />
     </Switch>
   );
