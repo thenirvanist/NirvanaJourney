@@ -47,7 +47,7 @@ export default function InnerNutritionSection() {
     return (
       <section className="py-20 bg-[#F7F2E8]">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-8">Inner Nutrition</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-8">Insights</h2>
           <p className="text-xl text-gray-600 mb-12">
             Nourishment for your spiritual journey through mindful insights and transformative wisdom
           </p>
@@ -61,7 +61,7 @@ export default function InnerNutritionSection() {
     <section className="py-20 bg-[#F7F2E8]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Inner Nutrition</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Insights</h2>
           <p className="text-xl text-gray-600 mb-8">
             Nourishment for your spiritual journey through mindful insights and transformative wisdom
           </p>
@@ -70,8 +70,8 @@ export default function InnerNutritionSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {latestPosts.map((post: BlogPost) => (
             <Link key={post.id} href={`/inner-nutrition/${post.slug}`}>
-              <Card className="group bg-white hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border-0">
-                <div className="relative overflow-hidden">
+              <Card className="group bg-white hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border-0 h-full flex flex-col">
+                <div className="relative overflow-hidden flex-shrink-0">
                   <img
                     src={post.image}
                     alt={post.title}
@@ -80,7 +80,7 @@ export default function InnerNutritionSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 
-                <CardContent className="p-6">
+                <CardContent className="p-6 flex flex-col flex-grow">
                   <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
                     <div className="flex items-center gap-1">
                       <User className="w-4 h-4" />
@@ -100,7 +100,7 @@ export default function InnerNutritionSection() {
                     {post.title}
                   </h3>
                   
-                  <p className="text-gray-600 leading-relaxed mb-4">
+                  <p className="text-gray-600 leading-relaxed mb-4 line-clamp-3 flex-grow">
                     {post.excerpt}
                   </p>
                   
@@ -117,7 +117,7 @@ export default function InnerNutritionSection() {
                     </div>
                   )}
                   
-                  <div className="flex items-center text-[hsl(75,64%,49%)] font-medium group-hover:text-[hsl(75,64%,39%)] transition-colors duration-300">
+                  <div className="flex items-center text-[hsl(75,64%,49%)] font-medium group-hover:text-[hsl(75,64%,39%)] transition-colors duration-300 mt-auto">
                     <span>Read More</span>
                     <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                   </div>

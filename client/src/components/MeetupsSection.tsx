@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Video, Users, Globe } from "lucide-react";
 import { Link } from "wouter";
-import satsangImage from "@assets/Satsang_2_1768145886759.png";
+import satsangImage from "@assets/Satsang_4_1768371365026.png";
 
 export default function MeetupsSection() {
   const sectionRef = useRef<HTMLElement>(null);

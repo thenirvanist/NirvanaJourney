@@ -16,7 +16,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import satsangImage from "@assets/Satsang_2_1768145886759.png";
+import satsangImage from "@assets/Satsang_4_1768371365026.png";
 
 const meetupsBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },

@@ -69,8 +69,8 @@ export default function SimpleSagesSection() {
               onClick={() => window.scrollTo(0, 0)}
               className="block"
             >
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer h-full">
-                <div className="relative">
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer h-full flex flex-col">
+                <div className="relative flex-shrink-0">
                   <img 
                     src={sage.image} 
                     alt={sage.name}
@@ -84,25 +84,27 @@ export default function SimpleSagesSection() {
                     />
                   </div>
                 </div>
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow">
                   <h3 className="text-xl font-semibold mb-2">{sage.name}</h3>
-                  <p className="text-gray-600 mb-3">{sage.description}</p>
+                  <p className="text-gray-600 mb-3 line-clamp-2">{sage.description}</p>
                   <p className="text-sm text-gray-500 mb-4">{sage.location}</p>
                   
-                  {sage.teachings && sage.teachings.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="font-medium text-gray-700 mb-2">Core Teachings:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {sage.teachings.slice(0, 3).map((teaching, index) => (
-                          <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                            {teaching}
-                          </span>
-                        ))}
+                  <div className="flex-grow">
+                    {sage.teachings && sage.teachings.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="font-medium text-gray-700 mb-2">Notable Works:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {sage.teachings.slice(0, 3).map((teaching, index) => (
+                            <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                              {teaching}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
-                  <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 rounded-lg font-semibold transition-all duration-300">
+                  <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 rounded-lg font-semibold transition-all duration-300 mt-auto">
                     Read Full Biography
                   </Button>
                 </div>
