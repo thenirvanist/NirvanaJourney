@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import { Link } from "wouter";
-import { ArrowRight, Mail, Users, Video, MapPin, MessageCircle } from "lucide-react";
+import { ArrowRight, Mail, Video, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const breadcrumb = createBreadcrumbSchema([
@@ -29,11 +29,6 @@ const explorationMethods = [
     description: "The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance."
   },
   {
-    icon: Users,
-    title: "Group Sessions",
-    description: "We will conduct virtual meetings where curated speeches by enlightened sages will be broadcasted, followed by questions for introspection or discussion. If possible, this will be conducted in groups of 8 virtually in your location, where you'll have the opportunity to gather with others to share and connect."
-  },
-  {
     icon: MapPin,
     title: "Ashram Visits",
     description: "In the near future, we will explore the potential to do site visits to ashrams across India. This deep experiential immersion will have a profound impact on you, as it has had on us."
@@ -44,11 +39,6 @@ const deepQuestions = [
   "What is the purpose of my life?",
   "What is happiness and how do I reach a sustainable state of peace, joy, and happiness?",
   "How do I deal with my emotions and relationships in my everyday life?"
-];
-
-const learnings = [
-  "The various schools of thought of Indian philosophy and what distinguishes them.",
-  "The unique and inspiring life stories of many Indian philosophers, coming from the East or the West."
 ];
 
 export default function HowWillWeExplore() {
@@ -99,8 +89,14 @@ export default function HowWillWeExplore() {
 
           <div className="bg-[#F7F2E8] rounded-3xl p-12 mb-20">
             <div className="max-w-3xl mx-auto">
+              <h3 className="text-2xl font-light text-gray-900 mb-6 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                More about Satsangs
+              </h3>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
                 Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                We will conduct virtual meetings where curated speeches by enlightened sages will be broadcasted, followed by questions for introspection or discussion. If possible, this will be conducted in groups of 8 virtually in your location, where you'll have the opportunity to gather with others to share and connect.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed">
                 However, if you prefer solitude, you may also attend the videos individually and introspect on the questions on your own.
@@ -108,9 +104,9 @@ export default function HowWillWeExplore() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 mb-20">
+          <div className="max-w-2xl mx-auto mb-20">
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-2xl font-light text-gray-900 mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+              <h3 className="text-2xl font-light text-gray-900 mb-6 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                 Deep Questions You'll Explore
               </h3>
               <ul className="space-y-4">
@@ -124,28 +120,6 @@ export default function HowWillWeExplore() {
                 ))}
               </ul>
             </div>
-
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h3 className="text-2xl font-light text-gray-900 mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                What You'll Learn
-              </h3>
-              <ul className="space-y-4">
-                {learnings.map((learning, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="w-6 h-6 rounded-full bg-[#70c92e] text-white flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
-                      ✓
-                    </span>
-                    <span className="text-gray-700">{learning}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-l-4 border-[#70c92e] pl-6 my-12 max-w-3xl mx-auto">
-            <p className="text-xl text-gray-800 italic leading-relaxed" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-              Coming from different backgrounds, and of rational thinking, we will try to maintain impartiality as much as possible.
-            </p>
           </div>
 
           <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center">

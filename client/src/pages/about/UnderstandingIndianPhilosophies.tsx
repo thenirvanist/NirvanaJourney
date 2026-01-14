@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import rigVedaImage from "@assets/Rig_Veda_Poem_on_parchment_1768386280615.png";
+import heroImage from "@assets/stock_images/himalayan_mountains__77518048.jpg";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -63,7 +64,7 @@ const concepts = [
     content: `The shared assumption that validates the worship of the divine in multiple forms also validates diverse ways of worshipping. Depending on the inclination of an individual, various channels are recognized as valid: knowledge (gnan), meditation (dhyan), devotion (bhakti), and action (karma). Art is also recognized as a vital channel of religious expression. Music, dance, and painting are pursued as paths for approaching the divine.`
   },
   {
-    title: "The Guru-Shishya System",
+    title: "The Guru-Shishya (disciple) System",
     content: `The guru system demands a different relationship from that of congregant and priest. The guru is seen as a path to—or in some cases an embodiment of—the divine. In philosophical systems that emphasize the disintegration of the ego, unconditional devotion to the guru is seen as the most efficient way for spiritual progress. However, this in no manner means to stop questioning or encourages blind faith. True gurus are those who encourage seekers to constantly question.`
   }
 ];
@@ -79,7 +80,7 @@ export default function UnderstandingIndianPhilosophies() {
       <Navigation />
       
       <section className="relative h-[50vh] flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1920&q=80')] bg-cover bg-center opacity-20"></div>
+        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             Understanding Indian Philosophies
@@ -133,25 +134,6 @@ export default function UnderstandingIndianPhilosophies() {
                 <p className="text-lg text-gray-600 leading-relaxed">
                   While Indian philosophies are marked by immense internal diversity of belief and practices, we do find broad patterns. They acknowledge explicitly or implicitly the authority of a vast scriptural corpus in the Sanskrit language known collectively as the Vedas. Most also share the concept that the divine manifests in a diversity of ways and believe in the eternity of the soul—reborn in body after body, life after life, guided by karma.
                 </p>
-              </div>
-
-              <div className="bg-[#F7F2E8] rounded-2xl p-8 mb-12">
-                <h2 className="text-2xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                  Schools of Indian Philosophy
-                </h2>
-                <p className="text-gray-700 mb-4">
-                  There are many schools of Indian philosophy. Some that maintain the validity of the Vedas are known as <strong>orthodox</strong>; those that do not are known as <strong>heterodox</strong>.
-                </p>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-white rounded-xl p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">Orthodox Schools</h4>
-                    <p className="text-sm text-gray-600">Nyaya, Vaisesika, Samkhya, Yoga, Mimamsa, and Vedanta</p>
-                  </div>
-                  <div className="bg-white rounded-xl p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">Heterodox Schools</h4>
-                    <p className="text-sm text-gray-600">Buddhism, Jainism, Carvaka, Ajivika, and Ajnana</p>
-                  </div>
-                </div>
               </div>
 
               <h2 className="text-3xl font-light text-gray-900 mb-8" style={{ fontFamily: 'Cormorant Garamond, serif' }}>

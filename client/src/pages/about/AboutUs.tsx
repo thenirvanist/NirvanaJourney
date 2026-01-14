@@ -5,6 +5,7 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SiLinkedin } from "react-icons/si";
 import foundersImage from "@assets/Screenshot_2026-01-14_at_14.02.51_1768386248129.png";
 
 const breadcrumb = createBreadcrumbSchema([
@@ -60,7 +61,11 @@ export default function AboutUs() {
             </p>
           </div>
 
-          <div className="my-16 flex flex-col lg:flex-row items-center gap-12">
+          <h2 className="text-3xl font-light text-gray-900 mb-12 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            Meet the Founders
+          </h2>
+
+          <div className="my-8 flex flex-col lg:flex-row items-start gap-12">
             <div className="lg:w-1/2">
               <img 
                 src={foundersImage} 
@@ -69,18 +74,35 @@ export default function AboutUs() {
               />
             </div>
             <div className="lg:w-1/2">
-              <h2 className="text-3xl font-light text-gray-900 mb-6" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                Meet the Founders
-              </h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-4">
                 We are <strong>Pratik Malia</strong> and <strong>Celine Delacharlerie</strong>, an Indian-Belgian couple who met in Singapore and now live in Mauritius.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-4">
                 We wanted to create this platform because we are ourselves very curious to indulge deeper in Indian philosophies, from which we have deeply benefited in our personal lives.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-600 leading-relaxed mb-6">
                 We wanted to create a ritual for ourselves to stay connected to this wisdom in the midst of our worldly life.
               </p>
+              <div className="flex gap-4">
+                <a 
+                  href="https://www.linkedin.com/in/pratik-malia-a3976227/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-[#0077B5] hover:bg-[#006699] text-white rounded-lg transition-colors"
+                >
+                  <SiLinkedin className="w-5 h-5" />
+                  Pratik
+                </a>
+                <a 
+                  href="https://www.linkedin.com/in/celinedelacharlerie/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-[#0077B5] hover:bg-[#006699] text-white rounded-lg transition-colors"
+                >
+                  <SiLinkedin className="w-5 h-5" />
+                  Celine
+                </a>
+              </div>
             </div>
           </div>
 

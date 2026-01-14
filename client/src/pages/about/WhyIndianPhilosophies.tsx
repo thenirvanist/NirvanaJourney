@@ -5,6 +5,7 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import heroImage from "@assets/stock_images/spiritual_meditation_8a5fb307.jpg";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -23,7 +24,7 @@ export default function WhyIndianPhilosophies() {
       <Navigation />
       
       <section className="relative h-[50vh] flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1545387092-733e7e39afe4?w=1920&q=80')] bg-cover bg-center opacity-30"></div>
+        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             Why Explore Indian Philosophy?
@@ -62,15 +63,15 @@ export default function WhyIndianPhilosophies() {
               Those commentators have also constantly encouraged questioning. They subjected their doctrines to rational analysis and justification, trying to give answers that rely as much as possible on logic. Strenuous attempts are made to show with logic and rationale what faith implicitly accepts.
             </p>
 
+            <p className="text-lg text-gray-600 leading-relaxed mb-8">
+              While in the West, philosophy is more of an intellectual exercise in search of the truth, in India, philosophy is more of a way of life. Although there is a strong truth-seeking strand in Indian philosophy, the truths sought are always ones that relate to the way we ought to live.
+            </p>
+
             <div className="border-l-4 border-[#70c92e] pl-6 my-12">
               <p className="text-xl text-gray-800 italic leading-relaxed" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                While in the West, philosophy is more of an intellectual exercise in search of the truth, in India, philosophy is more of a way of life. Although there is a strong truth-seeking strand in Indian philosophy, the truths sought are always ones that relate to the way we ought to live.
+                Therein lies the answer to "Why Indian philosophies?" They offer a wealth of inspiring thoughts and wisdom to help us make sense of our existence and to live our life with more peace and happiness. And if, after a sincere attempt to explore, they do not serve you, one must not hesitate to give them up either.
               </p>
             </div>
-
-            <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              Therein lies the answer to "Why Indian philosophies?" They offer a wealth of inspiring thoughts and wisdom to help us make sense of our existence and to live our life with more peace and happiness. And if, after a sincere attempt to explore, they do not serve you, one must not hesitate to give them up either.
-            </p>
           </div>
 
           <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center">
