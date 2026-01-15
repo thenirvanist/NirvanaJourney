@@ -71,7 +71,7 @@ const concepts = [
 
 export default function UnderstandingIndianPhilosophies() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <Seo
         title="Understanding Indian Philosophies - The Nirvanist"
         description="Explore the rich tapestry of Indian philosophical traditions from the Vedas to the Puranas, and understand the core concepts that unite them."
@@ -143,12 +143,16 @@ export default function UnderstandingIndianPhilosophies() {
               <div className="space-y-12">
                 {timelineSections.map((section, index) => (
                   <div key={section.id} id={section.id} className="scroll-mt-24">
-                    <div className="flex items-start gap-6">
-                      <div className="flex-shrink-0 w-24 text-center">
+                    <div className="flex items-start gap-4 sm:gap-6">
+                      <div className="hidden sm:block flex-shrink-0 w-24 text-center">
                         <div className="w-4 h-4 rounded-full bg-[#70c92e] mx-auto mb-2"></div>
                         <span className="text-xs text-gray-500">{section.period}</span>
                       </div>
                       <div className="flex-grow">
+                        <div className="flex sm:hidden items-center gap-2 mb-2">
+                          <div className="w-3 h-3 rounded-full bg-[#70c92e]"></div>
+                          <span className="text-xs text-gray-500">{section.period}</span>
+                        </div>
                         <h3 className="text-2xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
                           {section.title}
                         </h3>
@@ -173,7 +177,7 @@ export default function UnderstandingIndianPhilosophies() {
                       </div>
                     </div>
                     {index < timelineSections.length - 1 && (
-                      <div className="ml-12 border-l-2 border-gray-200 h-8 mt-4"></div>
+                      <div className="hidden sm:block ml-12 border-l-2 border-gray-200 h-8 mt-4"></div>
                     )}
                   </div>
                 ))}
