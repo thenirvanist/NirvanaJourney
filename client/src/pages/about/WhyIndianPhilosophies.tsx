@@ -6,6 +6,7 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@assets/stock_images/spiritual_meditation_8a5fb307.jpg";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -14,6 +15,7 @@ const breadcrumb = createBreadcrumbSchema([
 ]);
 
 export default function WhyIndianPhilosophies() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen">
       <Seo
@@ -27,10 +29,10 @@ export default function WhyIndianPhilosophies() {
         <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Why Explore Indian Philosophy?
+            {t("pages.about.whyPhilosophies.title")}
           </h1>
           <p className="text-xl text-gray-700">
-            A journey into wisdom that transforms how we understand life itself
+            {t("pages.about.whyPhilosophies.subtitle")}
           </p>
         </div>
       </section>

@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import rigVedaImage from "@assets/Rig_Veda_Poem_on_parchment_1768386280615.png";
 import heroImage from "@assets/stock_images/himalayan_mountains__77518048.jpg";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -70,6 +71,7 @@ const concepts = [
 ];
 
 export default function UnderstandingIndianPhilosophies() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
@@ -83,10 +85,10 @@ export default function UnderstandingIndianPhilosophies() {
         <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30" />
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Understanding Indian Philosophies
+            {t("pages.about.understanding.title")}
           </h1>
           <p className="text-xl text-gray-700">
-            From the Vedas to the Puranas: A journey through millennia of wisdom
+            {t("pages.about.understanding.subtitle")}
           </p>
         </div>
       </section>
@@ -96,7 +98,7 @@ export default function UnderstandingIndianPhilosophies() {
           <div className="grid lg:grid-cols-4 gap-12">
             <aside className="lg:col-span-1">
               <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Timeline</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">{t("pages.about.understanding.timeline")}</h3>
                 <nav className="space-y-2">
                   {timelineSections.map((section) => (
                     <a

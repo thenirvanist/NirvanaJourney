@@ -5,6 +5,7 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import { Link } from "wouter";
 import { ArrowRight, Mail, Video, MapPin, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -42,6 +43,7 @@ const deepQuestions = [
 ];
 
 export default function HowWillWeExplore() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen">
       <Seo
@@ -55,10 +57,10 @@ export default function HowWillWeExplore() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600618528240-fb9fc964b853?w=1920&q=80')] bg-cover bg-center opacity-20"></div>
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            How Will We Explore?
+            {t("pages.about.howExplore.title")}
           </h1>
           <p className="text-xl text-gray-700">
-            Join us on a journey of discovery through multiple pathways of learning
+            {t("pages.about.howExplore.subtitle")}
           </p>
         </div>
       </section>
@@ -72,7 +74,7 @@ export default function HowWillWeExplore() {
           </div>
 
           <h2 className="text-3xl font-light text-gray-900 mb-12 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Our Exploration Methods
+            {t("pages.about.howExplore.methods")}
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">

@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiLinkedin } from "react-icons/si";
 import foundersImage from "@assets/Screenshot_2026-01-14_at_14.02.51_1768386248129.png";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -15,6 +16,7 @@ const breadcrumb = createBreadcrumbSchema([
 ]);
 
 export default function AboutUs() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen">
       <Seo
@@ -28,10 +30,10 @@ export default function AboutUs() {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80')] bg-cover bg-center opacity-20"></div>
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            About Us
+            {t("pages.about.aboutUs.title")}
           </h1>
           <p className="text-xl text-gray-700">
-            Our journey into Indian philosophy and the vision behind The Nirvanist
+            {t("pages.about.aboutUs.subtitle")}
           </p>
         </div>
       </section>
@@ -62,7 +64,7 @@ export default function AboutUs() {
           </div>
 
           <h2 className="text-3xl font-light text-gray-900 mb-12 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Meet the Founders
+            {t("pages.about.aboutUs.meetFounders")}
           </h2>
 
           <div className="my-8 flex flex-col lg:flex-row items-start gap-12">
