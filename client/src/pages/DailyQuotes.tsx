@@ -8,8 +8,10 @@ import Footer from "@/components/Footer";
 import { useAllDailyWisdom } from "@/hooks/useSupabaseQuery";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import html2canvas from "html2canvas";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function DailyQuotes() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
@@ -76,8 +78,8 @@ export default function DailyQuotes() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Daily Quotes...</h1>
-              <p className="text-xl text-gray-600">Gathering spiritual insights for your journey</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.quotes.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.quotes.loadingSubtitle")}</p>
             </div>
           </div>
         </div>
@@ -93,10 +95,9 @@ export default function DailyQuotes() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Unable to Load Daily Quotes</h1>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.quotes.error")}</h1>
               <p className="text-xl text-gray-600">
-                We're experiencing difficulties accessing the quotes. 
-                Please try again later.
+                {t("pages.quotes.errorSubtitle")}
               </p>
             </div>
           </div>
@@ -113,9 +114,9 @@ export default function DailyQuotes() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Daily Quotes</h1>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.quotes.title")}</h1>
               <p className="text-xl text-gray-600">
-                Daily wisdom quotes are being compiled. Please check back soon.
+                {t("pages.quotes.empty")}
               </p>
             </div>
           </div>
@@ -132,10 +133,9 @@ export default function DailyQuotes() {
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-gray-100 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-6">Daily Quotes</h1>
+          <h1 className="text-5xl font-bold mb-6">{t("pages.quotes.title")}</h1>
           <p className="text-xl text-gray-600 leading-relaxed">
-            Discover timeless wisdom from spiritual masters across traditions. Each quote offers 
-            profound insights to illuminate your path and nourish your spiritual journey.
+            {t("pages.quotes.subtitle")}
           </p>
         </div>
       </section>
@@ -149,7 +149,7 @@ export default function DailyQuotes() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 type="text"
-                placeholder="Search by quote or author..."
+                placeholder={t("pages.quotes.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 py-3 text-lg rounded-lg border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] transition-colors"

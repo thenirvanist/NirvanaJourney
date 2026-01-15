@@ -116,14 +116,24 @@
     },
     "quotes": {
       "title": "Daily Spiritual Quotes",
-      "subtitle": "Ancient wisdom to inspire your daily practice",
-      "by": "by"
+      "subtitle": "Discover timeless wisdom from spiritual masters across traditions. Each quote offers profound insights to illuminate your path.",
+      "by": "by",
+      "loading": "Loading Daily Quotes...",
+      "loadingSubtitle": "Gathering spiritual insights for your journey",
+      "error": "Unable to Load Daily Quotes",
+      "errorSubtitle": "We're experiencing difficulties accessing the quotes. Please try again later.",
+      "empty": "Daily wisdom quotes are being compiled. Please check back soon.",
+      "searchPlaceholder": "Search by quote or author..."
     },
     "nutrition": {
       "title": "Inner Nutrition",
       "subtitle": "Insights and articles for spiritual growth",
       "readArticle": "Read Article",
-      "minRead": "min read"
+      "minRead": "min read",
+      "searchPlaceholder": "Search articles, authors, or topics...",
+      "noArticles": "No Articles Found",
+      "adjustSearch": "Try adjusting your search or filter criteria.",
+      "newArticles": "New articles are being prepared to nourish your spiritual journey."
     },
     "contact": {
       "title": "Contact Us",
@@ -179,6 +189,9 @@
       "title": "My Spiritual Collection",
       "subtitle": "Your saved journeys, sages, and ashrams",
       "noBookmarks": "You haven't saved anything yet. Start exploring!",
+      "loginRequired": "Login Required",
+      "loginMessage": "Please login to access your personal dashboard.",
+      "loginButton": "Login to Continue",
       "tabs": {
         "journeys": "Journeys",
         "sages": "Sages",
@@ -208,7 +221,8 @@
     "next": "Next",
     "previous": "Previous",
     "seeAll": "See All",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "clearFilters": "Clear Filters"
   },
   "footer": {
     "tagline": "Connecting souls with sacred journeys. Discover your path to inner peace and spiritual transformation.",

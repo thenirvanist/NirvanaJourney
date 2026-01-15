@@ -116,14 +116,24 @@
     },
     "quotes": {
       "title": "Tägliche Spirituelle Zitate",
-      "subtitle": "Alte Weisheit zur Inspiration Ihrer täglichen Praxis",
-      "by": "von"
+      "subtitle": "Entdecken Sie zeitlose Weisheit von spirituellen Meistern. Jedes Zitat bietet tiefe Einsichten, um Ihren Weg zu erhellen.",
+      "by": "von",
+      "loading": "Lade Tägliche Zitate...",
+      "loadingSubtitle": "Sammle spirituelle Einsichten für Ihre Reise",
+      "error": "Zitate konnten nicht geladen werden",
+      "errorSubtitle": "Wir haben Schwierigkeiten beim Zugriff auf die Zitate. Bitte versuchen Sie es später erneut.",
+      "empty": "Tägliche Weisheitszitate werden zusammengestellt. Bitte schauen Sie bald wieder vorbei.",
+      "searchPlaceholder": "Suche nach Zitat oder Autor..."
     },
     "nutrition": {
       "title": "Innere Nahrung",
       "subtitle": "Einsichten und Artikel für spirituelles Wachstum",
       "readArticle": "Artikel Lesen",
-      "minRead": "Min. Lesezeit"
+      "minRead": "Min. Lesezeit",
+      "searchPlaceholder": "Suche nach Artikeln, Autoren oder Themen...",
+      "noArticles": "Keine Artikel Gefunden",
+      "adjustSearch": "Versuchen Sie, Ihre Such- oder Filterkriterien anzupassen.",
+      "newArticles": "Neue Artikel werden vorbereitet, um Ihre spirituelle Reise zu nähren."
     },
     "contact": {
       "title": "Kontaktieren Sie Uns",
@@ -179,6 +189,9 @@
       "title": "Meine Spirituelle Sammlung",
       "subtitle": "Ihre gespeicherten Reisen, Weisen und Ashrams",
       "noBookmarks": "Sie haben noch nichts gespeichert. Beginnen Sie mit dem Erkunden!",
+      "loginRequired": "Anmeldung Erforderlich",
+      "loginMessage": "Bitte melden Sie sich an, um auf Ihr persönliches Dashboard zuzugreifen.",
+      "loginButton": "Anmelden zum Fortfahren",
       "tabs": {
         "journeys": "Reisen",
         "sages": "Weise",
@@ -208,7 +221,8 @@
     "next": "Weiter",
     "previous": "Zurück",
     "seeAll": "Alle Anzeigen",
-    "noResults": "Keine Ergebnisse gefunden"
+    "noResults": "Keine Ergebnisse gefunden",
+    "clearFilters": "Filter Löschen"
   },
   "footer": {
     "tagline": "Seelen mit heiligen Reisen verbinden. Entdecken Sie Ihren Weg zum inneren Frieden und zur spirituellen Transformation.",

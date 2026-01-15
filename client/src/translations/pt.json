@@ -116,14 +116,24 @@
     },
     "quotes": {
       "title": "Citações Espirituais Diárias",
-      "subtitle": "Sabedoria antiga para inspirar sua prática diária",
-      "by": "por"
+      "subtitle": "Descubra a sabedoria atemporal dos mestres espirituais. Cada citação oferece insights profundos para iluminar seu caminho.",
+      "by": "por",
+      "loading": "Carregando Citações Diárias...",
+      "loadingSubtitle": "Reunindo insights espirituais para sua jornada",
+      "error": "Não foi possível carregar as citações diárias",
+      "errorSubtitle": "Estamos tendo dificuldades para acessar as citações. Por favor, tente novamente mais tarde.",
+      "empty": "As citações de sabedoria diária estão sendo compiladas. Por favor, volte em breve.",
+      "searchPlaceholder": "Pesquisar por citação ou autor..."
     },
     "nutrition": {
       "title": "Nutrição Interior",
       "subtitle": "Insights e artigos para crescimento espiritual",
       "readArticle": "Ler Artigo",
-      "minRead": "min de leitura"
+      "minRead": "min de leitura",
+      "searchPlaceholder": "Pesquisar artigos, autores ou tópicos...",
+      "noArticles": "Nenhum Artigo Encontrado",
+      "adjustSearch": "Tente ajustar seus critérios de pesquisa ou filtro.",
+      "newArticles": "Novos artigos estão sendo preparados para nutrir sua jornada espiritual."
     },
     "contact": {
       "title": "Fale Conosco",
@@ -179,6 +189,9 @@
       "title": "Minha Coleção Espiritual",
       "subtitle": "Suas jornadas, sábios e ashrams salvos",
       "noBookmarks": "Você ainda não salvou nada. Comece a explorar!",
+      "loginRequired": "Login Necessário",
+      "loginMessage": "Por favor, faça login para acessar seu painel pessoal.",
+      "loginButton": "Fazer Login para Continuar",
       "tabs": {
         "journeys": "Jornadas",
         "sages": "Sábios",
@@ -208,7 +221,8 @@
     "next": "Próximo",
     "previous": "Anterior",
     "seeAll": "Ver Tudo",
-    "noResults": "Nenhum resultado encontrado"
+    "noResults": "Nenhum resultado encontrado",
+    "clearFilters": "Limpar Filtros"
   },
   "footer": {
     "tagline": "Conectando almas com jornadas sagradas. Descubra seu caminho para a paz interior e transformação espiritual.",

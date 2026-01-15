@@ -116,14 +116,24 @@
     },
     "quotes": {
       "title": "Citations Spirituelles Quotidiennes",
-      "subtitle": "Sagesse ancienne pour inspirer votre pratique quotidienne",
-      "by": "par"
+      "subtitle": "Découvrez la sagesse intemporelle des maîtres spirituels. Chaque citation offre des perspectives profondes pour éclairer votre chemin.",
+      "by": "par",
+      "loading": "Chargement des Citations Quotidiennes...",
+      "loadingSubtitle": "Rassemblement des perspectives spirituelles pour votre voyage",
+      "error": "Impossible de Charger les Citations",
+      "errorSubtitle": "Nous rencontrons des difficultés pour accéder aux citations. Veuillez réessayer plus tard.",
+      "empty": "Les citations de sagesse quotidienne sont en cours de compilation. Revenez bientôt.",
+      "searchPlaceholder": "Rechercher par citation ou auteur..."
     },
     "nutrition": {
       "title": "Nutrition Intérieure",
       "subtitle": "Perspectives et articles pour la croissance spirituelle",
       "readArticle": "Lire l'Article",
-      "minRead": "min de lecture"
+      "minRead": "min de lecture",
+      "searchPlaceholder": "Rechercher articles, auteurs ou sujets...",
+      "noArticles": "Aucun Article Trouvé",
+      "adjustSearch": "Essayez d'ajuster vos critères de recherche ou de filtre.",
+      "newArticles": "De nouveaux articles sont en préparation pour nourrir votre voyage spirituel."
     },
     "contact": {
       "title": "Nous Contacter",
@@ -179,6 +189,9 @@
       "title": "Ma Collection Spirituelle",
       "subtitle": "Vos voyages, sages et ashrams sauvegardés",
       "noBookmarks": "Vous n'avez encore rien sauvegardé. Commencez à explorer!",
+      "loginRequired": "Connexion Requise",
+      "loginMessage": "Veuillez vous connecter pour accéder à votre tableau de bord personnel.",
+      "loginButton": "Se Connecter pour Continuer",
       "tabs": {
         "journeys": "Voyages",
         "sages": "Sages",
@@ -208,7 +221,8 @@
     "next": "Suivant",
     "previous": "Précédent",
     "seeAll": "Voir Tout",
-    "noResults": "Aucun résultat trouvé"
+    "noResults": "Aucun résultat trouvé",
+    "clearFilters": "Effacer les Filtres"
   },
   "footer": {
     "tagline": "Connecter les âmes avec des voyages sacrés. Découvrez votre chemin vers la paix intérieure et la transformation spirituelle.",

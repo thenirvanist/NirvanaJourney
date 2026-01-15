@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import satsangImage from "@assets/Satsang_4_1768371365026.png";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const meetupsBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -34,6 +35,7 @@ const registrationSchema = z.object({
 type RegistrationForm = z.infer<typeof registrationSchema>;
 
 export default function Meetups() {
+  const { t } = useTranslation();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();

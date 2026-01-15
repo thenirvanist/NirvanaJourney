@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import type { BlogPost } from "@shared/schema";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { useBlogPosts } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const blogBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -18,6 +19,7 @@ const blogBreadcrumb = createBreadcrumbSchema([
 ]);
 
 export default function InnerNutrition() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -75,10 +77,9 @@ export default function InnerNutrition() {
       <section className="pt-24 pb-16 bg-gradient-to-br from-[hsl(38,42%,96%)] to-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">Inner Nutrition</h1>
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">{t("sections.nutrition.title")}</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover profound insights and transformative wisdom to nourish your spiritual journey. 
-              Explore articles on mindfulness, consciousness, and the path to inner awakening.
+              {t("sections.nutrition.subtitle")}
             </p>
           </div>
 
@@ -89,7 +90,7 @@ export default function InnerNutrition() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <Input
                   type="text"
-                  placeholder="Search articles, authors, or topics..."
+                  placeholder={t("pages.nutrition.searchPlaceholder")}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 py-3 border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] rounded-lg"
@@ -138,11 +139,11 @@ export default function InnerNutrition() {
             </div>
           ) : filteredPosts.length === 0 ? (
             <div className="text-center py-20">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">No Articles Found</h3>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">{t("pages.nutrition.noArticles")}</h3>
               <p className="text-gray-600 mb-8">
                 {searchTerm || selectedCategory !== "All" 
-                  ? "Try adjusting your search or filter criteria."
-                  : "New articles are being prepared to nourish your spiritual journey."
+                  ? t("pages.nutrition.adjustSearch")
+                  : t("pages.nutrition.newArticles")
                 }
               </p>
               {(searchTerm || selectedCategory !== "All") && (
@@ -154,7 +155,7 @@ export default function InnerNutrition() {
                   variant="outline"
                   className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white"
                 >
-                  Clear Filters
+                  {t("common.clearFilters")}
                 </Button>
               )}
             </div>

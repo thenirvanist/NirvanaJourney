@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Sage, Ashram, BlogPost, Journey, DailyWisdom } from "@shared/schema";
 import Navigation from "@/components/Navigation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Bookmark {
   id: number;
@@ -18,6 +19,7 @@ interface Bookmark {
 }
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const { user, isLoading: authLoading, session } = useAuth();
   const [, navigate] = useLocation();
 
@@ -134,13 +136,13 @@ export default function Dashboard() {
           <Card className="w-full max-w-md">
             <CardContent className="p-6 text-center">
               <User className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-              <h2 className="text-xl font-semibold mb-2">Login Required</h2>
+              <h2 className="text-xl font-semibold mb-2">{t("pages.dashboard.loginRequired")}</h2>
               <p className="text-gray-600 mb-4">
-                Please login to access your personal dashboard.
+                {t("pages.dashboard.loginMessage")}
               </p>
               <Link href="/login">
                 <Button className="w-full" data-testid="button-login">
-                  Login to Continue
+                  {t("pages.dashboard.loginButton")}
                 </Button>
               </Link>
             </CardContent>

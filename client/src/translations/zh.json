@@ -116,14 +116,24 @@
     },
     "quotes": {
       "title": "每日灵性箴言",
-      "subtitle": "古老智慧激励您的日常修行",
-      "by": "来自"
+      "subtitle": "发现灵性大师们亘古不变的智慧。每句箴言都提供深刻的洞察来照亮您的道路。",
+      "by": "来自",
+      "loading": "加载每日箴言中...",
+      "loadingSubtitle": "为您的旅程收集灵性洞察",
+      "error": "无法加载每日箴言",
+      "errorSubtitle": "我们在访问箴言时遇到困难，请稍后重试。",
+      "empty": "每日智慧箴言正在整理中，请稍后再来。",
+      "searchPlaceholder": "按箴言或作者搜索..."
     },
     "nutrition": {
       "title": "内在滋养",
       "subtitle": "促进灵性成长的洞察与文章",
       "readArticle": "阅读文章",
-      "minRead": "分钟阅读"
+      "minRead": "分钟阅读",
+      "searchPlaceholder": "搜索文章、作者或主题...",
+      "noArticles": "未找到文章",
+      "adjustSearch": "请尝试调整您的搜索或筛选条件。",
+      "newArticles": "新文章正在准备中，以滋养您的灵性之旅。"
     },
     "contact": {
       "title": "联系我们",
@@ -179,6 +189,9 @@
       "title": "我的灵性收藏",
       "subtitle": "您保存的旅程、圣贤和修道院",
       "noBookmarks": "您还没有保存任何内容，开始探索吧！",
+      "loginRequired": "需要登录",
+      "loginMessage": "请登录以访问您的个人仪表板。",
+      "loginButton": "登录以继续",
       "tabs": {
         "journeys": "旅程",
         "sages": "圣贤",
@@ -208,7 +221,8 @@
     "next": "下一个",
     "previous": "上一个",
     "seeAll": "查看全部",
-    "noResults": "未找到结果"
+    "noResults": "未找到结果",
+    "clearFilters": "清除筛选"
   },
   "footer": {
     "tagline": "连接灵魂与神圣之旅。发现通往内心平静和灵性转化的道路。",

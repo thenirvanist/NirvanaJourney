@@ -116,14 +116,24 @@
     },
     "quotes": {
       "title": "Citas Espirituales Diarias",
-      "subtitle": "Sabiduría antigua para inspirar tu práctica diaria",
-      "by": "por"
+      "subtitle": "Descubre la sabiduría eterna de los maestros espirituales. Cada cita ofrece profundas perspectivas para iluminar tu camino.",
+      "by": "por",
+      "loading": "Cargando Citas Diarias...",
+      "loadingSubtitle": "Reuniendo perspectivas espirituales para tu viaje",
+      "error": "No se pudieron cargar las citas",
+      "errorSubtitle": "Estamos experimentando dificultades para acceder a las citas. Por favor, inténtalo más tarde.",
+      "empty": "Las citas de sabiduría diaria se están compilando. Por favor, vuelve pronto.",
+      "searchPlaceholder": "Buscar por cita o autor..."
     },
     "nutrition": {
       "title": "Nutrición Interior",
       "subtitle": "Perspectivas y artículos para el crecimiento espiritual",
       "readArticle": "Leer Artículo",
-      "minRead": "min de lectura"
+      "minRead": "min de lectura",
+      "searchPlaceholder": "Buscar artículos, autores o temas...",
+      "noArticles": "No se Encontraron Artículos",
+      "adjustSearch": "Intenta ajustar tus criterios de búsqueda o filtro.",
+      "newArticles": "Se están preparando nuevos artículos para nutrir tu viaje espiritual."
     },
     "contact": {
       "title": "Contáctanos",
@@ -179,6 +189,9 @@
       "title": "Mi Colección Espiritual",
       "subtitle": "Tus viajes, sabios y ashrams guardados",
       "noBookmarks": "Aún no has guardado nada. ¡Comienza a explorar!",
+      "loginRequired": "Se Requiere Iniciar Sesión",
+      "loginMessage": "Por favor, inicia sesión para acceder a tu panel personal.",
+      "loginButton": "Iniciar Sesión para Continuar",
       "tabs": {
         "journeys": "Viajes",
         "sages": "Sabios",
@@ -208,7 +221,8 @@
     "next": "Siguiente",
     "previous": "Anterior",
     "seeAll": "Ver Todo",
-    "noResults": "No se encontraron resultados"
+    "noResults": "No se encontraron resultados",
+    "clearFilters": "Limpiar Filtros"
   },
   "footer": {
     "tagline": "Conectando almas con viajes sagrados. Descubre tu camino hacia la paz interior y la transformación espiritual.",
