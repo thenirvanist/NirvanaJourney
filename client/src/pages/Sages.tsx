@@ -10,6 +10,7 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useSages } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const sagesBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -17,6 +18,7 @@ const sagesBreadcrumb = createBreadcrumbSchema([
 ]);
 
 export default function Sages() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
 
@@ -62,8 +64,8 @@ export default function Sages() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Wisdom of the Sages...</h1>
-              <p className="text-xl text-gray-600">Gathering the profound teachings of spiritual masters</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.sages.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.sages.loadingSubtitle")}</p>
             </div>
           </div>
         </div>
@@ -79,10 +81,9 @@ export default function Sages() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Unable to Load Sage Wisdom</h1>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.sages.error")}</h1>
               <p className="text-xl text-gray-600">
-                We're experiencing difficulties accessing the sacred texts and teachings. 
-                Please try again later or contact our support team.
+                {t("pages.sages.errorSubtitle")}
               </p>
             </div>
           </div>
@@ -99,10 +100,9 @@ export default function Sages() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Wisdom of the Sages</h1>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.sages.title")}</h1>
               <p className="text-xl text-gray-600">
-                The sacred teachings are being compiled. Please check back soon as we continue 
-                to gather wisdom from spiritual masters across traditions.
+                {t("pages.sages.empty")}
               </p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function Sages() {
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-6">Wisdom of the Sages</h1>
+          <h1 className="text-5xl font-bold mb-6">{t("pages.sages.title")}</h1>
           <p className="text-xl text-gray-600 leading-relaxed">
             Spiritual philosophers, to whatever background they may belong, have left their mark in sands of times. 
             They lived and left this world holding a single aspiration – progress of their fellow human beings 
@@ -153,7 +153,7 @@ export default function Sages() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 type="text"
-                placeholder="Search sages by name or keywords..."
+                placeholder={t("pages.sages.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 py-3 text-lg rounded-lg border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] transition-colors"
@@ -242,7 +242,7 @@ export default function Sages() {
                             <div>
                               <div className="flex items-center mb-1">
                                 <Sparkles className="w-4 h-4 text-[hsl(75,64%,49%)] mr-2" />
-                                <h4 className="font-semibold text-gray-700 text-xs">Core Teachings</h4>
+                                <h4 className="font-semibold text-gray-700 text-xs">{t("pages.sages.coreTeachings")}</h4>
                               </div>
                               <div className="flex flex-wrap gap-1">
                                 {sage.teachings.slice(0, 2).map((teaching, index) => (
@@ -263,7 +263,7 @@ export default function Sages() {
                             <div>
                               <div className="flex items-center mb-1">
                                 <BookOpen className="w-4 h-4 text-[hsl(75,64%,49%)] mr-2" />
-                                <h4 className="font-semibold text-gray-700 text-xs">Notable Work</h4>
+                                <h4 className="font-semibold text-gray-700 text-xs">{t("pages.sages.notableWorks")}</h4>
                               </div>
                               <ul className="text-xs text-gray-600 space-y-0.5">
                                 {sage.books.slice(0, 2).map((book, index) => (
@@ -285,7 +285,7 @@ export default function Sages() {
 
                       <div className="pt-3 border-t border-gray-100 mt-3">
                         <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black py-2.5 text-sm rounded-lg font-semibold transition-all duration-300">
-                          Read Full Biography
+                          {t("pages.sages.readBio")}
                         </Button>
                       </div>
                     </div>

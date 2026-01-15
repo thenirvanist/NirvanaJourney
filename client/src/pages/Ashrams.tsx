@@ -10,6 +10,7 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useAshrams } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const ashramsBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -17,6 +18,7 @@ const ashramsBreadcrumb = createBreadcrumbSchema([
 ]);
 
 export default function Ashrams() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
 
@@ -59,8 +61,8 @@ export default function Ashrams() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Sacred Ashrams...</h1>
-              <p className="text-xl text-gray-600">Discovering peaceful sanctuaries for spiritual growth</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.ashrams.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.ashrams.subtitle")}</p>
             </div>
           </div>
         </div>
@@ -76,10 +78,9 @@ export default function Ashrams() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Unable to Load Sacred Spaces</h1>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.sages.error")}</h1>
               <p className="text-xl text-gray-600">
-                We're experiencing difficulties connecting to our ashram network. 
-                Please try again later or contact our support team.
+                {t("pages.sages.errorSubtitle")}
               </p>
             </div>
           </div>
@@ -96,10 +97,9 @@ export default function Ashrams() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Sacred Ashrams</h1>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.ashrams.title")}</h1>
               <p className="text-xl text-gray-600">
-                Our network of sacred ashrams is being carefully curated. Please check back soon 
-                as we continue to connect with spiritual centers worldwide.
+                {t("pages.sages.empty")}
               </p>
             </div>
           </div>
@@ -123,9 +123,9 @@ export default function Ashrams() {
                style={{backgroundImage: "url('https://images.unsplash.com/photo-1582510003544-4d00b7f74220?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800')"}}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-          <h1 className="text-6xl font-bold mb-6">Sacred Ashrams</h1>
+          <h1 className="text-6xl font-bold mb-6">{t("pages.ashrams.title")}</h1>
           <p className="text-xl mb-8 leading-relaxed">
-            Discover ancient ashrams where countless souls have found peace and enlightenment. 
+            {t("pages.ashrams.subtitle")} 
             These sacred spaces have preserved spiritual wisdom for centuries, offering refuge 
             and guidance to seekers from all walks of life.
           </p>
@@ -153,7 +153,7 @@ export default function Ashrams() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 type="text"
-                placeholder="Search ashrams by name, location, or focus..."
+                placeholder={t("pages.ashrams.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 py-3 text-lg rounded-lg border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] transition-colors"

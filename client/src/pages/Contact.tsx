@@ -15,6 +15,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -26,6 +27,7 @@ const contactSchema = z.object({
 type ContactForm = z.infer<typeof contactSchema>;
 
 export default function Contact() {
+  const { t } = useTranslation();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -119,10 +121,9 @@ export default function Contact() {
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold mb-6">Connect With Us</h1>
+          <h1 className="text-5xl font-bold mb-6">{t("pages.contact.title")}</h1>
           <p className="text-xl text-gray-600 leading-relaxed">
-            We're here to guide you on your spiritual journey. Whether you have questions about our retreats, 
-            need support with meetups, or simply want to share your experience, we'd love to hear from you.
+            {t("pages.contact.subtitle")}
           </p>
         </div>
       </section>
@@ -167,9 +168,9 @@ export default function Contact() {
                           name="name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Full Name</FormLabel>
+                              <FormLabel>{t("pages.contact.form.name")}</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter your full name" {...field} />
+                                <Input placeholder={t("pages.contact.form.name")} {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
