@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Phone, MapPin, Clock, MessageCircle, HelpCircle, Heart } from "lucide-react";
+import { Mail, Clock, MessageCircle, HelpCircle, Heart } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -136,7 +136,7 @@ export default function Contact() {
               <CardHeader>
                 <CardTitle className="text-2xl text-center">Send Us a Message</CardTitle>
                 <p className="text-gray-600 text-center">
-                  Share your thoughts, questions, or spiritual insights with our community
+                  Share your thoughts, questions, or spiritual insights with us
                 </p>
               </CardHeader>
               <CardContent className="p-8">
@@ -269,26 +269,10 @@ export default function Contact() {
                 </div>
                 
                 <div className="flex items-center space-x-3">
-                  <Phone className="text-[hsl(75,64%,49%)] w-5 h-5" />
-                  <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-sm text-gray-600">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
                   <Clock className="text-[hsl(75,64%,49%)] w-5 h-5" />
                   <div>
                     <p className="font-medium">Response Time</p>
                     <p className="text-sm text-gray-600">Within 24 hours</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <MapPin className="text-[hsl(75,64%,49%)] w-5 h-5" />
-                  <div>
-                    <p className="font-medium">Global Reach</p>
-                    <p className="text-sm text-gray-600">Worldwide spiritual journeys</p>
                   </div>
                 </div>
               </CardContent>

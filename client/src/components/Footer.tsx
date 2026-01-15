@@ -1,11 +1,12 @@
 import { Link } from "wouter";
 import { Heart, MapPin, Mail } from "lucide-react";
+import { SiFacebook, SiWhatsapp, SiInstagram, SiLinkedin, SiX } from "react-icons/si";
 
 export default function Footer() {
   return (
     <footer className="bg-[#253e1a] text-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="md:col-span-1">
             <h3 className="text-2xl font-bold text-[#70c92e] mb-4">The Nirvanist</h3>
@@ -88,6 +89,43 @@ export default function Footer() {
               <li className="flex items-center text-gray-300">
                 <Mail className="w-4 h-4 mr-2 text-[#70c92e]" />
                 <span className="text-sm">hello@nirvanist.com</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Social</h4>
+            <ul className="space-y-2">
+              <li>
+                <a href="https://www.facebook.com/thenirvanistofficial/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#70c92e] transition-colors flex items-center gap-2">
+                  <SiFacebook className="w-4 h-4" />
+                  <span>Facebook</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://whatsapp.com/channel/0029VbBqaSJ0QeapgNPxcR05" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#70c92e] transition-colors flex items-center gap-2">
+                  <SiWhatsapp className="w-4 h-4" />
+                  <span>WhatsApp</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/thenirvanistofficial/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#70c92e] transition-colors flex items-center gap-2">
+                  <SiInstagram className="w-4 h-4" />
+                  <span>Instagram</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/company/the-nirvanist/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#70c92e] transition-colors flex items-center gap-2">
+                  <SiLinkedin className="w-4 h-4" />
+                  <span>LinkedIn</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://x.com/the_nirvanist" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#70c92e] transition-colors flex items-center gap-2">
+                  <SiX className="w-4 h-4" />
+                  <span>X</span>
+                </a>
               </li>
             </ul>
           </div>
