@@ -17,7 +17,8 @@
     "whyIndianPhilosophies": "Por Que Filosofias Indianas",
     "understandingPhilosophies": "Entendendo as Filosofias Indianas",
     "aboutUs": "Sobre Nós",
-    "howWeExplore": "Como Exploramos"
+    "howWeExplore": "Como Exploramos",
+    "backToHome": "Voltar ao Início"
   },
   "hero": {
     "title": "Jornada para a Paz Interior",
@@ -26,44 +27,165 @@
     "secondaryCta": "Participar de Encontros Globais",
     "trustedPartners": "Parceiros de Confiança"
   },
-  "about": {
-    "title": "Sobre Nós",
-    "description": "Somos uma comunidade de buscadores espirituais dedicados a proporcionar experiências autênticas que nutrem a alma e expandem a consciência."
+  "sections": {
+    "sages": {
+      "title": "Biografias dos Sábios",
+      "subtitle": "Descubra a sabedoria e ensinamentos de mestres espirituais de diversas tradições"
+    },
+    "meetups": {
+      "title": "Encontros Espirituais",
+      "subtitle": "Junte-se à nossa comunidade global de buscadores em encontros virtuais"
+    },
+    "testimonials": {
+      "title": "Depoimentos",
+      "subtitle": "Ouça os viajantes que transformaram suas vidas"
+    },
+    "journeys": {
+      "title": "Jornadas Sagradas",
+      "subtitle": "Retiros espirituais transformadores para destinos sagrados"
+    },
+    "newsletter": {
+      "title": "Junte-se à Nossa Comunidade Espiritual",
+      "subtitle": "Inscreva-se para receber sabedoria, insights e atualizações sobre próximos retiros",
+      "placeholder": "Digite seu email",
+      "button": "Inscrever-se",
+      "success": "Obrigado por se inscrever!"
+    },
+    "quotes": {
+      "title": "Sabedoria Diária",
+      "subtitle": "Sabedoria antiga para buscadores modernos"
+    },
+    "nutrition": {
+      "title": "Nutrição Interior",
+      "subtitle": "Nutra sua mente, corpo e espírito com nossos insights selecionados"
+    }
   },
-  "contact": {
-    "title": "Fale Conosco",
-    "name": "Nome",
-    "email": "E-mail",
-    "subject": "Assunto",
-    "message": "Mensagem",
-    "send": "Enviar Mensagem",
-    "success": "Obrigado pela sua mensagem. Responderemos em breve!"
-  },
-  "auth": {
-    "login": "Entrar",
-    "register": "Cadastrar",
-    "forgotPassword": "Esqueci a Senha",
-    "resetPassword": "Redefinir Senha",
-    "firstName": "Nome",
-    "lastName": "Sobrenome",
-    "email": "E-mail",
-    "password": "Senha",
-    "confirmPassword": "Confirmar Senha",
-    "loginButton": "Entrar",
-    "registerButton": "Criar Conta",
-    "forgotPasswordButton": "Enviar Link",
-    "resetPasswordButton": "Redefinir",
-    "alreadyHaveAccount": "Já tem uma conta?",
-    "dontHaveAccount": "Não tem conta?",
-    "backToLogin": "Voltar ao Login"
-  },
-  "dashboard": {
-    "title": "Minha Coleção Espiritual",
-    "noBookmarks": "Você ainda não salvou nada. Comece a explorar nosso conteúdo!",
-    "journeys": "Jornadas Sagradas",
-    "sages": "Sábios",
-    "ashrams": "Ashrams",
-    "articles": "Artigos de Nutrição Interior"
+  "pages": {
+    "sages": {
+      "title": "Sabedoria dos Sábios",
+      "subtitle": "Explore os ensinamentos profundos de mestres iluminados",
+      "searchPlaceholder": "Pesquisar por nome, ensinamentos ou livros...",
+      "loading": "Carregando Sabedoria dos Sábios...",
+      "loadingSubtitle": "Reunindo os ensinamentos profundos de mestres espirituais",
+      "error": "Não foi Possível Carregar a Sabedoria dos Sábios",
+      "errorSubtitle": "Estamos com dificuldades para acessar os textos sagrados. Por favor, tente novamente mais tarde.",
+      "empty": "Os ensinamentos sagrados estão sendo compilados. Por favor, volte em breve.",
+      "readBio": "Ler Biografia Completa",
+      "coreTeachings": "Ensinamentos Principais",
+      "notableWorks": "Obras Notáveis",
+      "filters": {
+        "all": "Todos",
+        "livingSages": "Sábios Vivos",
+        "modernSages": "Sábios Modernos",
+        "ancientSages": "Sábios Antigos",
+        "hindu": "Hindu",
+        "buddhist": "Budista",
+        "sufi": "Sufi",
+        "jain": "Jainista"
+      }
+    },
+    "ashrams": {
+      "title": "Ashrams Sagrados",
+      "subtitle": "Descubra centros de retiro espiritual em toda a Índia",
+      "searchPlaceholder": "Pesquisar por nome, local ou foco...",
+      "loading": "Carregando Ashrams Sagrados...",
+      "readMore": "Ler Mais",
+      "keyFacilities": "Instalações Principais",
+      "founders": "Fundadores",
+      "filters": {
+        "all": "Todos",
+        "northIndia": "Norte da Índia",
+        "southIndia": "Sul da Índia",
+        "westIndia": "Oeste da Índia",
+        "eastIndia": "Leste da Índia",
+        "centralIndia": "Índia Central"
+      }
+    },
+    "meetups": {
+      "title": "Satsangs Virtuais",
+      "subtitle": "Junte-se à nossa comunidade espiritual global",
+      "comingSoon": "Em breve em abril de 2026",
+      "description": "Conecte-se com buscadores de todo o mundo em nossos encontros online para meditação, reflexão e crescimento espiritual.",
+      "registerTitle": "Registre-se para Atualizações",
+      "registerButton": "Registrar Agora",
+      "features": {
+        "virtual": "Encontros Virtuais",
+        "global": "Comunidade Global",
+        "weekly": "Sessões Semanais"
+      }
+    },
+    "quotes": {
+      "title": "Citações Espirituais Diárias",
+      "subtitle": "Sabedoria antiga para inspirar sua prática diária",
+      "by": "por"
+    },
+    "nutrition": {
+      "title": "Nutrição Interior",
+      "subtitle": "Insights e artigos para crescimento espiritual",
+      "readArticle": "Ler Artigo",
+      "minRead": "min de leitura"
+    },
+    "contact": {
+      "title": "Fale Conosco",
+      "subtitle": "Adoraríamos ouvir de você",
+      "form": {
+        "name": "Seu Nome",
+        "email": "Endereço de Email",
+        "subject": "Assunto",
+        "message": "Sua Mensagem",
+        "send": "Enviar Mensagem",
+        "sending": "Enviando..."
+      },
+      "success": "Obrigado pela sua mensagem. Responderemos em 24-48 horas.",
+      "location": "Nossa Localização",
+      "email": "Envie-nos um Email"
+    },
+    "login": {
+      "title": "Bem-vindo de Volta",
+      "subtitle": "Entre para continuar sua jornada espiritual",
+      "email": "Endereço de Email",
+      "password": "Senha",
+      "forgotPassword": "Esqueceu a Senha?",
+      "signIn": "Entrar",
+      "signingIn": "Entrando...",
+      "noAccount": "Não tem uma conta?",
+      "createAccount": "Crie uma",
+      "or": "ou continue com"
+    },
+    "register": {
+      "title": "Inicie Sua Jornada",
+      "subtitle": "Crie uma conta para se juntar à nossa comunidade espiritual",
+      "firstName": "Nome",
+      "lastName": "Sobrenome",
+      "email": "Endereço de Email",
+      "password": "Senha",
+      "confirmPassword": "Confirmar Senha",
+      "createAccount": "Criar Conta",
+      "creating": "Criando...",
+      "hasAccount": "Já tem uma conta?",
+      "signIn": "Entrar",
+      "or": "ou continue com"
+    },
+    "forgotPassword": {
+      "title": "Redefinir Senha",
+      "subtitle": "Digite seu email para receber um link de redefinição",
+      "email": "Endereço de Email",
+      "sendLink": "Enviar Link",
+      "sending": "Enviando...",
+      "backToLogin": "Voltar ao Login",
+      "success": "Verifique seu email para o link de redefinição"
+    },
+    "dashboard": {
+      "title": "Minha Coleção Espiritual",
+      "subtitle": "Suas jornadas, sábios e ashrams salvos",
+      "noBookmarks": "Você ainda não salvou nada. Comece a explorar!",
+      "tabs": {
+        "journeys": "Jornadas",
+        "sages": "Sábios",
+        "ashrams": "Ashrams",
+        "articles": "Artigos"
+      }
+    }
   },
   "common": {
     "loading": "Carregando...",
@@ -79,8 +201,14 @@
     "popular": "Popular",
     "recent": "Recente",
     "save": "Salvar",
+    "saved": "Salvo",
     "cancel": "Cancelar",
-    "close": "Fechar"
+    "close": "Fechar",
+    "submit": "Enviar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "seeAll": "Ver Tudo",
+    "noResults": "Nenhum resultado encontrado"
   },
   "footer": {
     "tagline": "Conectando almas com jornadas sagradas. Descubra seu caminho para a paz interior e transformação espiritual.",

@@ -1,5 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { getTranslation, DeepTranslationKey } from "@/translations";
+import { getTranslation } from "@/translations";
 
 /**
  * useTranslation - Hook for accessing static translations
@@ -18,7 +18,7 @@ export function useTranslation() {
    * @param fallback - Optional fallback text if translation not found
    * @returns Translated text
    */
-  const t = (key: DeepTranslationKey, fallback?: string): string => {
+  const t = (key: string, fallback?: string): string => {
     return getTranslation(currentLanguage, key, fallback);
   };
 
@@ -27,11 +27,11 @@ export function useTranslation() {
    * @param keys - Array of translation keys
    * @returns Object with key-value pairs of translations
    */
-  const tMultiple = (keys: DeepTranslationKey[]) => {
+  const tMultiple = (keys: string[]) => {
     return keys.reduce((acc, key) => {
       acc[key] = t(key);
       return acc;
-    }, {} as Record<DeepTranslationKey, string>);
+    }, {} as Record<string, string>);
   };
 
   return {

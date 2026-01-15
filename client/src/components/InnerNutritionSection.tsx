@@ -4,16 +4,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Clock, Calendar, User, ArrowRight } from "lucide-react";
 import type { BlogPost } from "@shared/schema";
 import { useBlogPosts } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function InnerNutritionSection() {
   const { data: blogPosts, isLoading, error } = useBlogPosts();
+  const { t } = useTranslation();
 
   if (error) {
     console.error('Error loading blog posts:', error);
     return null;
   }
 
-  // Show the 3 latest posts for homepage
   const latestPosts = blogPosts?.slice(0, 3) || [];
 
   if (isLoading) {
@@ -47,11 +48,11 @@ export default function InnerNutritionSection() {
     return (
       <section className="py-20 bg-[#F7F2E8]">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-8">Insights</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-8">{t("sections.nutrition.title")}</h2>
           <p className="text-xl text-gray-600 mb-12">
-            Nourishment for your spiritual journey through mindful insights and transformative wisdom
+            {t("sections.nutrition.subtitle")}
           </p>
-          <p className="text-gray-500">Coming soon - profound articles to nourish your inner being</p>
+          <p className="text-gray-500">{t("common.loading")}</p>
         </div>
       </section>
     );
@@ -61,9 +62,9 @@ export default function InnerNutritionSection() {
     <section className="py-20 bg-[#F7F2E8]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Insights</h2>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">{t("sections.nutrition.title")}</h2>
           <p className="text-xl text-gray-600 mb-8">
-            Nourishment for your spiritual journey through mindful insights and transformative wisdom
+            {t("sections.nutrition.subtitle")}
           </p>
         </div>
 
@@ -118,7 +119,7 @@ export default function InnerNutritionSection() {
                   )}
                   
                   <div className="flex items-center text-[hsl(75,64%,49%)] font-medium group-hover:text-[hsl(75,64%,39%)] transition-colors duration-300 mt-auto">
-                    <span>Read More</span>
+                    <span>{t("common.readMore")}</span>
                     <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300" />
                   </div>
                 </CardContent>
@@ -129,8 +130,8 @@ export default function InnerNutritionSection() {
 
         <div className="text-center">
           <Link href="/inner-nutrition" onClick={() => window.scrollTo(0, 0)}>
-            <Button className="bg-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,59%)] text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300">
-              Explore All Articles
+            <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-3 rounded-lg font-semibold transition-all duration-300">
+              {t("common.seeAll")}
             </Button>
           </Link>
         </div>

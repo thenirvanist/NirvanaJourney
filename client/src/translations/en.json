@@ -17,7 +17,8 @@
     "whyIndianPhilosophies": "Why Indian Philosophies",
     "understandingPhilosophies": "Understanding Indian Philosophies",
     "aboutUs": "About Us",
-    "howWeExplore": "How Will We Explore"
+    "howWeExplore": "How Will We Explore",
+    "backToHome": "Back to Home"
   },
   "hero": {
     "title": "Journey to Inner Peace",
@@ -26,44 +27,165 @@
     "secondaryCta": "Join Global Meetups",
     "trustedPartners": "Trusted Partners"
   },
-  "about": {
-    "title": "About Us",
-    "description": "We are a community of spiritual seekers dedicated to providing authentic experiences that nurture the soul and expand consciousness."
+  "sections": {
+    "sages": {
+      "title": "Biographies of the Sages",
+      "subtitle": "Discover the wisdom and teachings of spiritual masters across traditions"
+    },
+    "meetups": {
+      "title": "Spiritual Meetups",
+      "subtitle": "Join our global community of seekers in virtual gatherings"
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "subtitle": "Hear from travelers who have transformed their lives"
+    },
+    "journeys": {
+      "title": "Sacred Journeys",
+      "subtitle": "Transformative spiritual retreats to sacred destinations"
+    },
+    "newsletter": {
+      "title": "Join Our Spiritual Community",
+      "subtitle": "Subscribe to receive wisdom, insights, and updates on upcoming retreats",
+      "placeholder": "Enter your email",
+      "button": "Subscribe",
+      "success": "Thank you for subscribing!"
+    },
+    "quotes": {
+      "title": "Daily Wisdom",
+      "subtitle": "Ancient wisdom for modern seekers"
+    },
+    "nutrition": {
+      "title": "Inner Nutrition",
+      "subtitle": "Nourish your mind, body, and spirit with our curated insights"
+    }
   },
-  "contact": {
-    "title": "Contact Us",
-    "name": "Name",
-    "email": "Email",
-    "subject": "Subject",
-    "message": "Message",
-    "send": "Send Message",
-    "success": "Thank you for your message. We'll get back to you soon!"
-  },
-  "auth": {
-    "login": "Login",
-    "register": "Sign Up",
-    "forgotPassword": "Forgot Password",
-    "resetPassword": "Reset Password",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "loginButton": "Sign In",
-    "registerButton": "Create Account",
-    "forgotPasswordButton": "Send Reset Link",
-    "resetPasswordButton": "Reset Password",
-    "alreadyHaveAccount": "Already have an account?",
-    "dontHaveAccount": "Don't have an account?",
-    "backToLogin": "Back to Login"
-  },
-  "dashboard": {
-    "title": "My Spiritual Collection",
-    "noBookmarks": "You haven't bookmarked anything yet. Start exploring our content!",
-    "journeys": "Sacred Journeys",
-    "sages": "Sages",
-    "ashrams": "Ashrams",
-    "articles": "Inner Nutrition Articles"
+  "pages": {
+    "sages": {
+      "title": "Wisdom of the Sages",
+      "subtitle": "Explore the profound teachings of enlightened masters",
+      "searchPlaceholder": "Search by name, teachings, or books...",
+      "loading": "Loading Wisdom of the Sages...",
+      "loadingSubtitle": "Gathering the profound teachings of spiritual masters",
+      "error": "Unable to Load Sage Wisdom",
+      "errorSubtitle": "We're experiencing difficulties accessing the sacred texts and teachings. Please try again later.",
+      "empty": "The sacred teachings are being compiled. Please check back soon.",
+      "readBio": "Read Full Biography",
+      "coreTeachings": "Core Teachings",
+      "notableWorks": "Notable Works",
+      "filters": {
+        "all": "All",
+        "livingSages": "Living Sages",
+        "modernSages": "Modern Sages",
+        "ancientSages": "Ancient Sages",
+        "hindu": "Hindu",
+        "buddhist": "Buddhist",
+        "sufi": "Sufi",
+        "jain": "Jain"
+      }
+    },
+    "ashrams": {
+      "title": "Sacred Ashrams",
+      "subtitle": "Discover spiritual retreat centers across India",
+      "searchPlaceholder": "Search by name, location, or focus...",
+      "loading": "Loading Sacred Ashrams...",
+      "readMore": "Read More",
+      "keyFacilities": "Key Facilities",
+      "founders": "Founders",
+      "filters": {
+        "all": "All",
+        "northIndia": "North India",
+        "southIndia": "South India",
+        "westIndia": "West India",
+        "eastIndia": "East India",
+        "centralIndia": "Central India"
+      }
+    },
+    "meetups": {
+      "title": "Virtual Satsangs",
+      "subtitle": "Join our global spiritual community",
+      "comingSoon": "Coming April 2026",
+      "description": "Connect with seekers worldwide in our online gatherings for meditation, reflection, and spiritual growth.",
+      "registerTitle": "Register for Updates",
+      "registerButton": "Register Now",
+      "features": {
+        "virtual": "Virtual Gatherings",
+        "global": "Global Community",
+        "weekly": "Weekly Sessions"
+      }
+    },
+    "quotes": {
+      "title": "Daily Spiritual Quotes",
+      "subtitle": "Ancient wisdom to inspire your daily practice",
+      "by": "by"
+    },
+    "nutrition": {
+      "title": "Inner Nutrition",
+      "subtitle": "Insights and articles for spiritual growth",
+      "readArticle": "Read Article",
+      "minRead": "min read"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "We'd love to hear from you",
+      "form": {
+        "name": "Your Name",
+        "email": "Email Address",
+        "subject": "Subject",
+        "message": "Your Message",
+        "send": "Send Message",
+        "sending": "Sending..."
+      },
+      "success": "Thank you for your message. We'll respond within 24-48 hours.",
+      "location": "Our Location",
+      "email": "Email Us"
+    },
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to continue your spiritual journey",
+      "email": "Email Address",
+      "password": "Password",
+      "forgotPassword": "Forgot Password?",
+      "signIn": "Sign In",
+      "signingIn": "Signing In...",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one",
+      "or": "or continue with"
+    },
+    "register": {
+      "title": "Begin Your Journey",
+      "subtitle": "Create an account to join our spiritual community",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "createAccount": "Create Account",
+      "creating": "Creating Account...",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "or": "or continue with"
+    },
+    "forgotPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your email to receive a reset link",
+      "email": "Email Address",
+      "sendLink": "Send Reset Link",
+      "sending": "Sending...",
+      "backToLogin": "Back to Login",
+      "success": "Check your email for the reset link"
+    },
+    "dashboard": {
+      "title": "My Spiritual Collection",
+      "subtitle": "Your saved journeys, sages, and ashrams",
+      "noBookmarks": "You haven't saved anything yet. Start exploring!",
+      "tabs": {
+        "journeys": "Journeys",
+        "sages": "Sages",
+        "ashrams": "Ashrams",
+        "articles": "Articles"
+      }
+    }
   },
   "common": {
     "loading": "Loading...",
@@ -79,8 +201,14 @@
     "popular": "Popular",
     "recent": "Recent",
     "save": "Save",
+    "saved": "Saved",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "submit": "Submit",
+    "next": "Next",
+    "previous": "Previous",
+    "seeAll": "See All",
+    "noResults": "No results found"
   },
   "footer": {
     "tagline": "Connecting souls with sacred journeys. Discover your path to inner peace and spiritual transformation.",

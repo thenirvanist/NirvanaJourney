@@ -7,8 +7,10 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { SocialAuth } from "@/components/SocialAuth";
 import { SupabaseSignUp } from "@/components/SupabaseSignUp";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Register() {
+  const { t } = useTranslation();
   const [, navigate] = useLocation();
   const [registrationComplete, setRegistrationComplete] = useState(false);
 
@@ -69,7 +71,7 @@ export default function Register() {
             <Link href="/">
               <Button variant="ghost" className="mb-4 hover:bg-gray-100">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Home
+                {t("navigation.backToHome")}
               </Button>
             </Link>
           </div>
@@ -78,8 +80,8 @@ export default function Register() {
             <div className="h-2 brand-primary"></div>
             
             <CardHeader className="text-center pb-4">
-              <CardTitle className="text-3xl font-bold text-gray-900">Join Our Community</CardTitle>
-              <p className="text-gray-600 mt-2">Begin your transformative spiritual journey</p>
+              <CardTitle className="text-3xl font-bold text-gray-900">{t("pages.register.title")}</CardTitle>
+              <p className="text-gray-600 mt-2">{t("pages.register.subtitle")}</p>
             </CardHeader>
 
             <CardContent className="px-8 pb-8">
@@ -97,7 +99,7 @@ export default function Register() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">Or create account with email</span>
+                  <span className="px-4 bg-white text-gray-500">{t("pages.register.or")}</span>
                 </div>
               </div>
 
@@ -109,10 +111,10 @@ export default function Register() {
 
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
-                  Already have an account?{" "}
+                  {t("pages.register.hasAccount")}{" "}
                   <Link href="/login">
                     <button className="text-[hsl(75,64%,49%)] hover:underline font-semibold">
-                      Sign In
+                      {t("pages.register.signIn")}
                     </button>
                   </Link>
                 </p>

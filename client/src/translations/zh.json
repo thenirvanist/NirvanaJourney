@@ -17,7 +17,8 @@
     "whyIndianPhilosophies": "为何选择印度哲学",
     "understandingPhilosophies": "理解印度哲学",
     "aboutUs": "关于我们",
-    "howWeExplore": "我们如何探索"
+    "howWeExplore": "我们如何探索",
+    "backToHome": "返回首页"
   },
   "hero": {
     "title": "通往内心平静的旅程",
@@ -26,44 +27,165 @@
     "secondaryCta": "加入全球聚会",
     "trustedPartners": "信赖的合作伙伴"
   },
-  "about": {
-    "title": "关于我们",
-    "description": "我们是一个致力于提供滋养灵魂、扩展意识的真实体验的灵性追求者社区。"
+  "sections": {
+    "sages": {
+      "title": "圣贤传记",
+      "subtitle": "探索各传统中灵性大师的智慧与教导"
+    },
+    "meetups": {
+      "title": "灵性聚会",
+      "subtitle": "加入我们全球求道者社区的虚拟聚会"
+    },
+    "testimonials": {
+      "title": "见证分享",
+      "subtitle": "聆听改变生命的旅行者心声"
+    },
+    "journeys": {
+      "title": "神圣之旅",
+      "subtitle": "前往圣地的变革性灵性静修"
+    },
+    "newsletter": {
+      "title": "加入我们的灵性社区",
+      "subtitle": "订阅以获取智慧、洞察和即将举行的静修活动更新",
+      "placeholder": "输入您的邮箱",
+      "button": "订阅",
+      "success": "感谢您的订阅！"
+    },
+    "quotes": {
+      "title": "每日智慧",
+      "subtitle": "为现代求道者提供的古老智慧"
+    },
+    "nutrition": {
+      "title": "内在滋养",
+      "subtitle": "用我们精选的洞察滋养您的身心灵"
+    }
   },
-  "contact": {
-    "title": "联系我们",
-    "name": "姓名",
-    "email": "电子邮件",
-    "subject": "主题",
-    "message": "留言",
-    "send": "发送消息",
-    "success": "感谢您的留言。我们会尽快回复您！"
-  },
-  "auth": {
-    "login": "登录",
-    "register": "注册",
-    "forgotPassword": "忘记密码",
-    "resetPassword": "重置密码",
-    "firstName": "名",
-    "lastName": "姓",
-    "email": "电子邮件",
-    "password": "密码",
-    "confirmPassword": "确认密码",
-    "loginButton": "登录",
-    "registerButton": "创建账户",
-    "forgotPasswordButton": "发送重置链接",
-    "resetPasswordButton": "重置密码",
-    "alreadyHaveAccount": "已有账户？",
-    "dontHaveAccount": "没有账户？",
-    "backToLogin": "返回登录"
-  },
-  "dashboard": {
-    "title": "我的灵性收藏",
-    "noBookmarks": "您还没有收藏任何内容。开始探索我们的内容吧！",
-    "journeys": "神圣之旅",
-    "sages": "圣贤",
-    "ashrams": "修道院",
-    "articles": "内在营养文章"
+  "pages": {
+    "sages": {
+      "title": "圣贤智慧",
+      "subtitle": "探索开悟大师的深邃教导",
+      "searchPlaceholder": "按名字、教导或著作搜索...",
+      "loading": "加载圣贤智慧中...",
+      "loadingSubtitle": "正在收集灵性大师的深邃教导",
+      "error": "无法加载圣贤智慧",
+      "errorSubtitle": "我们在访问神圣典籍时遇到困难，请稍后再试。",
+      "empty": "神圣教导正在编纂中，请稍后再来。",
+      "readBio": "阅读完整传记",
+      "coreTeachings": "核心教导",
+      "notableWorks": "著名作品",
+      "filters": {
+        "all": "全部",
+        "livingSages": "在世圣贤",
+        "modernSages": "现代圣贤",
+        "ancientSages": "古代圣贤",
+        "hindu": "印度教",
+        "buddhist": "佛教",
+        "sufi": "苏菲派",
+        "jain": "耆那教"
+      }
+    },
+    "ashrams": {
+      "title": "神圣修道院",
+      "subtitle": "探索印度各地的灵性静修中心",
+      "searchPlaceholder": "按名称、地点或专注领域搜索...",
+      "loading": "加载神圣修道院中...",
+      "readMore": "阅读更多",
+      "keyFacilities": "主要设施",
+      "founders": "创始人",
+      "filters": {
+        "all": "全部",
+        "northIndia": "北印度",
+        "southIndia": "南印度",
+        "westIndia": "西印度",
+        "eastIndia": "东印度",
+        "centralIndia": "中印度"
+      }
+    },
+    "meetups": {
+      "title": "虚拟萨特桑",
+      "subtitle": "加入我们的全球灵性社区",
+      "comingSoon": "2026年4月即将推出",
+      "description": "通过我们的在线聚会与世界各地的求道者联系，进行冥想、反思和灵性成长。",
+      "registerTitle": "注册获取更新",
+      "registerButton": "立即注册",
+      "features": {
+        "virtual": "虚拟聚会",
+        "global": "全球社区",
+        "weekly": "每周课程"
+      }
+    },
+    "quotes": {
+      "title": "每日灵性箴言",
+      "subtitle": "古老智慧激励您的日常修行",
+      "by": "来自"
+    },
+    "nutrition": {
+      "title": "内在滋养",
+      "subtitle": "促进灵性成长的洞察与文章",
+      "readArticle": "阅读文章",
+      "minRead": "分钟阅读"
+    },
+    "contact": {
+      "title": "联系我们",
+      "subtitle": "我们期待您的来信",
+      "form": {
+        "name": "您的姓名",
+        "email": "电子邮箱",
+        "subject": "主题",
+        "message": "您的留言",
+        "send": "发送消息",
+        "sending": "发送中..."
+      },
+      "success": "感谢您的留言，我们将在24-48小时内回复。",
+      "location": "我们的位置",
+      "email": "发送邮件"
+    },
+    "login": {
+      "title": "欢迎回来",
+      "subtitle": "登录以继续您的灵性之旅",
+      "email": "电子邮箱",
+      "password": "密码",
+      "forgotPassword": "忘记密码？",
+      "signIn": "登录",
+      "signingIn": "登录中...",
+      "noAccount": "没有账户？",
+      "createAccount": "创建一个",
+      "or": "或使用以下方式继续"
+    },
+    "register": {
+      "title": "开启您的旅程",
+      "subtitle": "创建账户加入我们的灵性社区",
+      "firstName": "名",
+      "lastName": "姓",
+      "email": "电子邮箱",
+      "password": "密码",
+      "confirmPassword": "确认密码",
+      "createAccount": "创建账户",
+      "creating": "创建中...",
+      "hasAccount": "已有账户？",
+      "signIn": "登录",
+      "or": "或使用以下方式继续"
+    },
+    "forgotPassword": {
+      "title": "重置密码",
+      "subtitle": "输入您的邮箱以接收重置链接",
+      "email": "电子邮箱",
+      "sendLink": "发送重置链接",
+      "sending": "发送中...",
+      "backToLogin": "返回登录",
+      "success": "请查收邮箱中的重置链接"
+    },
+    "dashboard": {
+      "title": "我的灵性收藏",
+      "subtitle": "您保存的旅程、圣贤和修道院",
+      "noBookmarks": "您还没有保存任何内容，开始探索吧！",
+      "tabs": {
+        "journeys": "旅程",
+        "sages": "圣贤",
+        "ashrams": "修道院",
+        "articles": "文章"
+      }
+    }
   },
   "common": {
     "loading": "加载中...",
@@ -79,8 +201,14 @@
     "popular": "热门",
     "recent": "最新",
     "save": "保存",
+    "saved": "已保存",
     "cancel": "取消",
-    "close": "关闭"
+    "close": "关闭",
+    "submit": "提交",
+    "next": "下一个",
+    "previous": "上一个",
+    "seeAll": "查看全部",
+    "noResults": "未找到结果"
   },
   "footer": {
     "tagline": "连接灵魂与神圣之旅。发现通往内心平静和灵性转化的道路。",

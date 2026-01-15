@@ -2,19 +2,21 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { BookmarkButton } from "./BookmarkButton";
 import { useSages } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function SimpleSagesSection() {
   const { data: sages, isLoading, error } = useSages();
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-6">Biographies of the Sages</h2>
+            <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
             <div className="flex items-center justify-center space-x-3">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[hsl(75,64%,49%)]"></div>
-              <p className="text-lg text-gray-700">Loading spiritual wisdom...</p>
+              <p className="text-lg text-gray-700">{t("common.loading")}</p>
             </div>
           </div>
         </div>
@@ -27,9 +29,9 @@ export default function SimpleSagesSection() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-6">Biographies of the Sages</h2>
+            <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
             <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-              <p className="text-red-800 font-medium">Content unavailable</p>
+              <p className="text-red-800 font-medium">{t("pages.sages.error")}</p>
             </div>
           </div>
         </div>
@@ -42,8 +44,8 @@ export default function SimpleSagesSection() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-6">Biographies of the Sages</h2>
-            <p className="text-lg text-gray-700">No sage information available at the moment.</p>
+            <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
+            <p className="text-lg text-gray-700">{t("pages.sages.empty")}</p>
           </div>
         </div>
       </section>
@@ -54,10 +56,9 @@ export default function SimpleSagesSection() {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-6">Biographies of the Sages</h2>
+          <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-            Spiritual philosophers have left their mark in sands of times. They lived and left this world 
-            holding a single aspiration – progress of their fellow human beings in paths of spirituality.
+            {t("sections.sages.subtitle")}
           </p>
         </div>
         
@@ -92,7 +93,7 @@ export default function SimpleSagesSection() {
                   <div className="flex-grow">
                     {sage.teachings && sage.teachings.length > 0 && (
                       <div className="mb-4">
-                        <h4 className="font-medium text-gray-700 mb-2">Notable Works:</h4>
+                        <h4 className="font-medium text-gray-700 mb-2">{t("pages.sages.notableWorks")}:</h4>
                         <div className="flex flex-wrap gap-2">
                           {sage.teachings.slice(0, 3).map((teaching, index) => (
                             <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
@@ -103,20 +104,22 @@ export default function SimpleSagesSection() {
                       </div>
                     )}
                   </div>
-
-                  <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 rounded-lg font-semibold transition-all duration-300 mt-auto">
-                    Read Full Biography
-                  </Button>
+                  
+                  <div className="mt-auto">
+                    <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black font-semibold transition-all duration-300">
+                      {t("pages.sages.readBio")}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Link>
           ))}
         </div>
-        
+
         <div className="text-center mt-12">
           <Link href="/sages" onClick={() => window.scrollTo(0, 0)}>
             <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-3 rounded-lg font-semibold transition-all duration-300">
-              Visit All Sages
+              {t("common.seeAll")}
             </Button>
           </Link>
         </div>

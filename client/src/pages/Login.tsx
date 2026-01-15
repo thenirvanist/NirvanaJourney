@@ -13,8 +13,10 @@ import { loginSchema, type LoginData } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { SocialAuth } from "@/components/SocialAuth";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Login() {
+  const { t } = useTranslation();
   const [, navigate] = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +103,7 @@ export default function Login() {
             <Link href="/">
               <Button variant="ghost" className="mb-4 hover:bg-gray-100">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Home
+                {t("navigation.backToHome")}
               </Button>
             </Link>
           </div>
@@ -110,8 +112,8 @@ export default function Login() {
             <div className="h-2 brand-primary"></div>
             
             <CardHeader className="text-center pb-4">
-              <CardTitle className="text-3xl font-bold text-gray-900">Welcome Back</CardTitle>
-              <p className="text-gray-600 mt-2">Sign in to continue your spiritual journey</p>
+              <CardTitle className="text-3xl font-bold text-gray-900">{t("pages.login.title")}</CardTitle>
+              <p className="text-gray-600 mt-2">{t("pages.login.subtitle")}</p>
             </CardHeader>
 
             <CardContent className="px-8 pb-8">
@@ -129,7 +131,7 @@ export default function Login() {
                   <div className="w-full border-t border-gray-200"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">Or continue with email</span>
+                  <span className="px-4 bg-white text-gray-500">{t("pages.login.or")}</span>
                 </div>
               </div>
 
@@ -140,13 +142,13 @@ export default function Login() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700 font-semibold">Email Address</FormLabel>
+                        <FormLabel className="text-gray-700 font-semibold">{t("pages.login.email")}</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
                               type="email"
-                              placeholder="Enter your email"
+                              placeholder={t("pages.login.email")}
                               className="pl-10 py-3 border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] rounded-lg"
                               {...field}
                             />
@@ -162,13 +164,13 @@ export default function Login() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-gray-700 font-semibold">Password</FormLabel>
+                        <FormLabel className="text-gray-700 font-semibold">{t("pages.login.password")}</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                             <Input
                               type={showPassword ? "text" : "password"}
-                              placeholder="Enter your password"
+                              placeholder={t("pages.login.password")}
                               className="pl-10 pr-12 py-3 border-2 border-gray-200 focus:border-[hsl(75,64%,49%)] rounded-lg"
                               {...field}
                             />
@@ -192,7 +194,7 @@ export default function Login() {
                         type="button"
                         className="text-[hsl(75,64%,49%)] hover:underline text-sm font-medium"
                       >
-                        Forgot your password?
+                        {t("pages.login.forgotPassword")}
                       </button>
                     </Link>
                   </div>
@@ -205,10 +207,10 @@ export default function Login() {
                     {isLoading ? (
                       <>
                         <Loader className="w-4 h-4 mr-2 animate-spin" />
-                        Signing in...
+                        {t("pages.login.signingIn")}
                       </>
                     ) : (
-                      "Sign In"
+                      t("pages.login.signIn")
                     )}
                   </Button>
                 </form>
@@ -216,10 +218,10 @@ export default function Login() {
 
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
-                  Don't have an account?{" "}
+                  {t("pages.login.noAccount")}{" "}
                   <Link href="/register">
                     <button className="text-[hsl(75,64%,49%)] hover:underline font-semibold">
-                      Create Account
+                      {t("pages.login.createAccount")}
                     </button>
                   </Link>
                 </p>

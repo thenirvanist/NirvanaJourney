@@ -17,7 +17,8 @@
     "whyIndianPhilosophies": "Warum Indische Philosophien",
     "understandingPhilosophies": "Indische Philosophien Verstehen",
     "aboutUs": "Über Uns",
-    "howWeExplore": "Wie Wir Erkunden"
+    "howWeExplore": "Wie Wir Erkunden",
+    "backToHome": "Zurück zur Startseite"
   },
   "hero": {
     "title": "Reise zum Inneren Frieden",
@@ -26,44 +27,165 @@
     "secondaryCta": "Globalen Treffen Beitreten",
     "trustedPartners": "Vertrauenswürdige Partner"
   },
-  "about": {
-    "title": "Über Uns",
-    "description": "Wir sind eine Gemeinschaft spiritueller Suchender, die sich der Bereitstellung authentischer Erfahrungen widmet, die die Seele nähren und das Bewusstsein erweitern."
+  "sections": {
+    "sages": {
+      "title": "Biografien der Weisen",
+      "subtitle": "Entdecken Sie die Weisheit und Lehren spiritueller Meister verschiedener Traditionen"
+    },
+    "meetups": {
+      "title": "Spirituelle Treffen",
+      "subtitle": "Treten Sie unserer globalen Gemeinschaft von Suchenden in virtuellen Zusammenkünften bei"
+    },
+    "testimonials": {
+      "title": "Erfahrungsberichte",
+      "subtitle": "Hören Sie von Reisenden, die ihr Leben verändert haben"
+    },
+    "journeys": {
+      "title": "Heilige Reisen",
+      "subtitle": "Transformative spirituelle Retreats zu heiligen Orten"
+    },
+    "newsletter": {
+      "title": "Treten Sie Unserer Spirituellen Gemeinschaft Bei",
+      "subtitle": "Abonnieren Sie für Weisheit, Einsichten und Updates zu kommenden Retreats",
+      "placeholder": "Geben Sie Ihre E-Mail ein",
+      "button": "Abonnieren",
+      "success": "Vielen Dank für Ihr Abonnement!"
+    },
+    "quotes": {
+      "title": "Tägliche Weisheit",
+      "subtitle": "Alte Weisheit für moderne Suchende"
+    },
+    "nutrition": {
+      "title": "Innere Nahrung",
+      "subtitle": "Nähren Sie Geist, Körper und Seele mit unseren ausgewählten Einsichten"
+    }
   },
-  "contact": {
-    "title": "Kontakt",
-    "name": "Name",
-    "email": "E-Mail",
-    "subject": "Betreff",
-    "message": "Nachricht",
-    "send": "Nachricht Senden",
-    "success": "Vielen Dank für Ihre Nachricht. Wir werden uns bald bei Ihnen melden!"
-  },
-  "auth": {
-    "login": "Anmelden",
-    "register": "Registrieren",
-    "forgotPassword": "Passwort Vergessen",
-    "resetPassword": "Passwort Zurücksetzen",
-    "firstName": "Vorname",
-    "lastName": "Nachname",
-    "email": "E-Mail",
-    "password": "Passwort",
-    "confirmPassword": "Passwort Bestätigen",
-    "loginButton": "Anmelden",
-    "registerButton": "Konto Erstellen",
-    "forgotPasswordButton": "Link Senden",
-    "resetPasswordButton": "Zurücksetzen",
-    "alreadyHaveAccount": "Bereits ein Konto?",
-    "dontHaveAccount": "Kein Konto?",
-    "backToLogin": "Zurück zur Anmeldung"
-  },
-  "dashboard": {
-    "title": "Meine Spirituelle Sammlung",
-    "noBookmarks": "Sie haben noch nichts gespeichert. Beginnen Sie, unsere Inhalte zu erkunden!",
-    "journeys": "Heilige Reisen",
-    "sages": "Weise",
-    "ashrams": "Ashrams",
-    "articles": "Innere Ernährung Artikel"
+  "pages": {
+    "sages": {
+      "title": "Weisheit der Weisen",
+      "subtitle": "Erkunden Sie die tiefgründigen Lehren erleuchteter Meister",
+      "searchPlaceholder": "Suche nach Name, Lehren oder Büchern...",
+      "loading": "Lade Weisheit der Weisen...",
+      "loadingSubtitle": "Sammle die tiefgründigen Lehren spiritueller Meister",
+      "error": "Weisheit der Weisen kann nicht geladen werden",
+      "errorSubtitle": "Wir haben Schwierigkeiten beim Zugriff auf die heiligen Texte. Bitte versuchen Sie es später erneut.",
+      "empty": "Die heiligen Lehren werden zusammengestellt. Bitte schauen Sie bald wieder vorbei.",
+      "readBio": "Vollständige Biografie Lesen",
+      "coreTeachings": "Kernlehren",
+      "notableWorks": "Bedeutende Werke",
+      "filters": {
+        "all": "Alle",
+        "livingSages": "Lebende Weise",
+        "modernSages": "Moderne Weise",
+        "ancientSages": "Alte Weise",
+        "hindu": "Hindu",
+        "buddhist": "Buddhistisch",
+        "sufi": "Sufi",
+        "jain": "Jain"
+      }
+    },
+    "ashrams": {
+      "title": "Heilige Ashrams",
+      "subtitle": "Entdecken Sie spirituelle Retreat-Zentren in ganz Indien",
+      "searchPlaceholder": "Suche nach Name, Ort oder Schwerpunkt...",
+      "loading": "Lade Heilige Ashrams...",
+      "readMore": "Mehr Lesen",
+      "keyFacilities": "Wichtige Einrichtungen",
+      "founders": "Gründer",
+      "filters": {
+        "all": "Alle",
+        "northIndia": "Nordindien",
+        "southIndia": "Südindien",
+        "westIndia": "Westindien",
+        "eastIndia": "Ostindien",
+        "centralIndia": "Zentralindien"
+      }
+    },
+    "meetups": {
+      "title": "Virtuelle Satsangs",
+      "subtitle": "Treten Sie unserer globalen spirituellen Gemeinschaft bei",
+      "comingSoon": "Kommt im April 2026",
+      "description": "Verbinden Sie sich mit Suchenden weltweit in unseren Online-Zusammenkünften für Meditation, Reflexion und spirituelles Wachstum.",
+      "registerTitle": "Registrieren Sie sich für Updates",
+      "registerButton": "Jetzt Registrieren",
+      "features": {
+        "virtual": "Virtuelle Treffen",
+        "global": "Globale Gemeinschaft",
+        "weekly": "Wöchentliche Sitzungen"
+      }
+    },
+    "quotes": {
+      "title": "Tägliche Spirituelle Zitate",
+      "subtitle": "Alte Weisheit zur Inspiration Ihrer täglichen Praxis",
+      "by": "von"
+    },
+    "nutrition": {
+      "title": "Innere Nahrung",
+      "subtitle": "Einsichten und Artikel für spirituelles Wachstum",
+      "readArticle": "Artikel Lesen",
+      "minRead": "Min. Lesezeit"
+    },
+    "contact": {
+      "title": "Kontaktieren Sie Uns",
+      "subtitle": "Wir freuen uns von Ihnen zu hören",
+      "form": {
+        "name": "Ihr Name",
+        "email": "E-Mail-Adresse",
+        "subject": "Betreff",
+        "message": "Ihre Nachricht",
+        "send": "Nachricht Senden",
+        "sending": "Wird gesendet..."
+      },
+      "success": "Vielen Dank für Ihre Nachricht. Wir antworten innerhalb von 24-48 Stunden.",
+      "location": "Unser Standort",
+      "email": "Schreiben Sie Uns"
+    },
+    "login": {
+      "title": "Willkommen Zurück",
+      "subtitle": "Melden Sie sich an, um Ihre spirituelle Reise fortzusetzen",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "forgotPassword": "Passwort Vergessen?",
+      "signIn": "Anmelden",
+      "signingIn": "Anmeldung läuft...",
+      "noAccount": "Noch kein Konto?",
+      "createAccount": "Erstellen Sie eines",
+      "or": "oder fortfahren mit"
+    },
+    "register": {
+      "title": "Beginnen Sie Ihre Reise",
+      "subtitle": "Erstellen Sie ein Konto, um unserer spirituellen Gemeinschaft beizutreten",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "confirmPassword": "Passwort Bestätigen",
+      "createAccount": "Konto Erstellen",
+      "creating": "Wird erstellt...",
+      "hasAccount": "Bereits ein Konto?",
+      "signIn": "Anmelden",
+      "or": "oder fortfahren mit"
+    },
+    "forgotPassword": {
+      "title": "Passwort Zurücksetzen",
+      "subtitle": "Geben Sie Ihre E-Mail ein, um einen Reset-Link zu erhalten",
+      "email": "E-Mail-Adresse",
+      "sendLink": "Link Senden",
+      "sending": "Wird gesendet...",
+      "backToLogin": "Zurück zur Anmeldung",
+      "success": "Überprüfen Sie Ihre E-Mail auf den Reset-Link"
+    },
+    "dashboard": {
+      "title": "Meine Spirituelle Sammlung",
+      "subtitle": "Ihre gespeicherten Reisen, Weisen und Ashrams",
+      "noBookmarks": "Sie haben noch nichts gespeichert. Beginnen Sie mit dem Erkunden!",
+      "tabs": {
+        "journeys": "Reisen",
+        "sages": "Weise",
+        "ashrams": "Ashrams",
+        "articles": "Artikel"
+      }
+    }
   },
   "common": {
     "loading": "Laden...",
@@ -79,8 +201,14 @@
     "popular": "Beliebt",
     "recent": "Neueste",
     "save": "Speichern",
+    "saved": "Gespeichert",
     "cancel": "Abbrechen",
-    "close": "Schließen"
+    "close": "Schließen",
+    "submit": "Absenden",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "seeAll": "Alle Anzeigen",
+    "noResults": "Keine Ergebnisse gefunden"
   },
   "footer": {
     "tagline": "Seelen mit heiligen Reisen verbinden. Entdecken Sie Ihren Weg zum inneren Frieden und zur spirituellen Transformation.",

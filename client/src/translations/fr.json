@@ -17,7 +17,8 @@
     "whyIndianPhilosophies": "Pourquoi les Philosophies Indiennes",
     "understandingPhilosophies": "Comprendre les Philosophies Indiennes",
     "aboutUs": "Qui Sommes-Nous",
-    "howWeExplore": "Comment Nous Explorons"
+    "howWeExplore": "Comment Nous Explorons",
+    "backToHome": "Retour à l'Accueil"
   },
   "hero": {
     "title": "Voyage vers la Paix Intérieure",
@@ -26,44 +27,165 @@
     "secondaryCta": "Rejoindre les Rencontres Mondiales",
     "trustedPartners": "Partenaires de Confiance"
   },
-  "about": {
-    "title": "À Propos de Nous",
-    "description": "Nous sommes une communauté de chercheurs spirituels dédiés à fournir des expériences authentiques qui nourrissent l'âme et élargissent la conscience."
+  "sections": {
+    "sages": {
+      "title": "Biographies des Sages",
+      "subtitle": "Découvrez la sagesse et les enseignements des maîtres spirituels à travers les traditions"
+    },
+    "meetups": {
+      "title": "Rencontres Spirituelles",
+      "subtitle": "Rejoignez notre communauté mondiale de chercheurs lors de rassemblements virtuels"
+    },
+    "testimonials": {
+      "title": "Témoignages",
+      "subtitle": "Écoutez les voyageurs qui ont transformé leur vie"
+    },
+    "journeys": {
+      "title": "Voyages Sacrés",
+      "subtitle": "Retraites spirituelles transformatrices vers des destinations sacrées"
+    },
+    "newsletter": {
+      "title": "Rejoignez Notre Communauté Spirituelle",
+      "subtitle": "Abonnez-vous pour recevoir sagesse, perspectives et mises à jour sur les prochaines retraites",
+      "placeholder": "Entrez votre email",
+      "button": "S'abonner",
+      "success": "Merci de vous être abonné!"
+    },
+    "quotes": {
+      "title": "Sagesse Quotidienne",
+      "subtitle": "Sagesse ancienne pour les chercheurs modernes"
+    },
+    "nutrition": {
+      "title": "Nutrition Intérieure",
+      "subtitle": "Nourrissez votre esprit, corps et âme avec nos perspectives sélectionnées"
+    }
   },
-  "contact": {
-    "title": "Nous Contacter",
-    "name": "Nom",
-    "email": "Email",
-    "subject": "Sujet",
-    "message": "Message",
-    "send": "Envoyer le Message",
-    "success": "Merci pour votre message. Nous vous répondrons bientôt!"
-  },
-  "auth": {
-    "login": "Connexion",
-    "register": "S'inscrire",
-    "forgotPassword": "Mot de Passe Oublié",
-    "resetPassword": "Réinitialiser le Mot de Passe",
-    "firstName": "Prénom",
-    "lastName": "Nom de Famille",
-    "email": "Email",
-    "password": "Mot de Passe",
-    "confirmPassword": "Confirmer le Mot de Passe",
-    "loginButton": "Se Connecter",
-    "registerButton": "Créer un Compte",
-    "forgotPasswordButton": "Envoyer le Lien",
-    "resetPasswordButton": "Réinitialiser",
-    "alreadyHaveAccount": "Déjà un compte?",
-    "dontHaveAccount": "Pas de compte?",
-    "backToLogin": "Retour à la Connexion"
-  },
-  "dashboard": {
-    "title": "Ma Collection Spirituelle",
-    "noBookmarks": "Vous n'avez encore rien mis en favoris. Commencez à explorer notre contenu!",
-    "journeys": "Voyages Sacrés",
-    "sages": "Sages",
-    "ashrams": "Ashrams",
-    "articles": "Articles de Nutrition Intérieure"
+  "pages": {
+    "sages": {
+      "title": "Sagesse des Sages",
+      "subtitle": "Explorez les enseignements profonds des maîtres éclairés",
+      "searchPlaceholder": "Rechercher par nom, enseignements ou livres...",
+      "loading": "Chargement de la Sagesse des Sages...",
+      "loadingSubtitle": "Rassemblement des enseignements profonds des maîtres spirituels",
+      "error": "Impossible de Charger la Sagesse des Sages",
+      "errorSubtitle": "Nous rencontrons des difficultés pour accéder aux textes sacrés. Veuillez réessayer plus tard.",
+      "empty": "Les enseignements sacrés sont en cours de compilation. Revenez bientôt.",
+      "readBio": "Lire la Biographie Complète",
+      "coreTeachings": "Enseignements Principaux",
+      "notableWorks": "Œuvres Notables",
+      "filters": {
+        "all": "Tous",
+        "livingSages": "Sages Vivants",
+        "modernSages": "Sages Modernes",
+        "ancientSages": "Sages Anciens",
+        "hindu": "Hindou",
+        "buddhist": "Bouddhiste",
+        "sufi": "Soufi",
+        "jain": "Jaïn"
+      }
+    },
+    "ashrams": {
+      "title": "Ashrams Sacrés",
+      "subtitle": "Découvrez les centres de retraite spirituelle à travers l'Inde",
+      "searchPlaceholder": "Rechercher par nom, lieu ou spécialité...",
+      "loading": "Chargement des Ashrams Sacrés...",
+      "readMore": "Lire Plus",
+      "keyFacilities": "Installations Principales",
+      "founders": "Fondateurs",
+      "filters": {
+        "all": "Tous",
+        "northIndia": "Inde du Nord",
+        "southIndia": "Inde du Sud",
+        "westIndia": "Inde de l'Ouest",
+        "eastIndia": "Inde de l'Est",
+        "centralIndia": "Inde Centrale"
+      }
+    },
+    "meetups": {
+      "title": "Satsangs Virtuels",
+      "subtitle": "Rejoignez notre communauté spirituelle mondiale",
+      "comingSoon": "À venir en avril 2026",
+      "description": "Connectez-vous avec des chercheurs du monde entier lors de nos rassemblements en ligne pour la méditation, la réflexion et la croissance spirituelle.",
+      "registerTitle": "Inscrivez-vous pour les Mises à Jour",
+      "registerButton": "S'inscrire Maintenant",
+      "features": {
+        "virtual": "Rassemblements Virtuels",
+        "global": "Communauté Mondiale",
+        "weekly": "Sessions Hebdomadaires"
+      }
+    },
+    "quotes": {
+      "title": "Citations Spirituelles Quotidiennes",
+      "subtitle": "Sagesse ancienne pour inspirer votre pratique quotidienne",
+      "by": "par"
+    },
+    "nutrition": {
+      "title": "Nutrition Intérieure",
+      "subtitle": "Perspectives et articles pour la croissance spirituelle",
+      "readArticle": "Lire l'Article",
+      "minRead": "min de lecture"
+    },
+    "contact": {
+      "title": "Nous Contacter",
+      "subtitle": "Nous serions ravis de vous entendre",
+      "form": {
+        "name": "Votre Nom",
+        "email": "Adresse Email",
+        "subject": "Sujet",
+        "message": "Votre Message",
+        "send": "Envoyer le Message",
+        "sending": "Envoi en cours..."
+      },
+      "success": "Merci pour votre message. Nous répondrons sous 24-48 heures.",
+      "location": "Notre Emplacement",
+      "email": "Nous Écrire"
+    },
+    "login": {
+      "title": "Bon Retour",
+      "subtitle": "Connectez-vous pour continuer votre voyage spirituel",
+      "email": "Adresse Email",
+      "password": "Mot de Passe",
+      "forgotPassword": "Mot de Passe Oublié?",
+      "signIn": "Se Connecter",
+      "signingIn": "Connexion en cours...",
+      "noAccount": "Pas encore de compte?",
+      "createAccount": "Créez-en un",
+      "or": "ou continuez avec"
+    },
+    "register": {
+      "title": "Commencez Votre Voyage",
+      "subtitle": "Créez un compte pour rejoindre notre communauté spirituelle",
+      "firstName": "Prénom",
+      "lastName": "Nom de Famille",
+      "email": "Adresse Email",
+      "password": "Mot de Passe",
+      "confirmPassword": "Confirmer le Mot de Passe",
+      "createAccount": "Créer un Compte",
+      "creating": "Création en cours...",
+      "hasAccount": "Déjà un compte?",
+      "signIn": "Se connecter",
+      "or": "ou continuez avec"
+    },
+    "forgotPassword": {
+      "title": "Réinitialiser le Mot de Passe",
+      "subtitle": "Entrez votre email pour recevoir un lien de réinitialisation",
+      "email": "Adresse Email",
+      "sendLink": "Envoyer le Lien",
+      "sending": "Envoi en cours...",
+      "backToLogin": "Retour à la Connexion",
+      "success": "Vérifiez votre email pour le lien de réinitialisation"
+    },
+    "dashboard": {
+      "title": "Ma Collection Spirituelle",
+      "subtitle": "Vos voyages, sages et ashrams sauvegardés",
+      "noBookmarks": "Vous n'avez encore rien sauvegardé. Commencez à explorer!",
+      "tabs": {
+        "journeys": "Voyages",
+        "sages": "Sages",
+        "ashrams": "Ashrams",
+        "articles": "Articles"
+      }
+    }
   },
   "common": {
     "loading": "Chargement...",
@@ -78,9 +200,15 @@
     "featured": "En Vedette",
     "popular": "Populaire",
     "recent": "Récent",
-    "save": "Enregistrer",
+    "save": "Sauvegarder",
+    "saved": "Sauvegardé",
     "cancel": "Annuler",
-    "close": "Fermer"
+    "close": "Fermer",
+    "submit": "Soumettre",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "seeAll": "Voir Tout",
+    "noResults": "Aucun résultat trouvé"
   },
   "footer": {
     "tagline": "Connecter les âmes avec des voyages sacrés. Découvrez votre chemin vers la paix intérieure et la transformation spirituelle.",

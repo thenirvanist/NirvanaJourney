@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/hooks/useTranslation";
 import { SiFacebook, SiWhatsapp, SiInstagram, SiLinkedin, SiX } from "react-icons/si";
 
 export default function Newsletter() {
@@ -9,6 +10,7 @@ export default function Newsletter() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ export default function Newsletter() {
       if (response.ok) {
         setIsSuccess(true);
         toast({
-          title: "Thank you!",
+          title: t("sections.newsletter.success"),
           description: data.message || "Please check your inbox for a confirmation link.",
         });
         setEmail("");
@@ -55,7 +57,7 @@ export default function Newsletter() {
     return (
       <section className="py-20 bg-[#F7F2E8] text-gray-900">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6">Thank You!</h2>
+          <h2 className="text-4xl font-bold mb-6">{t("sections.newsletter.success")}</h2>
           <p className="text-xl text-gray-700">
             Please check your inbox for a confirmation link to finalize your subscription.
           </p>
@@ -67,14 +69,14 @@ export default function Newsletter() {
   return (
     <section className="py-20 bg-[#F7F2E8] text-gray-900">
       <div className="max-w-4xl mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold mb-6">Stay Connected to Your Journey</h2>
+        <h2 className="text-4xl font-bold mb-6">{t("sections.newsletter.title")}</h2>
         <p className="text-xl mb-8 text-gray-700">
-          Receive weekly inspiration, retreat updates, and spiritual insights delivered to your inbox
+          {t("sections.newsletter.subtitle")}
         </p>
         <form onSubmit={onFormSubmit} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
           <Input
             type="email"
-            placeholder="Enter your email"
+            placeholder={t("sections.newsletter.placeholder")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="flex-1 px-6 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[hsl(70,71%,62%)]"
@@ -87,13 +89,13 @@ export default function Newsletter() {
             className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-3 rounded-lg font-semibold transition-all duration-300"
             data-testid="button-newsletter-subscribe"
           >
-            {isSubmitting ? "Subscribing..." : "Subscribe"}
+            {isSubmitting ? t("common.loading") : t("sections.newsletter.button")}
           </Button>
         </form>
 
         {/* Stay In Touch - Social Links */}
         <div className="mt-12">
-          <h3 className="text-2xl font-semibold mb-6">Stay In Touch</h3>
+          <h3 className="text-2xl font-semibold mb-6">{t("footer.social")}</h3>
           <div className="flex flex-wrap justify-center gap-4">
             <a
               href="https://www.facebook.com/thenirvanistofficial/"
