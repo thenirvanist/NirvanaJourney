@@ -137,7 +137,7 @@ export default function Meetups() {
             Join a Global Circle of Spiritual Seekers
           </h2>
           <p className="text-xl mb-8 opacity-90 leading-relaxed">
-            Weekly online satsangs to pause, reflect, and grow — together.
+            Weekly online satsangs to pause, reflect, and grow — together starting April 2026.
           </p>
           <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 text-lg rounded-lg font-semibold transition-all duration-300">
             Join Our Community
@@ -145,9 +145,19 @@ export default function Meetups() {
         </div>
       </section>
 
-      {/* What is Satsang Section */}
+      {/* What is a Satsang Section */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-6">What is a 'Satsang'?</h2>
+            <p className="text-lg text-gray-700 leading-relaxed mb-6">
+              The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance.
+            </p>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.
+            </p>
+          </div>
+          
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6">What Happens in a Satsang?</h2>
           </div>
@@ -403,45 +413,6 @@ export default function Meetups() {
               )}
             </CardContent>
           </Card>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-12">What Our Circle Members Say</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="p-6 shadow-lg">
-              <p className="text-gray-700 mb-4 italic">
-                "I never thought I'd connect so deeply with strangers online. Every week leaves me 
-                with something to think about."
-              </p>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 brand-primary rounded-full flex items-center justify-center">
-                  <span className="text-white font-semibold">L</span>
-                </div>
-                <div>
-                  <p className="font-semibold">Leena</p>
-                  <p className="text-sm text-gray-500">Mauritius</p>
-                </div>
-              </div>
-            </Card>
-            
-            <Card className="p-6 shadow-lg">
-              <p className="text-gray-700 mb-4 italic">
-                "The quiet space I needed, without pressure or preaching."
-              </p>
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 brand-primary rounded-full flex items-center justify-center">
-                  <span className="text-white font-semibold">A</span>
-                </div>
-                <div>
-                  <p className="font-semibold">Aarti</p>
-                  <p className="text-sm text-gray-500">Mumbai</p>
-                </div>
-              </div>
-            </Card>
-          </div>
         </div>
       </section>
 
