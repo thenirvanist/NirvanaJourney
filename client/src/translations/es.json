@@ -198,6 +198,86 @@
         "ashrams": "Ashrams",
         "articles": "Artículos"
       }
+    },
+    "journeys": {
+      "title": "Viajes Sagrados",
+      "subtitle": "Embárcate en aventuras espirituales transformadoras que te conectan con la sabiduría antigua.",
+      "loading": "Cargando Viajes Sagrados...",
+      "loadingSubtitle": "Por favor espera mientras reunimos tus experiencias transformadoras",
+      "error": "No se pudieron cargar los viajes",
+      "errorSubtitle": "Estamos experimentando dificultades de conexión. Por favor, inténtalo más tarde.",
+      "empty": "No hay viajes espirituales disponibles actualmente. Vuelve pronto.",
+      "tryAgain": "Intentar de Nuevo",
+      "exploreAll": "Explorar Todos los Viajes",
+      "whyNeedOne": "¿Por Qué Necesitas Uno?",
+      "whyNeedOneSubtitle": "En nuestro mundo acelerado, los viajes sagrados ofrecen oportunidades profundas de crecimiento espiritual.",
+      "innerTransformation": "Transformación Interior",
+      "innerTransformationDesc": "Experimenta cambios profundos de conciencia a través de prácticas sagradas y meditación.",
+      "culturalConnection": "Conexión Cultural",
+      "culturalConnectionDesc": "Sumérgete en tradiciones espirituales antiguas y conéctate con la sabiduría viva.",
+      "communityGrowth": "Comunidad y Crecimiento",
+      "communityGrowthDesc": "Únete a una comunidad solidaria de buscadores que comparten tu pasión.",
+      "bookThisJourney": "Reservar Este Viaje",
+      "joinWaitlist": "Unirse a la Lista de Espera",
+      "viewAllJourneys": "Ver Todos los Viajes",
+      "availableNow": "Disponible Ahora",
+      "fullyBooked": "Agotado"
+    },
+    "journeyDetail": {
+      "loading": "Cargando Detalles...",
+      "loadingSubtitle": "Preparando tu aventura espiritual",
+      "notFound": "Viaje No Encontrado",
+      "notFoundSubtitle": "No pudimos encontrar el viaje que buscas.",
+      "overview": "Resumen",
+      "description": "Descripción",
+      "itinerary": "Itinerario",
+      "bookNow": "Reservar Este Viaje",
+      "joinWaitlist": "Unirse a la Lista de Espera"
+    },
+    "sageDetail": {
+      "loading": "Cargando Biografía Sagrada...",
+      "loadingSubtitle": "Recopilando la historia de este maestro espiritual",
+      "notFound": "Biografía No Encontrada",
+      "notFoundSubtitle": "No pudimos encontrar la biografía que buscas.",
+      "backToAll": "Volver a Todos los Sabios",
+      "returnToAll": "Regresar a Todos los Sabios",
+      "biography": "Biografía",
+      "teachings": "Enseñanzas",
+      "books": "Libros",
+      "relatedArticles": "Artículos Relacionados"
+    },
+    "ashramDetail": {
+      "loading": "Cargando Espacio Sagrado...",
+      "loadingSubtitle": "Recopilando detalles sobre este santuario espiritual",
+      "notFound": "Ashram No Encontrado",
+      "notFoundSubtitle": "No pudimos encontrar el ashram que buscas.",
+      "backToAll": "Volver a Todos los Ashrams",
+      "returnToAll": "Regresar a Todos los Ashrams",
+      "about": "Acerca de",
+      "facilities": "Instalaciones",
+      "contact": "Contacto",
+      "programs": "Programas"
+    },
+    "about": {
+      "whyPhilosophies": {
+        "title": "¿Por Qué Explorar la Filosofía India?",
+        "subtitle": "Un viaje hacia la sabiduría que transforma nuestra comprensión de la vida"
+      },
+      "understanding": {
+        "title": "Comprendiendo las Filosofías Indias",
+        "subtitle": "De los Vedas a los Puranas: Un viaje a través de milenios de sabiduría",
+        "timeline": "Línea de Tiempo"
+      },
+      "howExplore": {
+        "title": "¿Cómo Exploraremos?",
+        "subtitle": "Únete a nosotros en un viaje de descubrimiento a través de múltiples caminos de aprendizaje",
+        "methods": "Nuestros Métodos de Exploración"
+      },
+      "aboutUs": {
+        "title": "Sobre Nosotros",
+        "subtitle": "Nuestro viaje a la filosofía india y la visión detrás de The Nirvanist",
+        "meetFounders": "Conoce a los Fundadores"
+      }
     }
   },
   "common": {

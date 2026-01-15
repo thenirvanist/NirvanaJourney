@@ -198,6 +198,86 @@
         "ashrams": "修道院",
         "articles": "文章"
       }
+    },
+    "journeys": {
+      "title": "神圣旅程",
+      "subtitle": "踏上变革性的灵性冒险，与古老智慧、神圣之地和您的内在真相连接。",
+      "loading": "加载神圣旅程中...",
+      "loadingSubtitle": "请稍候，我们正在收集您的变革体验",
+      "error": "无法加载旅程",
+      "errorSubtitle": "我们正在遇到连接困难，请稍后重试。",
+      "empty": "目前没有可用的灵性旅程，请稍后再来。",
+      "tryAgain": "重试",
+      "exploreAll": "探索所有旅程",
+      "whyNeedOne": "为什么您需要一次?",
+      "whyNeedOneSubtitle": "在我们快节奏的世界中，神圣旅程提供了深刻的灵性成长机会。",
+      "innerTransformation": "内在转化",
+      "innerTransformationDesc": "通过神圣修行和冥想体验深刻的意识转变。",
+      "culturalConnection": "文化连接",
+      "culturalConnectionDesc": "沉浸在古老的灵性传统中，与活生生的智慧连接。",
+      "communityGrowth": "社区与成长",
+      "communityGrowthDesc": "加入一个志同道合的求道者社区。",
+      "bookThisJourney": "预订此旅程",
+      "joinWaitlist": "加入等候名单",
+      "viewAllJourneys": "查看所有旅程",
+      "availableNow": "现在可用",
+      "fullyBooked": "已满"
+    },
+    "journeyDetail": {
+      "loading": "加载旅程详情中...",
+      "loadingSubtitle": "准备您的灵性冒险",
+      "notFound": "未找到旅程",
+      "notFoundSubtitle": "我们找不到您要找的旅程。",
+      "overview": "概述",
+      "description": "描述",
+      "itinerary": "行程",
+      "bookNow": "预订此旅程",
+      "joinWaitlist": "加入等候名单"
+    },
+    "sageDetail": {
+      "loading": "加载神圣传记中...",
+      "loadingSubtitle": "收集这位灵性大师的生平故事",
+      "notFound": "未找到传记",
+      "notFoundSubtitle": "我们找不到您要找的传记。",
+      "backToAll": "返回所有圣贤",
+      "returnToAll": "返回所有圣贤",
+      "biography": "传记",
+      "teachings": "教导",
+      "books": "书籍",
+      "relatedArticles": "相关文章"
+    },
+    "ashramDetail": {
+      "loading": "加载神圣空间中...",
+      "loadingSubtitle": "收集有关这个灵性圣所的详情",
+      "notFound": "未找到修道院",
+      "notFoundSubtitle": "我们找不到您要找的修道院。",
+      "backToAll": "返回所有修道院",
+      "returnToAll": "返回所有修道院",
+      "about": "关于",
+      "facilities": "设施",
+      "contact": "联系",
+      "programs": "项目"
+    },
+    "about": {
+      "whyPhilosophies": {
+        "title": "为什么探索印度哲学?",
+        "subtitle": "一段改变我们理解生命方式的智慧之旅"
+      },
+      "understanding": {
+        "title": "理解印度哲学",
+        "subtitle": "从吠陀到往世书：穿越千年智慧的旅程",
+        "timeline": "时间线"
+      },
+      "howExplore": {
+        "title": "我们将如何探索?",
+        "subtitle": "加入我们，通过多种学习途径进行发现之旅",
+        "methods": "我们的探索方法"
+      },
+      "aboutUs": {
+        "title": "关于我们",
+        "subtitle": "我们的印度哲学之旅和The Nirvanist背后的愿景",
+        "meetFounders": "认识创始人"
+      }
     }
   },
   "common": {

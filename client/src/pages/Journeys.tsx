@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import TourCarousel from "@/components/TourCarousel";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import { useJourneys } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const journeysBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -16,6 +17,7 @@ const journeysBreadcrumb = createBreadcrumbSchema([
 ]);
 
 export default function Journeys() {
+  const { t } = useTranslation();
   const { data: journeys, isLoading, error } = useJourneys();
 
   if (isLoading) {
@@ -25,8 +27,8 @@ export default function Journeys() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Sacred Journeys...</h1>
-              <p className="text-xl text-gray-600">Please wait while we gather your transformative experiences</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.journeys.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.journeys.loadingSubtitle")}</p>
             </div>
           </div>
         </div>
@@ -42,10 +44,10 @@ export default function Journeys() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Unable to Load Journeys</h1>
-              <p className="text-xl text-gray-600">We're experiencing difficulties connecting to our spiritual guidance system. Please try again later or contact our support team.</p>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.journeys.error")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.journeys.errorSubtitle")}</p>
               <Button className="mt-6 brand-primary hover:brand-bright text-white hover:text-black">
-                Try Again
+                {t("pages.journeys.tryAgain")}
               </Button>
             </div>
           </div>
@@ -62,8 +64,8 @@ export default function Journeys() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Sacred Journeys</h1>
-              <p className="text-xl text-gray-600">No spiritual journeys are currently available. Please check back soon as we're always adding new transformative experiences.</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.journeys.title")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.journeys.empty")}</p>
             </div>
           </div>
         </div>

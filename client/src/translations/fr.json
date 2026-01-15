@@ -198,6 +198,86 @@
         "ashrams": "Ashrams",
         "articles": "Articles"
       }
+    },
+    "journeys": {
+      "title": "Voyages Sacrés",
+      "subtitle": "Embarquez pour des aventures spirituelles transformatrices qui vous connectent à la sagesse ancienne.",
+      "loading": "Chargement des Voyages Sacrés...",
+      "loadingSubtitle": "Veuillez patienter pendant que nous rassemblons vos expériences transformatrices",
+      "error": "Impossible de Charger les Voyages",
+      "errorSubtitle": "Nous rencontrons des difficultés de connexion. Veuillez réessayer plus tard.",
+      "empty": "Aucun voyage spirituel n'est actuellement disponible. Revenez bientôt.",
+      "tryAgain": "Réessayer",
+      "exploreAll": "Explorer Tous les Voyages",
+      "whyNeedOne": "Pourquoi en Avez-Vous Besoin?",
+      "whyNeedOneSubtitle": "Dans notre monde rapide, les voyages sacrés offrent des opportunités profondes de croissance spirituelle.",
+      "innerTransformation": "Transformation Intérieure",
+      "innerTransformationDesc": "Vivez des changements profonds de conscience à travers des pratiques sacrées et la méditation.",
+      "culturalConnection": "Connexion Culturelle",
+      "culturalConnectionDesc": "Plongez dans les traditions spirituelles anciennes et connectez-vous à la sagesse vivante.",
+      "communityGrowth": "Communauté et Croissance",
+      "communityGrowthDesc": "Rejoignez une communauté solidaire de chercheurs partageant votre passion.",
+      "bookThisJourney": "Réserver ce Voyage",
+      "joinWaitlist": "Rejoindre la Liste d'Attente",
+      "viewAllJourneys": "Voir Tous les Voyages",
+      "availableNow": "Disponible Maintenant",
+      "fullyBooked": "Complet"
+    },
+    "journeyDetail": {
+      "loading": "Chargement des Détails...",
+      "loadingSubtitle": "Préparation de votre aventure spirituelle",
+      "notFound": "Voyage Non Trouvé",
+      "notFoundSubtitle": "Nous n'avons pas trouvé le voyage que vous cherchez.",
+      "overview": "Aperçu",
+      "description": "Description",
+      "itinerary": "Itinéraire",
+      "bookNow": "Réserver ce Voyage",
+      "joinWaitlist": "Rejoindre la Liste d'Attente"
+    },
+    "sageDetail": {
+      "loading": "Chargement de la Biographie...",
+      "loadingSubtitle": "Rassemblement de l'histoire de ce maître spirituel",
+      "notFound": "Biographie Non Trouvée",
+      "notFoundSubtitle": "Nous n'avons pas trouvé la biographie que vous cherchez.",
+      "backToAll": "Retour aux Sages",
+      "returnToAll": "Retourner à Tous les Sages",
+      "biography": "Biographie",
+      "teachings": "Enseignements",
+      "books": "Livres",
+      "relatedArticles": "Articles Connexes"
+    },
+    "ashramDetail": {
+      "loading": "Chargement de l'Espace Sacré...",
+      "loadingSubtitle": "Rassemblement des détails sur ce sanctuaire spirituel",
+      "notFound": "Ashram Non Trouvé",
+      "notFoundSubtitle": "Nous n'avons pas trouvé l'ashram que vous cherchez.",
+      "backToAll": "Retour aux Ashrams",
+      "returnToAll": "Retourner à Tous les Ashrams",
+      "about": "À Propos",
+      "facilities": "Installations",
+      "contact": "Contact",
+      "programs": "Programmes"
+    },
+    "about": {
+      "whyPhilosophies": {
+        "title": "Pourquoi Explorer la Philosophie Indienne?",
+        "subtitle": "Un voyage vers la sagesse qui transforme notre compréhension de la vie"
+      },
+      "understanding": {
+        "title": "Comprendre les Philosophies Indiennes",
+        "subtitle": "Des Védas aux Puranas: Un voyage à travers des millénaires de sagesse",
+        "timeline": "Chronologie"
+      },
+      "howExplore": {
+        "title": "Comment Allons-Nous Explorer?",
+        "subtitle": "Rejoignez-nous dans un voyage de découverte à travers plusieurs voies d'apprentissage",
+        "methods": "Nos Méthodes d'Exploration"
+      },
+      "aboutUs": {
+        "title": "À Propos de Nous",
+        "subtitle": "Notre voyage dans la philosophie indienne et la vision derrière The Nirvanist",
+        "meetFounders": "Rencontrez les Fondateurs"
+      }
     }
   },
   "common": {

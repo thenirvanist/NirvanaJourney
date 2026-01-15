@@ -198,6 +198,86 @@
         "ashrams": "Ashrams",
         "articles": "Artigos"
       }
+    },
+    "journeys": {
+      "title": "Jornadas Sagradas",
+      "subtitle": "Embarque em aventuras espirituais transformadoras que o conectam com a sabedoria antiga.",
+      "loading": "Carregando Jornadas Sagradas...",
+      "loadingSubtitle": "Por favor, aguarde enquanto reunimos suas experiências transformadoras",
+      "error": "Não foi possível carregar as jornadas",
+      "errorSubtitle": "Estamos tendo dificuldades de conexão. Por favor, tente novamente mais tarde.",
+      "empty": "Não há jornadas espirituais disponíveis no momento. Volte em breve.",
+      "tryAgain": "Tentar Novamente",
+      "exploreAll": "Explorar Todas as Jornadas",
+      "whyNeedOne": "Por Que Você Precisa de Uma?",
+      "whyNeedOneSubtitle": "Em nosso mundo acelerado, jornadas sagradas oferecem oportunidades profundas de crescimento espiritual.",
+      "innerTransformation": "Transformação Interior",
+      "innerTransformationDesc": "Experimente mudanças profundas de consciência através de práticas sagradas e meditação.",
+      "culturalConnection": "Conexão Cultural",
+      "culturalConnectionDesc": "Mergulhe em tradições espirituais antigas e conecte-se com a sabedoria viva.",
+      "communityGrowth": "Comunidade e Crescimento",
+      "communityGrowthDesc": "Junte-se a uma comunidade solidária de buscadores que compartilham sua paixão.",
+      "bookThisJourney": "Reservar Esta Jornada",
+      "joinWaitlist": "Entrar na Lista de Espera",
+      "viewAllJourneys": "Ver Todas as Jornadas",
+      "availableNow": "Disponível Agora",
+      "fullyBooked": "Esgotado"
+    },
+    "journeyDetail": {
+      "loading": "Carregando Detalhes...",
+      "loadingSubtitle": "Preparando sua aventura espiritual",
+      "notFound": "Jornada Não Encontrada",
+      "notFoundSubtitle": "Não conseguimos encontrar a jornada que você procura.",
+      "overview": "Visão Geral",
+      "description": "Descrição",
+      "itinerary": "Itinerário",
+      "bookNow": "Reservar Esta Jornada",
+      "joinWaitlist": "Entrar na Lista de Espera"
+    },
+    "sageDetail": {
+      "loading": "Carregando Biografia Sagrada...",
+      "loadingSubtitle": "Reunindo a história de vida deste mestre espiritual",
+      "notFound": "Biografia Não Encontrada",
+      "notFoundSubtitle": "Não conseguimos encontrar a biografia que você procura.",
+      "backToAll": "Voltar para Todos os Sábios",
+      "returnToAll": "Retornar a Todos os Sábios",
+      "biography": "Biografia",
+      "teachings": "Ensinamentos",
+      "books": "Livros",
+      "relatedArticles": "Artigos Relacionados"
+    },
+    "ashramDetail": {
+      "loading": "Carregando Espaço Sagrado...",
+      "loadingSubtitle": "Reunindo detalhes sobre este santuário espiritual",
+      "notFound": "Ashram Não Encontrado",
+      "notFoundSubtitle": "Não conseguimos encontrar o ashram que você procura.",
+      "backToAll": "Voltar para Todos os Ashrams",
+      "returnToAll": "Retornar a Todos os Ashrams",
+      "about": "Sobre",
+      "facilities": "Instalações",
+      "contact": "Contato",
+      "programs": "Programas"
+    },
+    "about": {
+      "whyPhilosophies": {
+        "title": "Por Que Explorar a Filosofia Indiana?",
+        "subtitle": "Uma jornada para a sabedoria que transforma nossa compreensão da vida"
+      },
+      "understanding": {
+        "title": "Entendendo as Filosofias Indianas",
+        "subtitle": "Dos Vedas aos Puranas: Uma jornada através de milênios de sabedoria",
+        "timeline": "Linha do Tempo"
+      },
+      "howExplore": {
+        "title": "Como Vamos Explorar?",
+        "subtitle": "Junte-se a nós em uma jornada de descoberta através de múltiplos caminhos de aprendizado",
+        "methods": "Nossos Métodos de Exploração"
+      },
+      "aboutUs": {
+        "title": "Sobre Nós",
+        "subtitle": "Nossa jornada na filosofia indiana e a visão por trás do The Nirvanist",
+        "meetFounders": "Conheça os Fundadores"
+      }
     }
   },
   "common": {

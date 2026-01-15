@@ -11,8 +11,10 @@ import SchemaOrg, { createBreadcrumbSchema, createPersonSchema } from "@/compone
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useSage, useBlogPostsByAuthor } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function SageDetail() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const sageId = parseInt(id || "0");
 
@@ -27,8 +29,8 @@ export default function SageDetail() {
         <div className="pt-24 pb-20">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Sacred Biography...</h1>
-              <p className="text-xl text-gray-600">Gathering the life story of this spiritual master</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.sageDetail.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.sageDetail.loadingSubtitle")}</p>
             </div>
           </div>
         </div>
@@ -44,14 +46,14 @@ export default function SageDetail() {
         <div className="pt-24 pb-20">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Biography Not Found</h1>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.sageDetail.notFound")}</h1>
               <p className="text-xl text-gray-600 mb-8">
-                We couldn't find the biography you're looking for.
+                {t("pages.sageDetail.notFoundSubtitle")}
               </p>
               <Link href="/sages">
                 <Button className="brand-primary hover:brand-bright text-white hover:text-black">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Return to All Sages
+                  {t("pages.sageDetail.returnToAll")}
                 </Button>
               </Link>
             </div>

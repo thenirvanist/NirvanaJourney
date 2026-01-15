@@ -198,6 +198,86 @@
         "ashrams": "Ashrams",
         "articles": "Artikel"
       }
+    },
+    "journeys": {
+      "title": "Heilige Reisen",
+      "subtitle": "Begeben Sie sich auf transformative spirituelle Abenteuer, die Sie mit alter Weisheit verbinden.",
+      "loading": "Lade Heilige Reisen...",
+      "loadingSubtitle": "Bitte warten Sie, während wir Ihre transformativen Erfahrungen sammeln",
+      "error": "Reisen konnten nicht geladen werden",
+      "errorSubtitle": "Wir haben Schwierigkeiten mit der Verbindung. Bitte versuchen Sie es später erneut.",
+      "empty": "Derzeit sind keine spirituellen Reisen verfügbar. Schauen Sie bald wieder vorbei.",
+      "tryAgain": "Erneut Versuchen",
+      "exploreAll": "Alle Reisen Erkunden",
+      "whyNeedOne": "Warum Brauchen Sie Eine?",
+      "whyNeedOneSubtitle": "In unserer schnelllebigen Welt bieten heilige Reisen tiefgreifende Möglichkeiten für spirituelles Wachstum.",
+      "innerTransformation": "Innere Transformation",
+      "innerTransformationDesc": "Erleben Sie tiefgreifende Bewusstseinsveränderungen durch heilige Praktiken und Meditation.",
+      "culturalConnection": "Kulturelle Verbindung",
+      "culturalConnectionDesc": "Tauchen Sie ein in alte spirituelle Traditionen und verbinden Sie sich mit lebendiger Weisheit.",
+      "communityGrowth": "Gemeinschaft & Wachstum",
+      "communityGrowthDesc": "Schließen Sie sich einer unterstützenden Gemeinschaft von Suchenden an.",
+      "bookThisJourney": "Diese Reise Buchen",
+      "joinWaitlist": "Warteliste Beitreten",
+      "viewAllJourneys": "Alle Reisen Anzeigen",
+      "availableNow": "Jetzt Verfügbar",
+      "fullyBooked": "Ausgebucht"
+    },
+    "journeyDetail": {
+      "loading": "Lade Reisedetails...",
+      "loadingSubtitle": "Bereiten Sie Ihr spirituelles Abenteuer vor",
+      "notFound": "Reise Nicht Gefunden",
+      "notFoundSubtitle": "Wir konnten die gesuchte Reise nicht finden.",
+      "overview": "Überblick",
+      "description": "Beschreibung",
+      "itinerary": "Reiseplan",
+      "bookNow": "Diese Reise Buchen",
+      "joinWaitlist": "Warteliste Beitreten"
+    },
+    "sageDetail": {
+      "loading": "Lade Heilige Biografie...",
+      "loadingSubtitle": "Sammle die Lebensgeschichte dieses spirituellen Meisters",
+      "notFound": "Biografie Nicht Gefunden",
+      "notFoundSubtitle": "Wir konnten die gesuchte Biografie nicht finden.",
+      "backToAll": "Zurück zu Alle Weisen",
+      "returnToAll": "Zurück zu Allen Weisen",
+      "biography": "Biografie",
+      "teachings": "Lehren",
+      "books": "Bücher",
+      "relatedArticles": "Verwandte Artikel"
+    },
+    "ashramDetail": {
+      "loading": "Lade Heiligen Raum...",
+      "loadingSubtitle": "Sammle Details über dieses spirituelle Heiligtum",
+      "notFound": "Ashram Nicht Gefunden",
+      "notFoundSubtitle": "Wir konnten den gesuchten Ashram nicht finden.",
+      "backToAll": "Zurück zu Alle Ashrams",
+      "returnToAll": "Zurück zu Allen Ashrams",
+      "about": "Über",
+      "facilities": "Einrichtungen",
+      "contact": "Kontakt",
+      "programs": "Programme"
+    },
+    "about": {
+      "whyPhilosophies": {
+        "title": "Warum Indische Philosophie Erkunden?",
+        "subtitle": "Eine Reise in Weisheit, die unser Verständnis des Lebens verändert"
+      },
+      "understanding": {
+        "title": "Indische Philosophien Verstehen",
+        "subtitle": "Von den Veden zu den Puranas: Eine Reise durch Jahrtausende der Weisheit",
+        "timeline": "Zeitlinie"
+      },
+      "howExplore": {
+        "title": "Wie Werden Wir Erkunden?",
+        "subtitle": "Begleiten Sie uns auf einer Entdeckungsreise durch verschiedene Lernwege",
+        "methods": "Unsere Erkundungsmethoden"
+      },
+      "aboutUs": {
+        "title": "Über Uns",
+        "subtitle": "Unsere Reise in die indische Philosophie und die Vision hinter The Nirvanist",
+        "meetFounders": "Die Gründer Treffen"
+      }
     }
   },
   "common": {

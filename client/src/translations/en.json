@@ -198,6 +198,86 @@
         "ashrams": "Ashrams",
         "articles": "Articles"
       }
+    },
+    "journeys": {
+      "title": "Sacred Journeys",
+      "subtitle": "Embark on transformative spiritual adventures that connect you with ancient wisdom, sacred places, and your inner truth.",
+      "loading": "Loading Sacred Journeys...",
+      "loadingSubtitle": "Please wait while we gather your transformative experiences",
+      "error": "Unable to Load Journeys",
+      "errorSubtitle": "We're experiencing difficulties connecting to our spiritual guidance system. Please try again later.",
+      "empty": "No spiritual journeys are currently available. Please check back soon.",
+      "tryAgain": "Try Again",
+      "exploreAll": "Explore All Journeys",
+      "whyNeedOne": "Why Do You Need One?",
+      "whyNeedOneSubtitle": "In our fast-paced world, sacred journeys offer profound opportunities for spiritual growth, inner healing, and connection with ancient wisdom traditions.",
+      "innerTransformation": "Inner Transformation",
+      "innerTransformationDesc": "Experience profound shifts in consciousness through sacred practices, meditation, and connection with spiritual teachers and fellow seekers.",
+      "culturalConnection": "Cultural Connection",
+      "culturalConnectionDesc": "Immerse yourself in ancient spiritual traditions and connect with the living wisdom that has guided humanity for millennia.",
+      "communityGrowth": "Community & Growth",
+      "communityGrowthDesc": "Join a supportive community of fellow seekers who share your passion for spiritual discovery and personal transformation.",
+      "bookThisJourney": "Book This Journey",
+      "joinWaitlist": "Join Waitlist",
+      "viewAllJourneys": "View All Journeys",
+      "availableNow": "Available Now",
+      "fullyBooked": "Fully Booked"
+    },
+    "journeyDetail": {
+      "loading": "Loading Journey Details...",
+      "loadingSubtitle": "Preparing your spiritual adventure",
+      "notFound": "Journey Not Found",
+      "notFoundSubtitle": "We couldn't find the spiritual journey you're looking for.",
+      "overview": "Overview",
+      "description": "Description",
+      "itinerary": "Itinerary",
+      "bookNow": "Book This Journey",
+      "joinWaitlist": "Join Waitlist"
+    },
+    "sageDetail": {
+      "loading": "Loading Sacred Biography...",
+      "loadingSubtitle": "Gathering the life story of this spiritual master",
+      "notFound": "Biography Not Found",
+      "notFoundSubtitle": "We couldn't find the biography you're looking for.",
+      "backToAll": "Back to All Sages",
+      "returnToAll": "Return to All Sages",
+      "biography": "Biography",
+      "teachings": "Teachings",
+      "books": "Books",
+      "relatedArticles": "Related Articles"
+    },
+    "ashramDetail": {
+      "loading": "Loading Sacred Space...",
+      "loadingSubtitle": "Gathering details about this spiritual sanctuary",
+      "notFound": "Ashram Not Found",
+      "notFoundSubtitle": "We couldn't find the ashram you're looking for.",
+      "backToAll": "Back to All Ashrams",
+      "returnToAll": "Return to All Ashrams",
+      "about": "About",
+      "facilities": "Facilities",
+      "contact": "Contact",
+      "programs": "Programs"
+    },
+    "about": {
+      "whyPhilosophies": {
+        "title": "Why Explore Indian Philosophy?",
+        "subtitle": "A journey into wisdom that transforms how we understand life itself"
+      },
+      "understanding": {
+        "title": "Understanding Indian Philosophies",
+        "subtitle": "From the Vedas to the Puranas: A journey through millennia of wisdom",
+        "timeline": "Timeline"
+      },
+      "howExplore": {
+        "title": "How Will We Explore?",
+        "subtitle": "Join us on a journey of discovery through multiple pathways of learning",
+        "methods": "Our Exploration Methods"
+      },
+      "aboutUs": {
+        "title": "About Us",
+        "subtitle": "Our journey into Indian philosophy and the vision behind The Nirvanist",
+        "meetFounders": "Meet the Founders"
+      }
     }
   },
   "common": {

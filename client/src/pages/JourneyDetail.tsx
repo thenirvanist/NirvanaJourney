@@ -12,8 +12,10 @@ import SchemaOrg, { createBreadcrumbSchema, createTripSchema } from "@/component
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useJourney } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function JourneyDetail() {
+  const { t } = useTranslation();
   const [, params] = useRoute("/journeys/:id");
   const journeyId = params?.id ? parseInt(params.id) : 0;
 
@@ -26,8 +28,8 @@ export default function JourneyDetail() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Journey Details...</h1>
-              <p className="text-xl text-gray-600">Preparing your spiritual adventure</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.journeyDetail.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.journeyDetail.loadingSubtitle")}</p>
             </div>
           </div>
         </div>
@@ -43,12 +45,12 @@ export default function JourneyDetail() {
         <div className="pt-24 pb-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Journey Not Found</h1>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.journeyDetail.notFound")}</h1>
               <p className="text-xl text-gray-600">
-                We couldn't find the spiritual journey you're looking for. Please check the URL or explore our other transformative experiences.
+                {t("pages.journeyDetail.notFoundSubtitle")}
               </p>
               <Button className="mt-6 brand-primary hover:brand-bright text-white hover:text-black">
-                <a href="/journeys">View All Journeys</a>
+                <a href="/journeys">{t("pages.journeys.viewAllJourneys")}</a>
               </Button>
             </div>
           </div>

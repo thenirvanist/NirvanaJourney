@@ -11,8 +11,10 @@ import SchemaOrg, { createBreadcrumbSchema, createPlaceSchema } from "@/componen
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useAshram } from "@/hooks/useSupabaseQuery";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function AshramDetail() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const ashramId = parseInt(id || "0");
 
@@ -25,8 +27,8 @@ export default function AshramDetail() {
         <div className="pt-24 pb-20">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6">Loading Sacred Space...</h1>
-              <p className="text-xl text-gray-600">Gathering details about this spiritual sanctuary</p>
+              <h1 className="text-4xl font-bold mb-6">{t("pages.ashramDetail.loading")}</h1>
+              <p className="text-xl text-gray-600">{t("pages.ashramDetail.loadingSubtitle")}</p>
             </div>
           </div>
         </div>
@@ -42,14 +44,14 @@ export default function AshramDetail() {
         <div className="pt-24 pb-20">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center">
-              <h1 className="text-4xl font-bold mb-6 text-red-600">Ashram Not Found</h1>
+              <h1 className="text-4xl font-bold mb-6 text-red-600">{t("pages.ashramDetail.notFound")}</h1>
               <p className="text-xl text-gray-600 mb-8">
-                We couldn't find the ashram you're looking for.
+                {t("pages.ashramDetail.notFoundSubtitle")}
               </p>
               <Link href="/ashrams">
                 <Button className="brand-primary hover:brand-bright text-white hover:text-black">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  Return to All Ashrams
+                  {t("pages.ashramDetail.returnToAll")}
                 </Button>
               </Link>
             </div>
