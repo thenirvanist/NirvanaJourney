@@ -167,7 +167,7 @@ export default function UnderstandingIndianPhilosophies() {
                             <img 
                               src={rigVedaImage} 
                               alt="Rig Veda poem on parchment" 
-                              className="rounded-xl shadow-lg max-w-md"
+                              className="rounded-xl shadow-lg w-full sm:max-w-md"
                             />
                             <p className="text-sm text-gray-500 mt-2 italic">
                               Translation by Wendy Doniger O'Flaherty. From the Book "The Rig Veda - Anthology"
