@@ -25,8 +25,8 @@ export default function Navigation() {
     { href: "/meetups", label: "Satsangs", hidden: false },
     { href: "/sages", label: "Sages", hidden: false },
     { href: "/ashrams", label: "Ashrams", hidden: true },
-    { href: "/daily-quotes", label: "Daily Quotes", hidden: false },
     { href: "/inner-nutrition", label: "Insights", hidden: false },
+    { href: "/daily-quotes", label: "Daily Quotes", hidden: false },
   ];
 
   const aboutSubItems = [

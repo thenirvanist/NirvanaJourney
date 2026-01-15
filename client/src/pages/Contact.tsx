@@ -294,24 +294,6 @@ export default function Contact() {
               </CardContent>
             </Card>
 
-            {/* Emergency Support */}
-            <Card className="shadow-lg border-[hsl(75,64%,49%)]">
-              <CardHeader>
-                <CardTitle className="text-[hsl(75,64%,49%)]">24/7 Spiritual Support</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600 mb-4">
-                  If you're currently on a journey and need immediate guidance or support, 
-                  our AI spiritual guide is available 24/7 through our chatbot.
-                </p>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white"
-                >
-                  Chat with Spiritual Guide
-                </Button>
-              </CardContent>
-            </Card>
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Heart, MapPin, Phone, Mail, Settings } from "lucide-react";
+import { Heart, MapPin, Mail } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -24,12 +24,22 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/meetups" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Satsangs</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Satsang</span>
                 </Link>
               </li>
               <li>
                 <Link href="/sages" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Spiritual Sages</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Sages</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/inner-nutrition" onClick={() => window.scrollTo(0, 0)}>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Insights</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/daily-quotes" onClick={() => window.scrollTo(0, 0)}>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Daily Quotes</span>
                 </Link>
               </li>
             </ul>
@@ -40,6 +50,11 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Community</h4>
             <ul className="space-y-2">
               <li>
+                <a href="/#newsletter" className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">
+                  Newsletter
+                </a>
+              </li>
+              <li>
                 <Link href="/register" onClick={() => window.scrollTo(0, 0)}>
                   <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Join Us</span>
                 </Link>
@@ -49,24 +64,6 @@ export default function Footer() {
                   <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Member Login</span>
                 </Link>
               </li>
-              <li>
-                <Link href="/contact" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Contact</span>
-                </Link>
-              </li>
-              <li>
-                <a href="#" className="text-gray-300 hover:text-[#70c92e] transition-colors">
-                  Newsletter
-                </a>
-              </li>
-              <li className="pt-2 border-t border-gray-600">
-                <Link href="/admin" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-500 hover:text-gray-400 transition-colors text-xs flex items-center cursor-pointer" data-testid="link-admin-access">
-                    <Settings className="w-3 h-3 mr-1" />
-                    Admin Access
-                  </span>
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -74,13 +71,19 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Connect</h4>
             <ul className="space-y-3">
-              <li className="flex items-center text-gray-300">
-                <MapPin className="w-4 h-4 mr-2 text-[#70c92e]" />
-                <span className="text-sm">Spiritual Journeys Worldwide</span>
+              <li>
+                <Link href="/about/us" onClick={() => window.scrollTo(0, 0)}>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">About Us</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" onClick={() => window.scrollTo(0, 0)}>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Contact</span>
+                </Link>
               </li>
               <li className="flex items-center text-gray-300">
-                <Phone className="w-4 h-4 mr-2 text-[#70c92e]" />
-                <span className="text-sm">+1 (555) 123-PEACE</span>
+                <MapPin className="w-4 h-4 mr-2 text-[#70c92e]" />
+                <span className="text-sm">Tamarin, Mauritius</span>
               </li>
               <li className="flex items-center text-gray-300">
                 <Mail className="w-4 h-4 mr-2 text-[#70c92e]" />
