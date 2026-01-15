@@ -121,7 +121,7 @@ export default function QuotesCarousel() {
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
               Daily Quotes
             </h2>
-            <p className="text-xl text-gray-600 whitespace-nowrap">
+            <p className="text-xl text-gray-600">
               Inspirational quotes from spiritual masters and mystics
             </p>
           </div>
