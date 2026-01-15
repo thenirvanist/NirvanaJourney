@@ -26,7 +26,7 @@ const explorationMethods = [
   {
     icon: Video,
     title: "Virtual Satsangs",
-    description: "The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance."
+    description: "We will conduct virtual meetings where curated speeches by sages featured on this site will be broadcasted, followed by questions for introspection or discussion. If possible, this will be conducted in groups of 8 selected from within your country/location, so that you have the opportunity to gather physically in future if desired so. However, if you prefer solitude, you may also attend the videos on your own and introspect on the questions by yourself."
   },
   {
     icon: MapPin,
@@ -93,13 +93,10 @@ export default function HowWillWeExplore() {
                 More about Satsangs
               </h3>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                We will conduct virtual meetings where curated speeches by enlightened sages will be broadcasted, followed by questions for introspection or discussion. If possible, this will be conducted in groups of 8 virtually in your location, where you'll have the opportunity to gather with others to share and connect.
+                The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed">
-                However, if you prefer solitude, you may also attend the videos individually and introspect on the questions on your own.
+                Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.
               </p>
             </div>
           </div>
