@@ -2,21 +2,29 @@
   "navigation": {
     "home": "Accueil",
     "journeys": "Voyages Sacrés",
-    "meetups": "Rencontres Spirituelles",
-    "innerNutrition": "Nutrition Intérieure",
+    "meetups": "Satsangs",
+    "innerNutrition": "Perspectives",
     "sages": "Sages",
     "ashrams": "Ashrams",
+    "dailyQuotes": "Citations Quotidiennes",
     "login": "Connexion",
     "signUp": "S'inscrire",
     "logout": "Déconnexion",
     "myCollection": "Ma Collection",
-    "welcome": "Bienvenue"
+    "welcome": "Bienvenue",
+    "about": "À Propos",
+    "loading": "Chargement...",
+    "whyIndianPhilosophies": "Pourquoi les Philosophies Indiennes",
+    "understandingPhilosophies": "Comprendre les Philosophies Indiennes",
+    "aboutUs": "Qui Sommes-Nous",
+    "howWeExplore": "Comment Nous Explorons"
   },
   "hero": {
-    "title": "Nourrissez Votre Âme",
-    "subtitle": "Embarquez dans des voyages spirituels transformateurs vers des destinations sacrées du monde entier",
+    "title": "Voyage vers la Paix Intérieure",
+    "subtitle": "Des voyages spirituels transformateurs qui favorisent la découverte de soi et la connexion avec diverses cultures",
     "cta": "Explorer les Voyages Sacrés",
-    "secondaryCta": "Rejoindre les Rencontres Mondiales"
+    "secondaryCta": "Rejoindre les Rencontres Mondiales",
+    "trustedPartners": "Partenaires de Confiance"
   },
   "about": {
     "title": "À Propos de Nous",
@@ -75,13 +83,23 @@
     "close": "Fermer"
   },
   "footer": {
+    "tagline": "Connecter les âmes avec des voyages sacrés. Découvrez votre chemin vers la paix intérieure et la transformation spirituelle.",
+    "madeWithLove": "Fait avec amour pour les chercheurs",
+    "explore": "Explorer",
+    "satsang": "Satsang",
+    "insights": "Perspectives",
+    "community": "Communauté",
+    "newsletter": "Newsletter",
+    "joinUs": "Nous Rejoindre",
+    "memberLogin": "Connexion Membre",
+    "connect": "Contact",
     "aboutUs": "À Propos",
     "contact": "Contact",
+    "social": "Réseaux Sociaux",
+    "copyright": "© 2025 The Nirvanist. Tous droits réservés.",
     "privacy": "Politique de Confidentialité",
     "terms": "Conditions d'Utilisation",
-    "newsletter": "Newsletter",
     "subscribeNewsletter": "Abonnez-vous à notre newsletter pour des insights spirituels",
-    "subscribe": "S'abonner",
-    "copyright": "© 2024 The Nirvanist. Tous droits réservés."
+    "subscribe": "S'abonner"
   }
 }

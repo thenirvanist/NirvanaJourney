@@ -1,8 +1,11 @@
 import { Link } from "wouter";
 import { Heart, MapPin, Mail } from "lucide-react";
 import { SiFacebook, SiWhatsapp, SiInstagram, SiLinkedin, SiX } from "react-icons/si";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-[#253e1a] text-white">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -11,36 +14,36 @@ export default function Footer() {
           <div className="md:col-span-1">
             <h3 className="text-2xl font-bold text-[#70c92e] mb-4">The Nirvanist</h3>
             <p className="text-gray-300 mb-4 leading-relaxed">
-              Connecting souls with sacred journeys. Discover your path to inner peace and spiritual transformation.
+              {t("footer.tagline")}
             </p>
             <div className="flex items-center text-sm text-gray-300">
               <Heart className="w-4 h-4 mr-1 text-[#70c92e]" />
-              Made with love for seekers
+              {t("footer.madeWithLove")}
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Explore</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("footer.explore")}</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="/meetups" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Satsang</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("footer.satsang")}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/sages" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Sages</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("navigation.sages")}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/inner-nutrition" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Insights</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("footer.insights")}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/daily-quotes" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Daily Quotes</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("navigation.dailyQuotes")}</span>
                 </Link>
               </li>
             </ul>
@@ -48,21 +51,21 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Community</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("footer.community")}</h4>
             <ul className="space-y-2">
               <li>
                 <a href="/#newsletter" className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">
-                  Newsletter
+                  {t("footer.newsletter")}
                 </a>
               </li>
               <li>
                 <Link href="/register" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Join Us</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("footer.joinUs")}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/login" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Member Login</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("footer.memberLogin")}</span>
                 </Link>
               </li>
             </ul>
@@ -70,16 +73,16 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Connect</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("footer.connect")}</h4>
             <ul className="space-y-3">
               <li>
                 <Link href="/about/us" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">About Us</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("footer.aboutUs")}</span>
                 </Link>
               </li>
               <li>
                 <Link href="/contact" onClick={() => window.scrollTo(0, 0)}>
-                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">Contact</span>
+                  <span className="text-gray-300 hover:text-[#70c92e] transition-colors cursor-pointer">{t("footer.contact")}</span>
                 </Link>
               </li>
               <li className="flex items-center text-gray-300">
@@ -95,7 +98,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Social</h4>
+            <h4 className="text-lg font-semibold mb-4">{t("footer.social")}</h4>
             <ul className="space-y-2">
               <li>
                 <a href="https://www.facebook.com/thenirvanistofficial/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-[#70c92e] transition-colors flex items-center gap-2">
@@ -134,9 +137,9 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 mt-8 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © 2025 The Nirvanist. All rights reserved. | 
-            <span className="mx-2">Privacy Policy</span> | 
-            <span className="mx-2">Terms of Service</span>
+            {t("footer.copyright")} | 
+            <span className="mx-2">{t("footer.privacy")}</span> | 
+            <span className="mx-2">{t("footer.terms")}</span>
           </p>
         </div>
       </div>

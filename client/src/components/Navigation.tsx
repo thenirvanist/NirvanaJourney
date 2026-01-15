@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageDropdown } from "./LanguageDropdown";
 import usePreviewMode from "@/hooks/usePreviewMode";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,21 +20,22 @@ export default function Navigation() {
   const [location] = useLocation();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
   const isPreviewMode = usePreviewMode();
+  const { t } = useTranslation();
 
   const allNavItems = [
-    { href: "/journeys", label: "Sacred Journeys", hidden: true },
-    { href: "/meetups", label: "Satsangs", hidden: false },
-    { href: "/sages", label: "Sages", hidden: false },
-    { href: "/ashrams", label: "Ashrams", hidden: true },
-    { href: "/inner-nutrition", label: "Insights", hidden: false },
-    { href: "/daily-quotes", label: "Daily Quotes", hidden: false },
+    { href: "/journeys", labelKey: "navigation.journeys" as const, hidden: true },
+    { href: "/meetups", labelKey: "navigation.meetups" as const, hidden: false },
+    { href: "/sages", labelKey: "navigation.sages" as const, hidden: false },
+    { href: "/ashrams", labelKey: "navigation.ashrams" as const, hidden: true },
+    { href: "/inner-nutrition", labelKey: "navigation.innerNutrition" as const, hidden: false },
+    { href: "/daily-quotes", labelKey: "navigation.dailyQuotes" as const, hidden: false },
   ];
 
   const aboutSubItems = [
-    { href: "/about/why-indian-philosophies", label: "Why Indian Philosophies" },
-    { href: "/about/understanding", label: "Understanding Indian Philosophies" },
-    { href: "/about/us", label: "About Us" },
-    { href: "/about/how-we-explore", label: "How Will We Explore" },
+    { href: "/about/why-indian-philosophies", labelKey: "navigation.whyIndianPhilosophies" as const },
+    { href: "/about/understanding", labelKey: "navigation.understandingPhilosophies" as const },
+    { href: "/about/us", labelKey: "navigation.aboutUs" as const },
+    { href: "/about/how-we-explore", labelKey: "navigation.howWeExplore" as const },
   ];
 
   const isAboutActive = () => location.startsWith("/about");
@@ -63,7 +65,7 @@ export default function Navigation() {
                     isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
                   }`}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Button>
               </Link>
             ))}
@@ -77,7 +79,7 @@ export default function Navigation() {
                     isAboutActive() ? "bg-[hsl(70,71%,62%)] text-black" : ""
                   }`}
                 >
-                  About
+                  {t("navigation.about")}
                   <ChevronDown className="ml-1 w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -86,7 +88,7 @@ export default function Navigation() {
                   <DropdownMenuItem key={item.href} asChild className="cursor-pointer">
                     <Link href={item.href} className="w-full">
                       <span className={`w-full px-2 py-1 ${isActive(item.href) ? "text-[#70c92e] font-semibold" : "text-gray-700 hover:text-[#70c92e]"}`}>
-                        {item.label}
+                        {t(item.labelKey)}
                       </span>
                     </Link>
                   </DropdownMenuItem>
@@ -98,11 +100,11 @@ export default function Navigation() {
             <div className="flex items-center space-x-4 pl-4 border-l border-white/20">
               <LanguageDropdown />
               {isLoading ? (
-                <div className="text-white">Loading...</div>
+                <div className="text-white">{t("navigation.loading")}</div>
               ) : isAuthenticated && user ? (
                 <div className="flex items-center space-x-3">
                   <div className="text-white text-sm">
-                    Welcome, {user.firstName}
+                    {t("navigation.welcome")}, {user.firstName}
                   </div>
                   <Link href="/dashboard">
                     <Button
@@ -112,7 +114,7 @@ export default function Navigation() {
                       }`}
                     >
                       <Heart className="w-4 h-4 mr-1 fill-red-500 text-red-500" />
-                      My Collection
+                      {t("navigation.myCollection")}
                     </Button>
                   </Link>
                   <Button
@@ -121,7 +123,7 @@ export default function Navigation() {
                     className="text-white hover:bg-red-500 hover:text-white px-3 py-2 rounded-lg transition-all duration-300"
                   >
                     <LogOut className="w-4 h-4 mr-1" />
-                    Logout
+                    {t("navigation.logout")}
                   </Button>
                 </div>
               ) : (
@@ -132,12 +134,12 @@ export default function Navigation() {
                       className="text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300"
                     >
                       <User className="w-4 h-4 mr-1" />
-                      Login
+                      {t("navigation.login")}
                     </Button>
                   </Link>
                   <Link href="/register">
                     <Button className="bg-[hsl(70,71%,62%)] text-black hover:bg-[hsl(70,71%,72%)] px-4 py-2 rounded-lg transition-all duration-300">
-                      Sign Up
+                      {t("navigation.signUp")}
                     </Button>
                   </Link>
                 </div>
@@ -171,7 +173,7 @@ export default function Navigation() {
                       isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
                     }`}
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                   </Button>
                 </Link>
               ))}
@@ -185,7 +187,7 @@ export default function Navigation() {
                   }`}
                   onClick={() => setAboutOpen(!aboutOpen)}
                 >
-                  About
+                  {t("navigation.about")}
                   <ChevronDown className={`w-4 h-4 transition-transform ${aboutOpen ? "rotate-180" : ""}`} />
                 </Button>
                 {aboutOpen && (
@@ -207,7 +209,7 @@ export default function Navigation() {
                             isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
                           }`}
                         >
-                          {item.label}
+                          {t(item.labelKey)}
                         </Button>
                       </Link>
                     ))}
@@ -223,11 +225,11 @@ export default function Navigation() {
               {/* Mobile Authentication Section */}
               <div className="pt-2 border-t border-white/20 mt-4">
                 {isLoading ? (
-                  <div className="text-white text-center py-2">Loading...</div>
+                  <div className="text-white text-center py-2">{t("navigation.loading")}</div>
                 ) : isAuthenticated && user ? (
                   <div className="flex flex-col space-y-2">
                     <div className="text-white text-sm px-4 py-2">
-                      Welcome, {user.firstName}
+                      {t("navigation.welcome")}, {user.firstName}
                     </div>
                     <Link href="/dashboard">
                       <Button
@@ -240,7 +242,7 @@ export default function Navigation() {
                         onClick={() => setIsOpen(false)}
                       >
                         <Heart className="w-4 h-4 mr-2 fill-red-500 text-red-500" />
-                        My Collection
+                        {t("navigation.myCollection")}
                       </Button>
                     </Link>
                     <Button
@@ -252,7 +254,7 @@ export default function Navigation() {
                       className="w-full text-white hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg transition-all duration-300 justify-start"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
-                      Logout
+                      {t("navigation.logout")}
                     </Button>
                   </div>
                 ) : (
@@ -264,7 +266,7 @@ export default function Navigation() {
                         onClick={() => setIsOpen(false)}
                       >
                         <User className="w-4 h-4 mr-2" />
-                        Login
+                        {t("navigation.login")}
                       </Button>
                     </Link>
                     <Link href="/register">
@@ -272,7 +274,7 @@ export default function Navigation() {
                         className="w-full bg-[hsl(70,71%,62%)] text-black hover:bg-[hsl(70,71%,72%)] px-4 py-2 rounded-lg transition-all duration-300"
                         onClick={() => setIsOpen(false)}
                       >
-                        Sign Up
+                        {t("navigation.signUp")}
                       </Button>
                     </Link>
                   </div>

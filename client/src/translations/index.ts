@@ -1,15 +1,12 @@
 import { LanguageCode } from "@/contexts/LanguageContext";
 import en from "./en.json";
 import fr from "./fr.json";
-
-// Import placeholder files for other languages (these contain English text as fallbacks)
-// You can replace these with actual translations when ready
-const de = en; // German - replace with actual German translations
-const es = en; // Spanish - replace with actual Spanish translations
-const zh = en; // Chinese - replace with actual Chinese translations
-const ar = en; // Arabic - replace with actual Arabic translations
-const ru = en; // Russian - replace with actual Russian translations  
-const pt = en; // Portuguese - replace with actual Portuguese translations
+import de from "./de.json";
+import es from "./es.json";
+import zh from "./zh.json";
+import ar from "./ar.json";
+import ru from "./ru.json";
+import pt from "./pt.json";
 
 /**
  * Static translations object containing all manual translations
@@ -41,15 +38,23 @@ export type DeepTranslationKey =
   | "navigation.innerNutrition"
   | "navigation.sages"
   | "navigation.ashrams"
+  | "navigation.dailyQuotes"
   | "navigation.login"
   | "navigation.signUp"
   | "navigation.logout"
   | "navigation.myCollection"
   | "navigation.welcome"
+  | "navigation.about"
+  | "navigation.loading"
+  | "navigation.whyIndianPhilosophies"
+  | "navigation.understandingPhilosophies"
+  | "navigation.aboutUs"
+  | "navigation.howWeExplore"
   | "hero.title"
   | "hero.subtitle"
   | "hero.cta"
   | "hero.secondaryCta"
+  | "hero.trustedPartners"
   | "about.title"
   | "about.description"
   | "contact.title"
@@ -96,14 +101,24 @@ export type DeepTranslationKey =
   | "common.save"
   | "common.cancel"
   | "common.close"
+  | "footer.tagline"
+  | "footer.madeWithLove"
+  | "footer.explore"
+  | "footer.satsang"
+  | "footer.insights"
+  | "footer.community"
+  | "footer.newsletter"
+  | "footer.joinUs"
+  | "footer.memberLogin"
+  | "footer.connect"
   | "footer.aboutUs"
   | "footer.contact"
+  | "footer.social"
+  | "footer.copyright"
   | "footer.privacy"
   | "footer.terms"
-  | "footer.newsletter"
   | "footer.subscribeNewsletter"
-  | "footer.subscribe"
-  | "footer.copyright";
+  | "footer.subscribe";
 
 /**
  * Utility function to get nested translation value using dot notation

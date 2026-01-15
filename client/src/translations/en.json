@@ -2,21 +2,29 @@
   "navigation": {
     "home": "Home",
     "journeys": "Sacred Journeys",
-    "meetups": "Spiritual Meetups",
-    "innerNutrition": "Inner Nutrition",
+    "meetups": "Satsangs",
+    "innerNutrition": "Insights",
     "sages": "Sages",
     "ashrams": "Ashrams",
+    "dailyQuotes": "Daily Quotes",
     "login": "Login",
     "signUp": "Sign Up",
     "logout": "Logout",
     "myCollection": "My Collection",
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "about": "About",
+    "loading": "Loading...",
+    "whyIndianPhilosophies": "Why Indian Philosophies",
+    "understandingPhilosophies": "Understanding Indian Philosophies",
+    "aboutUs": "About Us",
+    "howWeExplore": "How Will We Explore"
   },
   "hero": {
-    "title": "Nourish Your Soul",
-    "subtitle": "Embark on transformative spiritual journeys to sacred destinations around the world",
+    "title": "Journey to Inner Peace",
+    "subtitle": "Transformative spiritual journeys that foster self-discovery and connection with diverse cultures",
     "cta": "Explore Sacred Journeys",
-    "secondaryCta": "Join Global Meetups"
+    "secondaryCta": "Join Global Meetups",
+    "trustedPartners": "Trusted Partners"
   },
   "about": {
     "title": "About Us",
@@ -75,13 +83,23 @@
     "close": "Close"
   },
   "footer": {
+    "tagline": "Connecting souls with sacred journeys. Discover your path to inner peace and spiritual transformation.",
+    "madeWithLove": "Made with love for seekers",
+    "explore": "Explore",
+    "satsang": "Satsang",
+    "insights": "Insights",
+    "community": "Community",
+    "newsletter": "Newsletter",
+    "joinUs": "Join Us",
+    "memberLogin": "Member Login",
+    "connect": "Connect",
     "aboutUs": "About Us",
     "contact": "Contact",
+    "social": "Social",
+    "copyright": "© 2025 The Nirvanist. All rights reserved.",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "newsletter": "Newsletter",
     "subscribeNewsletter": "Subscribe to our newsletter for spiritual insights",
-    "subscribe": "Subscribe",
-    "copyright": "© 2024 The Nirvanist. All rights reserved."
+    "subscribe": "Subscribe"
   }
 }

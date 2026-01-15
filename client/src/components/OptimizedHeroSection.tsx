@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // Lazy load the video component to reduce initial bundle size
 const LazyVideoBackground = lazy(() => import('@/components/VideoBackground'));
@@ -10,6 +11,7 @@ interface HeroSectionProps {
 }
 
 export default function OptimizedHeroSection({ priority = true }: HeroSectionProps) {
+  const { t } = useTranslation();
   const [shouldLoadVideo, setShouldLoadVideo] = useState(true);
   const [isReducedMotion, setIsReducedMotion] = useState(false);
 
@@ -38,17 +40,17 @@ export default function OptimizedHeroSection({ priority = true }: HeroSectionPro
       {/* Hero Content */}
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 text-reveal">
-          Journey to Inner Peace
+          {t("hero.title")}
         </h1>
         <p className="text-lg sm:text-xl md:text-2xl mb-8 opacity-90 text-reveal max-w-3xl mx-auto" style={{animationDelay: "0.3s"}}>
-          Transformative spiritual journeys that foster self-discovery and connection with diverse cultures
+          {t("hero.subtitle")}
         </p>
         <Link href="/journeys">
           <Button 
             className="brand-primary hover:brand-bright text-white hover:text-black px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold transition-all duration-300 transform hover:scale-105 text-reveal"
             style={{animationDelay: "0.6s"}}
           >
-            Explore Sacred Journeys
+            {t("hero.cta")}
           </Button>
         </Link>
       </div>
@@ -78,11 +80,13 @@ function StaticBackground() {
 
 // Optimized partner strip with reduced layout shift
 function PartnerStrip() {
+  const { t } = useTranslation();
+  
   return (
     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 backdrop-blur-sm py-3 sm:py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-center space-x-4 sm:space-x-12 text-white text-xs sm:text-sm opacity-90">
-          <span className="hidden sm:inline">Trusted Partners:</span>
+          <span className="hidden sm:inline">{t("hero.trustedPartners")}:</span>
           <div className="flex items-center space-x-3 sm:space-x-8 text-xs sm:text-sm">
             <span>Sacred Earth</span>
             <span className="hidden sm:inline">Mindful Travel Co</span>
