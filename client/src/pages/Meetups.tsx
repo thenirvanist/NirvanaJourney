@@ -134,15 +134,15 @@ export default function Meetups() {
                style={{backgroundImage: `url(${satsangImage})`}}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-          <h1 className="text-6xl font-bold mb-6">Satsangs</h1>
+          <h1 className="text-6xl font-bold mb-6">{t("pages.meetups.heroTitle")}</h1>
           <h2 className="text-2xl font-semibold mb-4 text-[hsl(70,71%,62%)]">
-            Join a Global Circle of Spiritual Seekers
+            {t("pages.meetups.heroSubtitle")}
           </h2>
           <p className="text-xl mb-8 opacity-90 leading-relaxed">
-            Weekly online satsangs to pause, reflect, and grow — together starting April 2026.
+            {t("pages.meetups.heroDesc")}
           </p>
           <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 text-lg rounded-lg font-semibold transition-all duration-300">
-            Join Our Community
+            {t("pages.meetups.joinButton")}
           </Button>
         </div>
       </section>
@@ -151,17 +151,17 @@ export default function Meetups() {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6">What is a 'Satsang'?</h2>
+            <h2 className="text-4xl font-bold mb-6">{t("pages.meetups.whatIsSatsangTitle")}</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance.
+              {t("pages.meetups.whatIsSatsangDesc1")}
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.
+              {t("pages.meetups.whatIsSatsangDesc2")}
             </p>
           </div>
           
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6">What Happens in a Satsang?</h2>
+            <h2 className="text-4xl font-bold mb-6">{t("pages.meetups.whatHappensTitle")}</h2>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -169,10 +169,9 @@ export default function Meetups() {
               <div className="w-16 h-16 brand-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Video className="text-white text-2xl" />
               </div>
-              <h3 className="font-semibold text-lg mb-3">🧘‍♀️ Short Guru Video</h3>
+              <h3 className="font-semibold text-lg mb-3">{t("pages.meetups.guruVideoTitle")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Each Sunday, we gather online to watch a short video from a spiritual master — 
-                Ramana Maharshi, Sri Aurobindo, Anandamayi Ma, and others.
+                {t("pages.meetups.guruVideoDesc")}
               </p>
             </div>
             
@@ -180,9 +179,9 @@ export default function Meetups() {
               <div className="w-16 h-16 brand-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="text-white text-2xl" />
               </div>
-              <h3 className="font-semibold text-lg mb-3">💬 Group Reflection</h3>
+              <h3 className="font-semibold text-lg mb-3">{t("pages.meetups.groupReflectionTitle")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Then, you're placed into a private virtual circle of 6–8 people from around the world.
+                {t("pages.meetups.groupReflectionDesc")}
               </p>
             </div>
             
@@ -190,10 +189,9 @@ export default function Meetups() {
               <div className="w-16 h-16 brand-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <Globe className="text-white text-2xl" />
               </div>
-              <h3 className="font-semibold text-lg mb-3">🌍 Global Community</h3>
+              <h3 className="font-semibold text-lg mb-3">{t("pages.meetups.globalCommunityTitle")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Together, you reflect on what touched you, what challenged you, and how to live 
-                these teachings more deeply.
+                {t("pages.meetups.globalCommunityDesc")}
               </p>
             </div>
           </div>
@@ -205,29 +203,29 @@ export default function Meetups() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold mb-6">Why Join a Satsang?</h2>
+              <h2 className="text-4xl font-bold mb-6">{t("pages.meetups.whyJoinTitle")}</h2>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <Heart className="text-[hsl(75,64%,49%)] text-2xl mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Inner Clarity</h3>
-                    <p className="text-gray-600">Discover calm and insight through the wisdom of great teachers.</p>
+                    <h3 className="font-semibold text-lg mb-2">{t("pages.meetups.innerClarityTitle")}</h3>
+                    <p className="text-gray-600">{t("pages.meetups.innerClarityDesc")}</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-4">
                   <Users className="text-[hsl(75,64%,49%)] text-2xl mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Human Connection</h3>
-                    <p className="text-gray-600">Connect deeply with others on the same path.</p>
+                    <h3 className="font-semibold text-lg mb-2">{t("pages.meetups.humanConnectionTitle")}</h3>
+                    <p className="text-gray-600">{t("pages.meetups.humanConnectionDesc")}</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start space-x-4">
                   <Calendar className="text-[hsl(75,64%,49%)] text-2xl mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Soulful Consistency</h3>
-                    <p className="text-gray-600">One gentle hour each week, dedicated to growth.</p>
+                    <h3 className="font-semibold text-lg mb-2">{t("pages.meetups.soulfulConsistencyTitle")}</h3>
+                    <p className="text-gray-600">{t("pages.meetups.soulfulConsistencyDesc")}</p>
                   </div>
                 </div>
               </div>
@@ -247,26 +245,26 @@ export default function Meetups() {
       {/* Who Is It For Section */}
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-8">You'll Feel at Home If You...</h2>
+          <h2 className="text-4xl font-bold mb-8">{t("pages.meetups.feelAtHomeTitle")}</h2>
           <div className="grid md:grid-cols-2 gap-6 text-left">
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 brand-primary rounded-full"></div>
-                <span>Are curious about Eastern spirituality</span>
+                <span>{t("pages.meetups.curious")}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 brand-primary rounded-full"></div>
-                <span>Want to bring calm and meaning into your week</span>
+                <span>{t("pages.meetups.wantCalm")}</span>
               </div>
             </div>
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 brand-primary rounded-full"></div>
-                <span>Prefer small, thoughtful circles over large noisy groups</span>
+                <span>{t("pages.meetups.preferSmall")}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 brand-primary rounded-full"></div>
-                <span>Crave spiritual depth without dogma</span>
+                <span>{t("pages.meetups.craveDepth")}</span>
               </div>
             </div>
           </div>
@@ -278,9 +276,9 @@ export default function Meetups() {
         <div className="max-w-2xl mx-auto px-6">
           <Card className="shadow-lg">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold mb-4">Join Our Next Satsang</CardTitle>
+              <CardTitle className="text-3xl font-bold mb-4">{t("pages.meetups.joinNextTitle")}</CardTitle>
               <p className="text-gray-600">
-                Every Sunday at various times to accommodate global participants
+                {t("pages.meetups.joinNextDesc")}
               </p>
             </CardHeader>
             <CardContent className="p-8">
@@ -289,17 +287,16 @@ export default function Meetups() {
                   <div className="w-16 h-16 brand-primary rounded-full flex items-center justify-center mx-auto mb-4">
                     <Heart className="text-white text-2xl" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4 text-[hsl(75,64%,49%)]">Welcome to Our Circle!</h3>
+                  <h3 className="text-2xl font-bold mb-4 text-[hsl(75,64%,49%)]">{t("pages.meetups.welcomeTitle")}</h3>
                   <p className="text-gray-600 mb-6">
-                    Thank you for joining our global spiritual community. You'll receive an email with 
-                    meeting details and preparation guidance within 24 hours.
+                    {t("pages.meetups.welcomeDesc")}
                   </p>
                   <Button 
                     onClick={() => setIsSubmitted(false)}
                     variant="outline"
                     className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white"
                   >
-                    Register Another Person
+                    {t("pages.meetups.registerAnother")}
                   </Button>
                 </div>
               ) : (
@@ -310,7 +307,7 @@ export default function Meetups() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
+                          <FormLabel>{t("pages.meetups.fullName")}</FormLabel>
                           <FormControl>
                             <Input placeholder="Enter your full name" {...field} />
                           </FormControl>
@@ -324,7 +321,7 @@ export default function Meetups() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email Address</FormLabel>
+                          <FormLabel>{t("pages.meetups.email")}</FormLabel>
                           <FormControl>
                             <Input type="email" placeholder="Enter your email address" {...field} />
                           </FormControl>
@@ -338,11 +335,11 @@ export default function Meetups() {
                       name="country"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Country</FormLabel>
+                          <FormLabel>{t("pages.meetups.country")}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select your country" />
+                                <SelectValue placeholder={t("pages.meetups.selectCountry")} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -363,11 +360,11 @@ export default function Meetups() {
                       name="timezone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Timezone</FormLabel>
+                          <FormLabel>{t("pages.meetups.timezone")}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select your timezone" />
+                                <SelectValue placeholder={t("pages.meetups.selectTimezone")} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -408,7 +405,7 @@ export default function Meetups() {
                       disabled={registerMutation.isPending}
                       className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 text-lg font-semibold transition-all duration-300"
                     >
-                      {registerMutation.isPending ? "Joining Circle..." : "Join the Circle"}
+                      {registerMutation.isPending ? t("pages.meetups.registering") : t("pages.meetups.registerButton")}
                     </Button>
                   </form>
                 </Form>

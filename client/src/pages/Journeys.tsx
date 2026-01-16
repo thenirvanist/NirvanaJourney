@@ -88,14 +88,12 @@ export default function Journeys() {
                style={{backgroundImage: "url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=800')"}}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-          <h1 className="text-6xl font-bold mb-6">Sacred Journeys</h1>
+          <h1 className="text-6xl font-bold mb-6">{t("pages.journeys.heroTitle")}</h1>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
-            Embark on transformative spiritual adventures that connect you with ancient wisdom, 
-            sacred places, and your inner truth. Each journey is carefully curated to provide 
-            authentic experiences that foster deep personal growth.
+            {t("pages.journeys.heroSubtitle")}
           </p>
           <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 text-lg rounded-lg font-semibold transition-all duration-300">
-            Explore All Journeys
+            {t("pages.journeys.exploreButton")}
           </Button>
         </div>
       </section>
@@ -107,10 +105,9 @@ export default function Journeys() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Why Do You Need One?</h2>
+            <h2 className="text-4xl font-bold mb-6">{t("pages.journeys.whyNeedTitle")}</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              In our fast-paced world, sacred journeys offer profound opportunities for spiritual growth, 
-              inner healing, and connection with ancient wisdom traditions.
+              {t("pages.journeys.whyNeedSubtitle")}
             </p>
           </div>
           
@@ -119,10 +116,9 @@ export default function Journeys() {
               <div className="w-20 h-20 brand-primary rounded-full flex items-center justify-center mx-auto mb-6">
                 <Heart className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold mb-4">Inner Transformation</h3>
+              <h3 className="text-2xl font-semibold mb-4">{t("pages.journeys.innerTransformationTitle")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Experience profound shifts in consciousness through sacred practices, meditation, 
-                and connection with spiritual teachers and fellow seekers.
+                {t("pages.journeys.innerTransformationDesc")}
               </p>
             </div>
             
@@ -130,10 +126,9 @@ export default function Journeys() {
               <div className="w-20 h-20 brand-primary rounded-full flex items-center justify-center mx-auto mb-6">
                 <Globe className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold mb-4">Cultural Immersion</h3>
+              <h3 className="text-2xl font-semibold mb-4">{t("pages.journeys.culturalImmersionTitle")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Dive deep into authentic spiritual traditions, visiting sacred sites and learning 
-                from indigenous wisdom keepers in their natural environments.
+                {t("pages.journeys.culturalImmersionDesc")}
               </p>
             </div>
             
@@ -141,10 +136,9 @@ export default function Journeys() {
               <div className="w-20 h-20 brand-primary rounded-full flex items-center justify-center mx-auto mb-6">
                 <Users className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold mb-4">Soul Community</h3>
+              <h3 className="text-2xl font-semibold mb-4">{t("pages.journeys.soulCommunityTitle")}</h3>
               <p className="text-gray-600 leading-relaxed">
-                Connect with like-minded spiritual seekers, forming lasting bonds and creating 
-                a supportive community for your ongoing spiritual journey.
+                {t("pages.journeys.soulCommunityDesc")}
               </p>
             </div>
           </div>
@@ -156,26 +150,23 @@ export default function Journeys() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold mb-6">Pricing First</h2>
-              <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">Transparent & Accessible</h3>
+              <h2 className="text-4xl font-bold mb-6">{t("pages.journeys.pricingFirstTitle")}</h2>
+              <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">{t("pages.journeys.pricingFirstSubtitle")}</h3>
               <p className="text-gray-700 leading-relaxed mb-6">
-                We believe spiritual growth shouldn't be limited by financial barriers. Our pricing is 
-                transparent from the start - no hidden fees, no surprise costs. We offer flexible 
-                payment plans and early-bird discounts to make these transformative experiences 
-                accessible to sincere seekers.
+                {t("pages.journeys.pricingFirstDesc")}
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>All-inclusive pricing with no hidden costs</span>
+                  <span>{t("pages.journeys.pricingItem1")}</span>
                 </li>
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Flexible payment plans available</span>
+                  <span>{t("pages.journeys.pricingItem2")}</span>
                 </li>
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Scholarship opportunities for dedicated practitioners</span>
+                  <span>{t("pages.journeys.pricingItem3")}</span>
                 </li>
               </ul>
             </div>
@@ -195,25 +186,23 @@ export default function Journeys() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="lg:order-2">
-              <h2 className="text-4xl font-bold mb-6">Tech First</h2>
-              <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">Modern Tools for Ancient Wisdom</h3>
+              <h2 className="text-4xl font-bold mb-6">{t("pages.journeys.techFirstTitle")}</h2>
+              <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">{t("pages.journeys.techFirstSubtitle")}</h3>
               <p className="text-gray-700 leading-relaxed mb-6">
-                We seamlessly blend traditional spiritual practices with modern technology. From AI-powered 
-                journey matching to virtual preparation sessions, our tech-first approach ensures you're 
-                fully prepared and connected throughout your sacred journey.
+                {t("pages.journeys.techFirstDesc")}
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>AI-powered journey recommendations</span>
+                  <span>{t("pages.journeys.techItem1")}</span>
                 </li>
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Virtual pre-journey preparation sessions</span>
+                  <span>{t("pages.journeys.techItem2")}</span>
                 </li>
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Real-time journey updates and support</span>
+                  <span>{t("pages.journeys.techItem3")}</span>
                 </li>
               </ul>
             </div>
@@ -233,25 +222,23 @@ export default function Journeys() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold mb-6">Partnership First</h2>
-              <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">Authentic Local Connections</h3>
+              <h2 className="text-4xl font-bold mb-6">{t("pages.journeys.partnershipFirstTitle")}</h2>
+              <h3 className="text-2xl font-semibold mb-4 text-[hsl(75,64%,49%)]">{t("pages.journeys.partnershipFirstSubtitle")}</h3>
               <p className="text-gray-700 leading-relaxed mb-6">
-                We partner directly with authentic spiritual teachers, local communities, and sacred sites. 
-                This ensures your journey benefits the local community while providing you with genuine, 
-                unfiltered spiritual experiences that commercial tours simply cannot offer.
+                {t("pages.journeys.partnershipFirstDesc")}
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Direct partnerships with spiritual teachers</span>
+                  <span>{t("pages.journeys.partnershipItem1")}</span>
                 </li>
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Community-based tourism supporting locals</span>
+                  <span>{t("pages.journeys.partnershipItem2")}</span>
                 </li>
                 <li className="flex items-center">
                   <Star className="w-5 h-5 text-[hsl(75,64%,49%)] mr-3" />
-                  <span>Exclusive access to sacred sites and ceremonies</span>
+                  <span>{t("pages.journeys.partnershipItem3")}</span>
                 </li>
               </ul>
             </div>
