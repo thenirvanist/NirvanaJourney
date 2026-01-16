@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import heroVideo from "@assets/Heritge Film India_VF720p30_CQ30 Slow_1753290344167.webm";
 import usePreviewMode from "@/hooks/usePreviewMode";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function HeroSection() {
   const isPreviewMode = usePreviewMode();
+  const { t } = useTranslation();
   
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -32,10 +34,10 @@ export default function HeroSection() {
       
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
         <h1 className="text-5xl md:text-7xl font-bold mb-6 text-reveal">
-          Journey to Inner Peace
+          {t('hero.title')}
         </h1>
         <p className="text-xl md:text-2xl mb-8 opacity-90 text-reveal" style={{animationDelay: "0.3s"}}>
-          Transformative spiritual journeys that foster self-discovery and connection with diverse cultures
+          {t('hero.subtitle')}
         </p>
         {isPreviewMode && (
           <Link href="/journeys">
@@ -43,7 +45,7 @@ export default function HeroSection() {
               className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 text-reveal"
               style={{animationDelay: "0.6s"}}
             >
-              Explore Sacred Journeys
+              {t('hero.cta')}
             </Button>
           </Link>
         )}
