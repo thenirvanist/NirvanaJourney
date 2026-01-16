@@ -8,8 +8,8 @@ import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema, createArticleSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import type { BlogPost } from "@shared/schema";
-import { useBlogPost, useBlogPosts } from "@/hooks/useSupabaseQuery";
+import type { BlogPost, Sage } from "@shared/schema";
+import { useBlogPost, useBlogPosts, useSages } from "@/hooks/useSupabaseQuery";
 
 // Social sharing component
 function SocialShare({ post, url }: { post: BlogPost; url: string }) {
@@ -81,6 +81,19 @@ export default function BlogArticle() {
     ?.filter((p: BlogPost) => p.id !== post?.id && (p.category === post?.category || 
       post?.tags?.some((tag: string) => p.tags?.includes(tag))))
     ?.slice(0, 3) || [];
+
+  // Get sages to link author names to their biography pages
+  const { data: sages } = useSages();
+  
+  // Find matching sage by name (case-insensitive partial match)
+  const findSageByName = (authorName: string): Sage | undefined => {
+    if (!sages || !authorName) return undefined;
+    const normalizedAuthor = authorName.toLowerCase().trim();
+    return sages.find((sage: Sage) => 
+      sage.name.toLowerCase().includes(normalizedAuthor) ||
+      normalizedAuthor.includes(sage.name.toLowerCase())
+    );
+  };
 
   if (isLoading) {
     return (
@@ -200,7 +213,19 @@ export default function BlogArticle() {
                 <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
                   <div className="flex items-center gap-2">
                     <User className="w-5 h-5" />
-                    <span className="font-medium">{post.author}</span>
+                    {(() => {
+                      const matchingSage = findSageByName(post.author);
+                      if (matchingSage) {
+                        return (
+                          <Link href={`/sages/${matchingSage.id}`}>
+                            <span className="font-medium text-[hsl(75,64%,39%)] hover:text-[hsl(75,64%,29%)] underline cursor-pointer transition-colors">
+                              {post.author}
+                            </span>
+                          </Link>
+                        );
+                      }
+                      return <span className="font-medium">{post.author}</span>;
+                    })()}
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-5 h-5" />
