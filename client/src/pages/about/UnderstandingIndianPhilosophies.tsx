@@ -15,63 +15,65 @@ const breadcrumb = createBreadcrumbSchema([
   { name: "Understanding Indian Philosophies" }
 ]);
 
-const timelineSections = [
+const getTimelineSections = (t: (key: string) => string) => [
   {
     id: "vedas",
-    title: "The Vedas",
-    period: "2500 - 600 BCE",
-    content: `Indian philosophy is rooted in the authority of ancient, sacred texts called the Vedas, which originated between 2500 and 600 BCE. The Rig Veda is the earliest of the four Vedas, with the remaining three known as the Sama, Yajur, and Atharva Veda. The earliest hymns of the Rig Veda began to be transmitted orally. They addressed topics including the creation and structure of the universe, the natural world, and praise of a number of deities including Indra and Agni.`
+    title: t("pages.about.understanding.vedas.title"),
+    period: t("pages.about.understanding.vedas.period"),
+    content: t("pages.about.understanding.vedas.content")
   },
   {
     id: "upanishads",
-    title: "The Upanishads",
-    period: "900 - 300 BCE",
-    content: `This was followed by the Upanishads from 900 to 300 BCE, which tried to explain the tenets of the Vedas in an intellectually rigorous question-answer format between a Guru and a disciple. They were philosophical dialogues that appeared at the end of each of the four Vedas. Consequently, they are often referred to as Vedanta, which literally means "the end of the Veda," a term that has also come to refer to several schools of Indian philosophy.`
+    title: t("pages.about.understanding.upanishads.title"),
+    period: t("pages.about.understanding.upanishads.period"),
+    content: t("pages.about.understanding.upanishads.content")
   },
   {
     id: "epics",
-    title: "The Epics",
-    period: "400 BCE - 200 CE",
-    content: `Then followed the age of the epics from 400 BCE – 200 CE, when the Mahabharata (of which the Bhagavad Gita is part) and Ramayana were written. They were long narrative poems telling the stories of human heroes and dynasties with gods in supporting or guiding roles, centered on ethical dilemmas, dharma, and exemplary conduct in complex life situations. Their function was to show how dharma (or right code of conduct) is lived in the world: family conflict, kingship, warfare.`
+    title: t("pages.about.understanding.epics.title"),
+    period: t("pages.about.understanding.epics.period"),
+    content: t("pages.about.understanding.epics.content")
   },
   {
     id: "gita",
-    title: "The Bhagavad Gita",
-    period: "Part of the Mahabharata",
-    content: `The Bhagavad Gita appears as an episode in the sixth book of the Mahabharata. The Gita, one of the most widely read texts in the world, consists of a dialogue between the warrior Arjuna and his charioteer Krishna on the edge of a battlefield before the first day of war. The text blends a wide range of philosophical ideas within the context of a larger literary narrative.`,
-    quote: `"As Krishna describes it, life is an impermanent, dreamlike state in which the soul is beset by dreams and illusions. The wise man learns to recognise these illusions for what they are and, freed from desires and attachments, goes through life with complete serenity, at the end of it merging into eternal unity with Brahman, the omnipresent spirit of all created things."`
+    title: t("pages.about.understanding.gita.title"),
+    period: t("pages.about.understanding.gita.period"),
+    content: t("pages.about.understanding.gita.content"),
+    quote: t("pages.about.understanding.gita.quote")
   },
   {
     id: "dharmashastras",
-    title: "Dharmashastras",
-    period: "100 CE",
-    content: `Building on this, in 100 CE, authoritative treatises that address the topic of dharma—which can be translated variously as duty, law, ethics, or moral order—were introduced. These texts offer pragmatic teachings on how to behave in accordance with the dharmic order of the universe, containing prescriptions for social order, family life, and gender relations.`
+    title: t("pages.about.understanding.dharmashastras.title"),
+    period: t("pages.about.understanding.dharmashastras.period"),
+    content: t("pages.about.understanding.dharmashastras.content")
   },
   {
     id: "puranas",
-    title: "The Puranas",
-    period: "250 - 1000 CE",
-    content: `Lastly came the age of the Puranas: myths and legends of gods and goddesses, cosmic cycles, creation and destruction, genealogies of gods, patriarchs, kings, pilgrim places, festivals, and ritual practice. Their function was to bridge high philosophy with popular worship; they taught cosmology, bhakti, ritual observances, and the glory of specific deities and holy places.`
+    title: t("pages.about.understanding.puranas.title"),
+    period: t("pages.about.understanding.puranas.period"),
+    content: t("pages.about.understanding.puranas.content")
   }
 ];
 
-const concepts = [
+const getConcepts = (t: (key: string) => string) => [
   {
-    title: "The One in Many",
-    content: `The vast array of deities in the Hindu pantheon is held together philosophically through the concept of "Brahman," the infinite and eternal Ultimate spirit that underlies all existence. Brahman pervades all that exists, even the deities. The multiple divine forms are viewed as manifestations of that one Ultimate. Natural elements like the sun and rivers are viewed as divine forms worthy of worship. The worship of the divine in the feminine form is also an aspect that sets it apart.`
+    title: t("pages.about.understanding.oneInMany.title"),
+    content: t("pages.about.understanding.oneInMany.content")
   },
   {
-    title: "Unity in Diversity",
-    content: `The shared assumption that validates the worship of the divine in multiple forms also validates diverse ways of worshipping. Depending on the inclination of an individual, various channels are recognized as valid: knowledge (gnan), meditation (dhyan), devotion (bhakti), and action (karma). Art is also recognized as a vital channel of religious expression. Music, dance, and painting are pursued as paths for approaching the divine.`
+    title: t("pages.about.understanding.unityInDiversity.title"),
+    content: t("pages.about.understanding.unityInDiversity.content")
   },
   {
-    title: "The Guru-Shishya (disciple) System",
-    content: `The guru system demands a different relationship from that of congregant and priest. The guru is seen as a path to—or in some cases an embodiment of—the divine. In philosophical systems that emphasize the disintegration of the ego, unconditional devotion to the guru is seen as the most efficient way for spiritual progress. However, this in no manner means to stop questioning or encourages blind faith. True gurus are those who encourage seekers to constantly question.`
+    title: t("pages.about.understanding.guruShishya.title"),
+    content: t("pages.about.understanding.guruShishya.content")
   }
 ];
 
 export default function UnderstandingIndianPhilosophies() {
   const { t } = useTranslation();
+  const timelineSections = getTimelineSections(t);
+  const concepts = getConcepts(t);
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
@@ -110,7 +112,7 @@ export default function UnderstandingIndianPhilosophies() {
                     </a>
                   ))}
                   <div className="border-t pt-4 mt-4">
-                    <span className="text-xs uppercase text-gray-500 font-medium">Core Concepts</span>
+                    <span className="text-xs uppercase text-gray-500 font-medium">{t("pages.about.understanding.coreConcepts")}</span>
                     {concepts.map((concept, idx) => (
                       <a
                         key={idx}
@@ -128,18 +130,18 @@ export default function UnderstandingIndianPhilosophies() {
             <div className="lg:col-span-3">
               <div className="prose prose-lg max-w-none mb-12">
                 <p className="text-xl text-gray-700 leading-relaxed">
-                  Many are bewildered to encounter the pantheon of deities in India: blue-faced gods and goddesses riding on tigers or seated in lotus flowers, snakes coiled around their necks; a god that is half-elephant, half-man; another riding on a rat; an eight-armed goddess wearing human skulls as a necklace and severed heads at her waist.
+                  {t("pages.about.understanding.intro1")}
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  As they go deeper, they recognize that belief in 'one God, eternal, omnific, omnipotent and omniscient' is fundamental to Indian philosophies, and that the multiplicity of deities is 'to be taken only in a figurative sense'. "One in Many" is the key theme, and that extends beyond deities to every living being.
+                  {t("pages.about.understanding.intro2")}
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  While Indian philosophies are marked by immense internal diversity of belief and practices, we do find broad patterns. They acknowledge explicitly or implicitly the authority of a vast scriptural corpus in the Sanskrit language known collectively as the Vedas. Most also share the concept that the divine manifests in a diversity of ways and believe in the eternity of the soul—reborn in body after body, life after life, guided by karma.
+                  {t("pages.about.understanding.intro3")}
                 </p>
               </div>
 
               <h2 className="text-3xl font-light text-gray-900 mb-8" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                Timeline of Development
+                {t("pages.about.understanding.timelineTitle")}
               </h2>
 
               <div className="space-y-12">
@@ -172,7 +174,7 @@ export default function UnderstandingIndianPhilosophies() {
                               className="rounded-xl shadow-lg w-full sm:max-w-md"
                             />
                             <p className="text-sm text-gray-500 mt-2 italic">
-                              Translation by Wendy Doniger O'Flaherty. From the Book "The Rig Veda - Anthology"
+                              {t("pages.about.understanding.rigVedaCaption")}
                             </p>
                           </div>
                         )}
@@ -187,12 +189,12 @@ export default function UnderstandingIndianPhilosophies() {
 
               <div className="bg-[#F7F2E8] rounded-2xl p-8 my-12">
                 <p className="text-lg text-gray-700 leading-relaxed text-center italic" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                  Together with the Upanishads and the Brahma Sutras, the Bhagavad Gita forms the triple foundation of orthodox Indian philosophy. They have determined the tone, if not the precise pattern, of Indian philosophical development ever since, upgraded and updated over time by countless learned sages.
+                  {t("pages.about.understanding.foundationQuote")}
                 </p>
               </div>
 
               <h2 className="text-3xl font-light text-gray-900 mb-8 mt-16" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                Core Underlying Concepts
+                {t("pages.about.understanding.coreConceptsTitle")}
               </h2>
 
               <div className="space-y-8">
@@ -208,21 +210,21 @@ export default function UnderstandingIndianPhilosophies() {
 
               <div className="border-l-4 border-[#70c92e] pl-6 my-12">
                 <p className="text-xl text-gray-800 italic leading-relaxed" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                  "If you haven't experienced it, it's not true."
+                  {t("pages.about.understanding.kabirQuote")}
                 </p>
-                <p className="text-gray-600 mt-2">— Kabir</p>
+                <p className="text-gray-600 mt-2">{t("pages.about.understanding.kabirAttribution")}</p>
               </div>
 
               <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/about/how-we-explore">
                   <Button className="bg-[#70c92e] hover:bg-[#5fb025] text-white px-8 py-3 rounded-full">
-                    How Will We Explore
+                    {t("pages.about.understanding.howExploreBtn")}
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
                 <Link href="/about/why-indian-philosophies">
                   <Button variant="outline" className="border-[#70c92e] text-[#70c92e] hover:bg-[#70c92e]/10 px-8 py-3 rounded-full">
-                    Why Indian Philosophies
+                    {t("pages.about.understanding.whyPhilosophiesBtn")}
                   </Button>
                 </Link>
               </div>

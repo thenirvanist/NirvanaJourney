@@ -150,7 +150,20 @@
       "timezone": "Preferred Time Zone",
       "selectTimezone": "Select your preferred time",
       "registerButton": "Register for Satsang",
-      "registering": "Registering..."
+      "registering": "Registering...",
+      "toastSuccessTitle": "Welcome to our spiritual circle!",
+      "toastSuccessDesc": "You've successfully registered for our global satsangs. We'll send you the meeting details soon.",
+      "toastErrorTitle": "Registration failed",
+      "toastErrorDesc": "Please try again or contact our support team for assistance.",
+      "namePlaceholder": "Enter your full name",
+      "emailPlaceholder": "Enter your email address",
+      "travelInterest": "Would you like to be invited for group travel to India in the future?",
+      "validation": {
+        "nameMin": "Name must be at least 2 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "countryRequired": "Please select your country",
+        "timezoneRequired": "Please select your timezone"
+      }
     },
     "quotes": {
       "title": "Daily Spiritual Quotes",
@@ -327,22 +340,123 @@
     "about": {
       "whyPhilosophies": {
         "title": "Why Explore Indian Philosophy?",
-        "subtitle": "A journey into wisdom that transforms how we understand life itself"
+        "subtitle": "A journey into wisdom that transforms how we understand life itself",
+        "intro1": "You are said to be indulging in philosophy whenever you set your mind to a systematic investigation of the nature of the world, selfhood, values, human good, the sources of knowledge, and the limits of human reason.",
+        "intro2": "Philosophy attempts to explain what cannot be explained by science. However, it differentiates itself from faith and religion in its approach: constantly questioning rather than accepting a certain truth.",
+        "paradoxTitle": "The Paradox of Indian Philosophy",
+        "paradoxText": "Indian philosophy is often mixed with faith and religion because it is rooted in the authority of ancient, sacred texts. But the paradox—and the originality—of Indian philosophy is that although it respects these ancient texts, for centuries commentators have interpreted them with such creativity that the philosophy has progressed enormously with time.",
+        "vedasText": "The very vastness of those ancient texts, called the Vedas, allowed authors to select any portion for their authority, leaving ample room for original thought. Contemporary Indian philosophers are well versed in both Western and Indian thought, contributing to this interpretive creativity. The Vedas provide such a rich list of philosophical ingredients that philosophers can constantly upgrade them to be suited to prevalent times. In fact, there are many schools of thought within Indian philosophy.",
+        "questioningText": "Those commentators have also constantly encouraged questioning. They subjected their doctrines to rational analysis and justification, trying to give answers that rely as much as possible on logic. Strenuous attempts are made to show with logic and rationale what faith implicitly accepts.",
+        "wayOfLife": "While in the West, philosophy is more of an intellectual exercise in search of the truth, in India, philosophy is more of a way of life. Although there is a strong truth-seeking strand in Indian philosophy, the truths sought are always ones that relate to the way we ought to live.",
+        "conclusion": "Therein lies the answer to \"Why Indian philosophies?\" They offer a wealth of inspiring thoughts and wisdom to help us make sense of our existence and to live our life with more peace and happiness. And if, after a sincere attempt to explore, they do not serve you, one must not hesitate to give them up either.",
+        "understandingBtn": "Understanding Indian Philosophies",
+        "aboutUsBtn": "About Us"
       },
       "understanding": {
         "title": "Understanding Indian Philosophies",
         "subtitle": "From the Vedas to the Puranas: A journey through millennia of wisdom",
-        "timeline": "Timeline"
+        "timeline": "Timeline",
+        "coreConcepts": "Core Concepts",
+        "intro1": "Many are bewildered to encounter the pantheon of deities in India: blue-faced gods and goddesses riding on tigers or seated in lotus flowers, snakes coiled around their necks; a god that is half-elephant, half-man; another riding on a rat; an eight-armed goddess wearing human skulls as a necklace and severed heads at her waist.",
+        "intro2": "As they go deeper, they recognize that belief in 'one God, eternal, omnific, omnipotent and omniscient' is fundamental to Indian philosophies, and that the multiplicity of deities is 'to be taken only in a figurative sense'. \"One in Many\" is the key theme, and that extends beyond deities to every living being.",
+        "intro3": "While Indian philosophies are marked by immense internal diversity of belief and practices, we do find broad patterns. They acknowledge explicitly or implicitly the authority of a vast scriptural corpus in the Sanskrit language known collectively as the Vedas. Most also share the concept that the divine manifests in a diversity of ways and believe in the eternity of the soul—reborn in body after body, life after life, guided by karma.",
+        "timelineTitle": "Timeline of Development",
+        "vedas": {
+          "title": "The Vedas",
+          "period": "2500 - 600 BCE",
+          "content": "Indian philosophy is rooted in the authority of ancient, sacred texts called the Vedas, which originated between 2500 and 600 BCE. The Rig Veda is the earliest of the four Vedas, with the remaining three known as the Sama, Yajur, and Atharva Veda. The earliest hymns of the Rig Veda began to be transmitted orally. They addressed topics including the creation and structure of the universe, the natural world, and praise of a number of deities including Indra and Agni."
+        },
+        "upanishads": {
+          "title": "The Upanishads",
+          "period": "900 - 300 BCE",
+          "content": "This was followed by the Upanishads from 900 to 300 BCE, which tried to explain the tenets of the Vedas in an intellectually rigorous question-answer format between a Guru and a disciple. They were philosophical dialogues that appeared at the end of each of the four Vedas. Consequently, they are often referred to as Vedanta, which literally means \"the end of the Veda,\" a term that has also come to refer to several schools of Indian philosophy."
+        },
+        "epics": {
+          "title": "The Epics",
+          "period": "400 BCE - 200 CE",
+          "content": "Then followed the age of the epics from 400 BCE – 200 CE, when the Mahabharata (of which the Bhagavad Gita is part) and Ramayana were written. They were long narrative poems telling the stories of human heroes and dynasties with gods in supporting or guiding roles, centered on ethical dilemmas, dharma, and exemplary conduct in complex life situations. Their function was to show how dharma (or right code of conduct) is lived in the world: family conflict, kingship, warfare."
+        },
+        "gita": {
+          "title": "The Bhagavad Gita",
+          "period": "Part of the Mahabharata",
+          "content": "The Bhagavad Gita appears as an episode in the sixth book of the Mahabharata. The Gita, one of the most widely read texts in the world, consists of a dialogue between the warrior Arjuna and his charioteer Krishna on the edge of a battlefield before the first day of war. The text blends a wide range of philosophical ideas within the context of a larger literary narrative.",
+          "quote": "As Krishna describes it, life is an impermanent, dreamlike state in which the soul is beset by dreams and illusions. The wise man learns to recognise these illusions for what they are and, freed from desires and attachments, goes through life with complete serenity, at the end of it merging into eternal unity with Brahman, the omnipresent spirit of all created things."
+        },
+        "dharmashastras": {
+          "title": "Dharmashastras",
+          "period": "100 CE",
+          "content": "Building on this, in 100 CE, authoritative treatises that address the topic of dharma—which can be translated variously as duty, law, ethics, or moral order—were introduced. These texts offer pragmatic teachings on how to behave in accordance with the dharmic order of the universe, containing prescriptions for social order, family life, and gender relations."
+        },
+        "puranas": {
+          "title": "The Puranas",
+          "period": "250 - 1000 CE",
+          "content": "Lastly came the age of the Puranas: myths and legends of gods and goddesses, cosmic cycles, creation and destruction, genealogies of gods, patriarchs, kings, pilgrim places, festivals, and ritual practice. Their function was to bridge high philosophy with popular worship; they taught cosmology, bhakti, ritual observances, and the glory of specific deities and holy places."
+        },
+        "foundationQuote": "Together with the Upanishads and the Brahma Sutras, the Bhagavad Gita forms the triple foundation of orthodox Indian philosophy. They have determined the tone, if not the precise pattern, of Indian philosophical development ever since, upgraded and updated over time by countless learned sages.",
+        "coreConceptsTitle": "Core Underlying Concepts",
+        "oneInMany": {
+          "title": "The One in Many",
+          "content": "The vast array of deities in the Hindu pantheon is held together philosophically through the concept of \"Brahman,\" the infinite and eternal Ultimate spirit that underlies all existence. Brahman pervades all that exists, even the deities. The multiple divine forms are viewed as manifestations of that one Ultimate. Natural elements like the sun and rivers are viewed as divine forms worthy of worship. The worship of the divine in the feminine form is also an aspect that sets it apart."
+        },
+        "unityInDiversity": {
+          "title": "Unity in Diversity",
+          "content": "The shared assumption that validates the worship of the divine in multiple forms also validates diverse ways of worshipping. Depending on the inclination of an individual, various channels are recognized as valid: knowledge (gnan), meditation (dhyan), devotion (bhakti), and action (karma). Art is also recognized as a vital channel of religious expression. Music, dance, and painting are pursued as paths for approaching the divine."
+        },
+        "guruShishya": {
+          "title": "The Guru-Shishya (disciple) System",
+          "content": "The guru system demands a different relationship from that of congregant and priest. The guru is seen as a path to—or in some cases an embodiment of—the divine. In philosophical systems that emphasize the disintegration of the ego, unconditional devotion to the guru is seen as the most efficient way for spiritual progress. However, this in no manner means to stop questioning or encourages blind faith. True gurus are those who encourage seekers to constantly question."
+        },
+        "kabirQuote": "If you haven't experienced it, it's not true.",
+        "kabirAttribution": "— Kabir",
+        "howExploreBtn": "How Will We Explore",
+        "whyPhilosophiesBtn": "Why Indian Philosophies",
+        "rigVedaCaption": "Translation by Wendy Doniger O'Flaherty. From the Book \"The Rig Veda - Anthology\""
       },
       "howExplore": {
         "title": "How Will We Explore?",
         "subtitle": "Join us on a journey of discovery through multiple pathways of learning",
-        "methods": "Our Exploration Methods"
+        "methods": "Our Exploration Methods",
+        "intro": "We will explore together all philosophers connected to Indian philosophy, past and present. There are many schools of thought within Indian philosophy, and our goal is to explore as many of them as possible, while giving you the keys to understand their particularities.",
+        "newsletter": {
+          "title": "Weekly Newsletter",
+          "description": "Every week, in our newsletter, you will read what sages have to say on deep questions relevant to our everyday life. You will read some of their most inspiring and transformative texts, curated for you to explore timeless Indian philosophical wisdom applied to the dilemmas of contemporary life."
+        },
+        "dailyWisdom": {
+          "title": "Daily Wisdom",
+          "description": "If you'd like to stay connected to spirituality throughout the week, you can join our WhatsApp group in which we post one inspiring quote by a sage daily. Alternatively, you may follow our social media channels or visit this site to view the quotes daily. Please note, while the main focus of the platform is Indian philosophy, we have taken the liberty to share quotes from western philosophers to emphasise unity in diversity."
+        },
+        "virtualSatsangs": {
+          "title": "Virtual Satsangs",
+          "description": "We will conduct virtual meetings where curated speeches by sages featured on this site will be broadcasted, followed by questions for introspection or discussion. If possible, this will be conducted in groups of 8 selected from within your country/location, so that you have the opportunity to gather physically in future if desired so. However, if you prefer solitude, you may also attend the videos on your own and introspect on the questions by yourself."
+        },
+        "ashramVisits": {
+          "title": "Ashram Visits",
+          "description": "In the near future, we will explore the potential to do site visits to ashrams across India. This deep experiential immersion will have a profound impact on you, as it has had on us."
+        },
+        "moreSatsangs": "More about Satsangs",
+        "satsangDesc1": "The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance.",
+        "satsangDesc2": "Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.",
+        "deepQuestionsTitle": "Deep Questions You'll Explore",
+        "question1": "What is the purpose of my life?",
+        "question2": "What is happiness and how do I reach a sustainable state of peace, joy, and happiness?",
+        "question3": "How do I deal with my emotions and relationships in my everyday life?",
+        "aboutUsBtn": "About Us",
+        "understandingBtn": "Understanding Indian Philosophies"
       },
       "aboutUs": {
         "title": "About Us",
         "subtitle": "Our journey into Indian philosophy and the vision behind The Nirvanist",
-        "meetFounders": "Meet the Founders"
+        "meetFounders": "Meet the Founders",
+        "intro": "Many of the ideas of Indian philosophies, which were once regarded as eccentric, exotic, foreign, or cranky, are now part of everyday life. Where once Christian ministers and clerics railed against the \"heresies\" of Hinduism, yoga classes are now held in church halls. Meditation has been stripped of its spiritual connotations and rebranded as 'mindfulness'. Statues of the Buddha have become a ubiquitous accoutrement in design magazines. The term 'guru' has floated free of its original significance to become a cliché for any expert or wise counselor.",
+        "deeperText": "However, this is akin to merely dipping your toes in the water. A vast ocean of peace and happiness awaits those who are prepared to delve deeper. Where societies rely on cold rationale and science, they often lose meaning and purpose, which is given by philosophy. After all, science is limited to what has been discovered physically, whereas spirituality extends to what has been discovered experientially.",
+        "oceanQuote": "Those who speculate from the shore about the ocean shall know only its surface, but those who would know the depths of the ocean must be willing to plunge into it.",
+        "oceanAttribution": "— Meher Baba",
+        "missionText": "Our humble attempt with The Nirvanist is to offer a door for a curious mind to be exposed to Indian philosophy and spirituality—for those who want to explore this rich source of wisdom, better understand its uniqueness, and potentially go through a profound positive transformation.",
+        "foundersIntro": "We are Pratik Malia and Celine Delacharlerie, an Indian-Belgian couple who met in Singapore and now live in Mauritius.",
+        "foundersWhy": "We wanted to create this platform because we are ourselves very curious to indulge deeper in Indian philosophies, from which we have deeply benefited in our personal lives.",
+        "foundersRitual": "We wanted to create a ritual for ourselves to stay connected to this wisdom in the midst of our worldly life.",
+        "howExploreBtn": "How Will We Explore",
+        "whyPhilosophiesBtn": "Why Indian Philosophies"
       }
     }
   },

@@ -24,21 +24,28 @@ const meetupsBreadcrumb = createBreadcrumbSchema([
   { name: "Satsangs" }
 ]);
 
-const registrationSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  country: z.string().min(2, "Please select your country"),
-  timezone: z.string().min(2, "Please select your timezone"),
+const createRegistrationSchema = (t: (key: string) => string) => z.object({
+  name: z.string().min(2, t("pages.meetups.validation.nameMin")),
+  email: z.string().email(t("pages.meetups.validation.emailInvalid")),
+  country: z.string().min(2, t("pages.meetups.validation.countryRequired")),
+  timezone: z.string().min(2, t("pages.meetups.validation.timezoneRequired")),
   interestedInTravel: z.boolean().default(false),
 });
 
-type RegistrationForm = z.infer<typeof registrationSchema>;
+type RegistrationForm = {
+  name: string;
+  email: string;
+  country: string;
+  timezone: string;
+  interestedInTravel: boolean;
+};
 
 export default function Meetups() {
   const { t } = useTranslation();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const registrationSchema = createRegistrationSchema(t);
 
   const form = useForm<RegistrationForm>({
     resolver: zodResolver(registrationSchema),
@@ -57,8 +64,8 @@ export default function Meetups() {
     },
     onSuccess: () => {
       toast({
-        title: "Welcome to our spiritual circle!",
-        description: "You've successfully registered for our global satsangs. We'll send you the meeting details soon.",
+        title: t("pages.meetups.toastSuccessTitle"),
+        description: t("pages.meetups.toastSuccessDesc"),
       });
       setIsSubmitted(true);
       form.reset();
@@ -66,8 +73,8 @@ export default function Meetups() {
     },
     onError: () => {
       toast({
-        title: "Registration failed",
-        description: "Please try again or contact our support team for assistance.",
+        title: t("pages.meetups.toastErrorTitle"),
+        description: t("pages.meetups.toastErrorDesc"),
         variant: "destructive",
       });
     },
@@ -309,7 +316,7 @@ export default function Meetups() {
                         <FormItem>
                           <FormLabel>{t("pages.meetups.fullName")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter your full name" {...field} />
+                            <Input placeholder={t("pages.meetups.namePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -323,7 +330,7 @@ export default function Meetups() {
                         <FormItem>
                           <FormLabel>{t("pages.meetups.email")}</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="Enter your email address" {...field} />
+                            <Input type="email" placeholder={t("pages.meetups.emailPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -393,7 +400,7 @@ export default function Meetups() {
                           </FormControl>
                           <div className="space-y-1 leading-none">
                             <FormLabel>
-                              Would you like to be invited for group travel to India in the future?
+                              {t("pages.meetups.travelInterest")}
                             </FormLabel>
                           </div>
                         </FormItem>

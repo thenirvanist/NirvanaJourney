@@ -13,37 +13,39 @@ const breadcrumb = createBreadcrumbSchema([
   { name: "How Will We Explore" }
 ]);
 
-const explorationMethods = [
+const getExplorationMethods = (t: (key: string) => string) => [
   {
     icon: Mail,
-    title: "Weekly Newsletter",
-    description: "Every week, in our newsletter, you will read what sages have to say on deep questions relevant to our everyday life. You will read some of their most inspiring and transformative texts, curated for you to explore timeless Indian philosophical wisdom applied to the dilemmas of contemporary life."
+    title: t("pages.about.howExplore.newsletter.title"),
+    description: t("pages.about.howExplore.newsletter.description")
   },
   {
     icon: MessageCircle,
-    title: "Daily Wisdom",
-    description: "If you'd like to stay connected to spirituality throughout the week, you can join our WhatsApp group in which we post one inspiring quote by a sage daily. Alternatively, you may follow our social media channels or visit this site to view the quotes daily. Please note, while the main focus of the platform is Indian philosophy, we have taken the liberty to share quotes from western philosophers to emphasise unity in diversity."
+    title: t("pages.about.howExplore.dailyWisdom.title"),
+    description: t("pages.about.howExplore.dailyWisdom.description")
   },
   {
     icon: Video,
-    title: "Virtual Satsangs",
-    description: "We will conduct virtual meetings where curated speeches by sages featured on this site will be broadcasted, followed by questions for introspection or discussion. If possible, this will be conducted in groups of 8 selected from within your country/location, so that you have the opportunity to gather physically in future if desired so. However, if you prefer solitude, you may also attend the videos on your own and introspect on the questions by yourself."
+    title: t("pages.about.howExplore.virtualSatsangs.title"),
+    description: t("pages.about.howExplore.virtualSatsangs.description")
   },
   {
     icon: MapPin,
-    title: "Ashram Visits",
-    description: "In the near future, we will explore the potential to do site visits to ashrams across India. This deep experiential immersion will have a profound impact on you, as it has had on us."
+    title: t("pages.about.howExplore.ashramVisits.title"),
+    description: t("pages.about.howExplore.ashramVisits.description")
   }
 ];
 
-const deepQuestions = [
-  "What is the purpose of my life?",
-  "What is happiness and how do I reach a sustainable state of peace, joy, and happiness?",
-  "How do I deal with my emotions and relationships in my everyday life?"
+const getDeepQuestions = (t: (key: string) => string) => [
+  t("pages.about.howExplore.question1"),
+  t("pages.about.howExplore.question2"),
+  t("pages.about.howExplore.question3")
 ];
 
 export default function HowWillWeExplore() {
   const { t } = useTranslation();
+  const explorationMethods = getExplorationMethods(t);
+  const deepQuestions = getDeepQuestions(t);
   return (
     <div className="min-h-screen">
       <Seo
@@ -69,7 +71,7 @@ export default function HowWillWeExplore() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="prose prose-lg max-w-none mb-16">
             <p className="text-xl text-gray-700 leading-relaxed text-center">
-              We will explore together all philosophers connected to Indian philosophy, past and present. There are many schools of thought within Indian philosophy, and our goal is to explore as many of them as possible, while giving you the keys to understand their particularities.
+              {t("pages.about.howExplore.intro")}
             </p>
           </div>
 
@@ -92,13 +94,13 @@ export default function HowWillWeExplore() {
           <div className="bg-[#F7F2E8] rounded-3xl p-12 mb-20">
             <div className="max-w-3xl mx-auto">
               <h3 className="text-2xl font-light text-gray-900 mb-6 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                More about Satsangs
+                {t("pages.about.howExplore.moreSatsangs")}
               </h3>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance.
+                {t("pages.about.howExplore.satsangDesc1")}
               </p>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.
+                {t("pages.about.howExplore.satsangDesc2")}
               </p>
             </div>
           </div>
@@ -106,7 +108,7 @@ export default function HowWillWeExplore() {
           <div className="max-w-2xl mx-auto mb-20">
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-2xl font-light text-gray-900 mb-6 text-center" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                Deep Questions You'll Explore
+                {t("pages.about.howExplore.deepQuestionsTitle")}
               </h3>
               <ul className="space-y-4">
                 {deepQuestions.map((question, index) => (
@@ -124,13 +126,13 @@ export default function HowWillWeExplore() {
           <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/about/us">
               <Button className="bg-[#70c92e] hover:bg-[#5fb025] text-white px-8 py-3 rounded-full">
-                About Us
+                {t("pages.about.howExplore.aboutUsBtn")}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
             <Link href="/about/understanding">
               <Button variant="outline" className="border-[#70c92e] text-[#70c92e] hover:bg-[#70c92e]/10 px-8 py-3 rounded-full">
-                Understanding Indian Philosophies
+                {t("pages.about.howExplore.understandingBtn")}
               </Button>
             </Link>
           </div>

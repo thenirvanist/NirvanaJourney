@@ -42,24 +42,24 @@ export default function AboutUs() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="prose prose-lg max-w-none">
             <p className="text-xl text-gray-700 leading-relaxed mb-8">
-              Many of the ideas of Indian philosophies, which were once regarded as eccentric, exotic, foreign, or cranky, are now part of everyday life. Where once Christian ministers and clerics railed against the "heresies" of Hinduism, yoga classes are now held in church halls. Meditation has been stripped of its spiritual connotations and rebranded as 'mindfulness'. Statues of the Buddha have become a ubiquitous accoutrement in design magazines. The term 'guru' has floated free of its original significance to become a cliché for any expert or wise counselor.
+              {t("pages.about.aboutUs.intro")}
             </p>
 
             <div className="bg-[#F7F2E8] rounded-2xl p-8 my-12">
               <p className="text-lg text-gray-700 leading-relaxed">
-                However, this is akin to merely dipping your toes in the water. A vast ocean of peace and happiness awaits those who are prepared to delve deeper. Where societies rely on cold rationale and science, they often lose meaning and purpose, which is given by philosophy. After all, science is limited to what has been discovered physically, whereas spirituality extends to what has been discovered experientially.
+                {t("pages.about.aboutUs.deeperText")}
               </p>
             </div>
 
             <div className="border-l-4 border-[#70c92e] pl-6 my-12">
               <p className="text-xl text-gray-800 italic leading-relaxed" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                "Those who speculate from the shore about the ocean shall know only its surface, but those who would know the depths of the ocean must be willing to plunge into it."
+                {t("pages.about.aboutUs.oceanQuote")}
               </p>
-              <p className="text-gray-600 mt-2">— Meher Baba</p>
+              <p className="text-gray-600 mt-2">{t("pages.about.aboutUs.oceanAttribution")}</p>
             </div>
 
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              Our humble attempt with The Nirvanist is to offer a door for a curious mind to be exposed to Indian philosophy and spirituality—for those who want to explore this rich source of wisdom, better understand its uniqueness, and potentially go through a profound positive transformation.
+              {t("pages.about.aboutUs.missionText")}
             </p>
           </div>
 
@@ -77,13 +77,13 @@ export default function AboutUs() {
             </div>
             <div className="lg:w-1/2">
               <p className="text-lg text-gray-600 leading-relaxed mb-4">
-                We are <strong>Pratik Malia</strong> and <strong>Celine Delacharlerie</strong>, an Indian-Belgian couple who met in Singapore and now live in Mauritius.
+                {t("pages.about.aboutUs.foundersIntro")}
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-4">
-                We wanted to create this platform because we are ourselves very curious to indulge deeper in Indian philosophies, from which we have deeply benefited in our personal lives.
+                {t("pages.about.aboutUs.foundersWhy")}
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                We wanted to create a ritual for ourselves to stay connected to this wisdom in the midst of our worldly life.
+                {t("pages.about.aboutUs.foundersRitual")}
               </p>
               <div className="flex gap-4">
                 <a 
@@ -111,13 +111,13 @@ export default function AboutUs() {
           <div className="mt-16 flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/about/how-we-explore">
               <Button className="bg-[#70c92e] hover:bg-[#5fb025] text-white px-8 py-3 rounded-full">
-                How Will We Explore
+                {t("pages.about.aboutUs.howExploreBtn")}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
             <Link href="/about/why-indian-philosophies">
               <Button variant="outline" className="border-[#70c92e] text-[#70c92e] hover:bg-[#70c92e]/10 px-8 py-3 rounded-full">
-                Why Indian Philosophies
+                {t("pages.about.aboutUs.whyPhilosophiesBtn")}
               </Button>
             </Link>
           </div>
