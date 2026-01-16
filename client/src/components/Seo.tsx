@@ -19,9 +19,9 @@ export interface SeoProps {
 }
 
 const BASE_URL = "https://www.thenirvanist.com";
-const DEFAULT_TITLE = "The Nirvanist - Journey to Inner Peace";
-const DEFAULT_DESCRIPTION = "Transformative spiritual journeys that foster inner peace, self-discovery, and connection with diverse cultures and natural environments. Join The Nirvanist for sacred retreats, meditation tours, and spiritual growth experiences.";
-const DEFAULT_OG_IMAGE = `${BASE_URL}/attached_assets/og-image.png`;
+const DEFAULT_TITLE = "The Nirvanist - Nourish Your Soul";
+const DEFAULT_DESCRIPTION = "Embark on a spiritual odyssey towards inner transformation and holistic well-being. Join The Nirvanist for sacred retreats, meditation tours, and spiritual growth experiences.";
+const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export default function Seo({
   title,

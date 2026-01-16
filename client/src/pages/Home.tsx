@@ -39,8 +39,8 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Seo 
-        title="Journey to Inner Peace - Spiritual Retreats & Sacred Journeys"
-        description="Discover transformative spiritual journeys, sage wisdom, ashram retreats, and global meetups with The Nirvanist. Find your path to inner peace and self-discovery."
+        title="Nourish Your Soul - Embark on a spiritual odyssey towards inner transformation and holistic well-being"
+        description="Embark on a spiritual odyssey towards inner transformation and holistic well-being. Discover transformative spiritual journeys, sage wisdom, ashram retreats, and global meetups with The Nirvanist."
         ogType="website"
       />
       {/* Critical above-the-fold content */}
