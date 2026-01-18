@@ -112,7 +112,7 @@ export const contactMessages = pgTable("contact_messages", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+export const newsletterSubscribers = pgTable("newsletter_subscriber", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   verified: boolean("verified").default(false),

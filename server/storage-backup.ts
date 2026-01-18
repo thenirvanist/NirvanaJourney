@@ -385,7 +385,7 @@ export class SupabaseStorage implements IStorage {
   async createNewsletterSubscriber(email: string, verificationToken: string): Promise<NewsletterSubscriber> {
     try {
       const result = await db.execute(`
-        INSERT INTO newsletter_subscribers (email, verified, verification_token, subscribed_at)
+        INSERT INTO newsletter_subscriber (email, verified, verification_token, subscribed_at)
         VALUES ($1, false, $2, NOW())
         RETURNING *
       `, [email, verificationToken]);
@@ -398,7 +398,7 @@ export class SupabaseStorage implements IStorage {
 
   async getNewsletterSubscriberByEmail(email: string): Promise<NewsletterSubscriber | undefined> {
     try {
-      const result = await db.execute('SELECT * FROM newsletter_subscribers WHERE email = $1', [email]);
+      const result = await db.execute('SELECT * FROM newsletter_subscriber WHERE email = $1', [email]);
       return result.rows[0] as any || undefined;
     } catch (error) {
       console.error('Error getting newsletter subscriber:', error);
@@ -409,7 +409,7 @@ export class SupabaseStorage implements IStorage {
   async updateNewsletterSubscriber(id: number, data: Partial<NewsletterSubscriber>): Promise<NewsletterSubscriber> {
     try {
       const result = await db.execute(`
-        UPDATE newsletter_subscribers 
+        UPDATE newsletter_subscriber 
         SET verified = COALESCE($2, verified),
             verification_token = COALESCE($3, verification_token)
         WHERE id = $1

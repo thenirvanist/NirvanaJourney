@@ -119,7 +119,7 @@ export async function runMigrations() {
     `);
 
     await db.execute(sql`
-      CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+      CREATE TABLE IF NOT EXISTS newsletter_subscriber (
         id SERIAL PRIMARY KEY,
         email TEXT NOT NULL UNIQUE,
         verified BOOLEAN DEFAULT false,

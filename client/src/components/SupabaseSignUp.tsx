@@ -68,9 +68,9 @@ export function SupabaseSignUp({
     try {
       if (!supabase) return;
       
-      // Insert into newsletter_subscribers table, ignore duplicates
+      // Insert into newsletter_subscriber table, ignore duplicates
       await supabase
-        .from('newsletter_subscribers')
+        .from('newsletter_subscriber')
         .upsert(
           { email, verified: true },
           { onConflict: 'email', ignoreDuplicates: true }
