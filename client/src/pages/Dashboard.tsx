@@ -3,13 +3,25 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Book, Mountain, Compass, User, Quote, Check, Loader2 } from "lucide-react";
+import { Heart, Book, Mountain, Compass, User, Quote, Check, Loader2, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Sage, Ashram, BlogPost, Journey, DailyWisdom } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useToast } from "@/hooks/use-toast";
+import SatsangProfileModal from "@/components/SatsangProfileModal";
+
+interface SatsangProfile {
+  id?: number;
+  profile_id: string;
+  gender?: string;
+  age?: number;
+  location?: string;
+  current_vocation?: string;
+  field_of_study?: string;
+  prefer_1_on_1?: boolean;
+}
 
 interface Bookmark {
   id: number;
@@ -25,6 +37,7 @@ export default function Dashboard() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [satsangModalOpen, setSatsangModalOpen] = useState(false);
 
   // Redirect if not authenticated (after loading is complete)
   useEffect(() => {
@@ -85,6 +98,28 @@ export default function Dashboard() {
         variant: "destructive",
       });
     },
+  });
+
+  // Query to fetch existing satsang profile
+  const { data: satsangProfile } = useQuery<SatsangProfile | null>({
+    queryKey: ["satsang-profile", user?.id],
+    queryFn: async () => {
+      if (!user?.id || !supabase) return null;
+      
+      const { data, error } = await supabase
+        .from("satsang_profile")
+        .select("*")
+        .eq("profile_id", user.id)
+        .maybeSingle();
+      
+      if (error) {
+        console.error("Error fetching satsang profile:", error);
+        return null;
+      }
+      
+      return data;
+    },
+    enabled: !!user?.id && !!supabase,
   });
 
   // Fetch bookmarks directly from Supabase
@@ -274,11 +309,13 @@ export default function Dashboard() {
                   )}
                 </Button>
               )}
-              <Link href="/register">
-                <Button className="brand-primary hover:brand-bright text-white hover:text-black px-6 py-3">
-                  {t("pages.dashboard.attendSatsangs")}
-                </Button>
-              </Link>
+              <Button 
+                className="brand-primary hover:brand-bright text-white hover:text-black px-6 py-3"
+                onClick={() => setSatsangModalOpen(true)}
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                {satsangProfile ? "Update Satsang Profile" : t("pages.dashboard.attendSatsangs")}
+              </Button>
               <Button variant="outline" className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3">
                 {t("pages.dashboard.whatsappQuotes")}
               </Button>
@@ -532,6 +569,16 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Satsang Profile Modal */}
+      {user && (
+        <SatsangProfileModal
+          open={satsangModalOpen}
+          onOpenChange={setSatsangModalOpen}
+          userId={user.id}
+          existingProfile={satsangProfile}
+        />
+      )}
     </div>
   );
 }
