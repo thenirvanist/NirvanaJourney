@@ -13,8 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import SatsangProfileModal from "@/components/SatsangProfileModal";
 
 interface SatsangProfile {
-  id?: number;
-  profile_id: string;
+  id: string;
   gender?: string;
   age?: number;
   location?: string;
@@ -109,7 +108,7 @@ export default function Dashboard() {
       const { data, error } = await supabase
         .from("satsang_profile")
         .select("*")
-        .eq("profile_id", user.id)
+        .eq("id", user.id)
         .maybeSingle();
       
       if (error) {

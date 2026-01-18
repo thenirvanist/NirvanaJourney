@@ -11,8 +11,7 @@ import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
 interface SatsangProfile {
-  id?: number;
-  profile_id: string;
+  id: string;
   gender?: string;
   age?: number;
   location?: string;
@@ -73,7 +72,7 @@ export default function SatsangProfileModal({
       if (!supabase) throw new Error("Supabase not initialized");
       
       const profileData = {
-        profile_id: userId,
+        id: userId,
         gender: formData.gender || null,
         age: formData.age ? parseInt(formData.age) : null,
         location: formData.location || null,
@@ -84,7 +83,7 @@ export default function SatsangProfileModal({
 
       const { error } = await supabase
         .from("satsang_profile")
-        .upsert(profileData, { onConflict: "profile_id" });
+        .upsert(profileData, { onConflict: "id" });
       
       if (error) throw error;
       return true;
