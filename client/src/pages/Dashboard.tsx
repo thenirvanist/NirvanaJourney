@@ -1,14 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Book, Mountain, Compass, User, Quote } from "lucide-react";
-import { useEffect } from "react";
+import { Heart, Book, Mountain, Compass, User, Quote, Check, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Sage, Ashram, BlogPost, Journey, DailyWisdom } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useToast } from "@/hooks/use-toast";
 
 interface Bookmark {
   id: number;
@@ -22,6 +23,8 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const { user, isLoading: authLoading, session } = useAuth();
   const [, navigate] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Redirect if not authenticated (after loading is complete)
   useEffect(() => {
@@ -29,6 +32,60 @@ export default function Dashboard() {
       navigate("/login");
     }
   }, [authLoading, user, navigate]);
+
+  // Check if user is subscribed to newsletter
+  const { data: isNewsletterSubscribed = false } = useQuery<boolean>({
+    queryKey: ["newsletter-subscription", user?.email],
+    queryFn: async () => {
+      if (!user?.email || !supabase) return false;
+      
+      const { data, error } = await supabase
+        .from("newsletter_subscriber")
+        .select("id")
+        .eq("email", user.email)
+        .maybeSingle();
+      
+      if (error) {
+        console.error("Error checking newsletter subscription:", error);
+        return false;
+      }
+      
+      return !!data;
+    },
+    enabled: !!user?.email && !!supabase,
+  });
+
+  // Mutation to subscribe to newsletter
+  const subscribeToNewsletter = useMutation({
+    mutationFn: async () => {
+      if (!user?.email || !supabase) throw new Error("Not authenticated");
+      
+      const { error } = await supabase
+        .from("newsletter_subscriber")
+        .upsert(
+          { email: user.email, verified: true },
+          { onConflict: "email", ignoreDuplicates: true }
+        );
+      
+      if (error) throw error;
+      return true;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["newsletter-subscription", user?.email] });
+      toast({
+        title: "Subscribed!",
+        description: "You've been added to our newsletter.",
+      });
+    },
+    onError: (error) => {
+      console.error("Newsletter subscription error:", error);
+      toast({
+        title: "Subscription Failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    },
+  });
 
   // Fetch bookmarks directly from Supabase
   const { data: bookmarks = [], isLoading: bookmarksLoading } = useQuery<Bookmark[]>({
@@ -191,11 +248,32 @@ export default function Dashboard() {
             
             {/* Action Buttons */}
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="#newsletter">
-                <Button variant="outline" className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3">
-                  {t("pages.dashboard.joinNewsletter")}
+              {isNewsletterSubscribed ? (
+                <Button 
+                  variant="outline" 
+                  className="border-green-500 text-green-600 px-6 py-3 cursor-default"
+                  disabled
+                >
+                  <Check className="w-4 h-4 mr-2" />
+                  Subscribed to Newsletter
                 </Button>
-              </Link>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3"
+                  onClick={() => subscribeToNewsletter.mutate()}
+                  disabled={subscribeToNewsletter.isPending}
+                >
+                  {subscribeToNewsletter.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Subscribing...
+                    </>
+                  ) : (
+                    t("pages.dashboard.joinNewsletter")
+                  )}
+                </Button>
+              )}
               <Link href="/register">
                 <Button className="brand-primary hover:brand-bright text-white hover:text-black px-6 py-3">
                   {t("pages.dashboard.attendSatsangs")}
