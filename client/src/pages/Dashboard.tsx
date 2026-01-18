@@ -320,9 +320,15 @@ export default function Dashboard() {
                 <Calendar className="w-4 h-4 mr-2" />
                 {satsangProfile ? "Update Satsang Profile" : t("pages.dashboard.attendSatsangs")}
               </Button>
-              <Button variant="outline" className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3">
-                {t("pages.dashboard.whatsappQuotes")}
-              </Button>
+              <a 
+                href="https://www.whatsapp.com/channel/0029VbBqaSJ0QeapgNPxcR05" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Button variant="outline" className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3">
+                  {t("pages.dashboard.whatsappQuotes")}
+                </Button>
+              </a>
             </div>
           </div>
 
@@ -344,10 +350,10 @@ export default function Dashboard() {
                       Explore Sages
                     </Button>
                   </Link>
-                  <Link href="/ashrams">
-                    <Button variant="outline" className="w-full sm:w-auto mr-0 sm:mr-3 mb-3 sm:mb-0" data-testid="button-explore-ashrams">
-                      <Mountain className="h-4 w-4 mr-2" />
-                      Visit Ashrams
+                  <Link href="/daily-quotes">
+                    <Button variant="outline" className="w-full sm:w-auto mr-0 sm:mr-3 mb-3 sm:mb-0" data-testid="button-read-quotes">
+                      <Quote className="h-4 w-4 mr-2" />
+                      Read Quotes
                     </Button>
                   </Link>
                   <Link href="/inner-nutrition">
