@@ -97,11 +97,13 @@ export default function SatsangProfileModal({
       });
       onOpenChange(false);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Error saving satsang profile:", error);
+      console.error("Error details:", JSON.stringify(error, null, 2));
+      const errorMessage = error?.message || error?.details || "Failed to save your profile. Please try again.";
       toast({
         title: "Error",
-        description: "Failed to save your profile. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -116,11 +118,9 @@ export default function SatsangProfileModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {existingProfile ? "Update Your Satsang Profile" : "Join Satsang Sessions"}
-          </DialogTitle>
-          <DialogDescription>
-            Tell us a bit about yourself to personalize your spiritual journey.
+          <DialogTitle>Welcome to Satsangs</DialogTitle>
+          <DialogDescription className="italic text-gray-600">
+            <span className="font-semibold not-italic">Aligning Your Experience</span> — To ensure the most meaningful dialogue, we curate Satsang groups based on shared life stages and experiences. This helps us place you with peers where the conversation will naturally resonate.
           </DialogDescription>
         </DialogHeader>
         
@@ -201,7 +201,7 @@ export default function SatsangProfileModal({
               htmlFor="prefer_1_on_1" 
               className="text-sm font-normal cursor-pointer"
             >
-              I prefer 1-on-1 sessions
+              I prefer 1-on-1 sessions rather than a group setting.
             </Label>
           </div>
 
