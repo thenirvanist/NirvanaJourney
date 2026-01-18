@@ -182,11 +182,28 @@ export default function Dashboard() {
             <p className="text-xl text-gray-600 mb-6">
               Your Personal Spiritual Collection
             </p>
-            <div className="flex items-center justify-center space-x-2 text-lg text-amber-700">
+            <div className="flex items-center justify-center space-x-2 text-lg text-amber-700 mb-8">
               <Heart className="h-6 w-6 fill-red-500 text-red-500" />
               <span className="font-semibold" data-testid="text-bookmark-count">
                 {totalBookmarks} {totalBookmarks === 1 ? 'item' : 'items'} bookmarked
               </span>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link href="#newsletter">
+                <Button variant="outline" className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3">
+                  {t("pages.dashboard.joinNewsletter")}
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button className="brand-primary hover:brand-bright text-white hover:text-black px-6 py-3">
+                  {t("pages.dashboard.attendSatsangs")}
+                </Button>
+              </Link>
+              <Button variant="outline" className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white px-6 py-3">
+                {t("pages.dashboard.whatsappQuotes")}
+              </Button>
             </div>
           </div>
 

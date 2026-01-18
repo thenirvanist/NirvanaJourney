@@ -111,6 +111,7 @@
       "heroSubtitle": "Rejoignez un Cercle Mondial de Chercheurs Spirituels",
       "heroDesc": "Des satsangs en ligne chaque semaine pour faire une pause, réfléchir et grandir — ensemble à partir d'avril 2026.",
       "joinButton": "Rejoindre Notre Communauté",
+      "attendSatsangs": "Participer aux Satsangs",
       "whatIsSatsangTitle": "Qu'est-ce qu'un 'Satsang'?",
       "whatIsSatsangDesc1": "Le mot satsang vient de deux racines sanscrites: sat, signifiant la vérité, la pureté ou le réel, et sanga/sangha, signifiant la compagnie, l'association ou la communauté. Ensemble, satsang signifie s'associer avec des personnes et des enseignements qui reflètent la réalité spirituelle plutôt que l'ignorance.",
       "whatIsSatsangDesc2": "Traditionnellement, un satsang est une audience avec un maître éclairé qui fournit une instruction spirituelle. Cependant, dans les contextes modernes, satsang peut signifier tout rassemblement de personnes dans le but de discuter, de pratiquer ou de contempler la spiritualité.",
@@ -243,6 +244,9 @@
       "loginRequired": "Connexion Requise",
       "loginMessage": "Veuillez vous connecter pour accéder à votre tableau de bord personnel.",
       "loginButton": "Se Connecter pour Continuer",
+      "joinNewsletter": "S'abonner à la Newsletter",
+      "attendSatsangs": "Participer aux Satsangs",
+      "whatsappQuotes": "Recevoir les Citations sur WhatsApp",
       "tabs": {
         "journeys": "Voyages",
         "sages": "Sages",

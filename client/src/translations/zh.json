@@ -117,6 +117,7 @@
       "heroSubtitle": "加入全球灵性求道者的圆圈",
       "heroDesc": "每周在线萨特桑聚会，暂停、反思和成长——从2026年4月开始。",
       "joinButton": "加入我们的社区",
+      "attendSatsangs": "参加共修",
       "whatIsSatsangTitle": "什么是'萨特桑'?",
       "whatIsSatsangDesc1": "萨特桑这个词来自两个梵语根源：sat意为真理、纯净或真实；sanga/sangha意为伙伴、联合或社区。合在一起，萨特桑意味着与反映灵性现实而非无知的人和教导相联系。",
       "whatIsSatsangDesc2": "传统上，萨特桑是与一位开悟的导师的聚集，导师提供灵性指导。然而，在现代背景下，萨特桑可以指任何人们聚集在一起讨论、践行或思考灵性的场合。",
@@ -243,6 +244,9 @@
       "loginRequired": "需要登录",
       "loginMessage": "请登录以访问您的个人仪表板。",
       "loginButton": "登录以继续",
+      "joinNewsletter": "订阅新闻通讯",
+      "attendSatsangs": "参加共修",
+      "whatsappQuotes": "在WhatsApp上获取每日语录",
       "tabs": {
         "journeys": "旅程",
         "sages": "圣贤",

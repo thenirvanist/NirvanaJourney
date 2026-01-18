@@ -63,9 +63,9 @@ export default function MeetupsSection() {
         </div>
         
         <div className="text-center mt-12">
-          <Link href="/meetups" onClick={() => window.scrollTo(0, 0)}>
+          <Link href="/register" onClick={() => window.scrollTo(0, 0)}>
             <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-3 rounded-lg font-semibold transition-all duration-300">
-              {t("pages.meetups.registerButton")}
+              {t("pages.meetups.attendSatsangs")}
             </Button>
           </Link>
         </div>

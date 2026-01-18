@@ -1,21 +1,10 @@
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Video, Users, Globe, Heart, Calendar, Clock } from "lucide-react";
+import { Video, Users, Globe, Heart, Calendar } from "lucide-react";
+import { Link } from "wouter";
 import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
 import satsangImage from "@assets/Satsang_4_1768371365026.png";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -24,108 +13,8 @@ const meetupsBreadcrumb = createBreadcrumbSchema([
   { name: "Satsangs" }
 ]);
 
-const createRegistrationSchema = (t: (key: string) => string) => z.object({
-  name: z.string().min(2, t("pages.meetups.validation.nameMin")),
-  email: z.string().email(t("pages.meetups.validation.emailInvalid")),
-  country: z.string().min(2, t("pages.meetups.validation.countryRequired")),
-  timezone: z.string().min(2, t("pages.meetups.validation.timezoneRequired")),
-  interestedInTravel: z.boolean().default(false),
-});
-
-type RegistrationForm = {
-  name: string;
-  email: string;
-  country: string;
-  timezone: string;
-  interestedInTravel: boolean;
-};
-
 export default function Meetups() {
   const { t } = useTranslation();
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const registrationSchema = createRegistrationSchema(t);
-
-  const form = useForm<RegistrationForm>({
-    resolver: zodResolver(registrationSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      country: "",
-      timezone: "",
-      interestedInTravel: false,
-    },
-  });
-
-  const registerMutation = useMutation({
-    mutationFn: async (data: RegistrationForm) => {
-      return apiRequest("POST", "/api/meetups/register", data);
-    },
-    onSuccess: () => {
-      toast({
-        title: t("pages.meetups.toastSuccessTitle"),
-        description: t("pages.meetups.toastSuccessDesc"),
-      });
-      setIsSubmitted(true);
-      form.reset();
-      queryClient.invalidateQueries({ queryKey: ["/api/meetups"] });
-    },
-    onError: () => {
-      toast({
-        title: t("pages.meetups.toastErrorTitle"),
-        description: t("pages.meetups.toastErrorDesc"),
-        variant: "destructive",
-      });
-    },
-  });
-
-  const onSubmit = (data: RegistrationForm) => {
-    registerMutation.mutate(data);
-  };
-
-  const timezones = [
-    "UTC-12:00 (Baker Island)",
-    "UTC-11:00 (American Samoa)",
-    "UTC-10:00 (Hawaii)",
-    "UTC-09:00 (Alaska)",
-    "UTC-08:00 (Pacific Time)",
-    "UTC-07:00 (Mountain Time)",
-    "UTC-06:00 (Central Time)",
-    "UTC-05:00 (Eastern Time)",
-    "UTC-04:00 (Atlantic Time)",
-    "UTC-03:00 (Argentina)",
-    "UTC-02:00 (South Georgia)",
-    "UTC-01:00 (Azores)",
-    "UTC+00:00 (London, Dublin)",
-    "UTC+01:00 (Paris, Berlin)",
-    "UTC+02:00 (Cairo, Athens)",
-    "UTC+03:00 (Moscow, Nairobi)",
-    "UTC+04:00 (Dubai, Mauritius)",
-    "UTC+05:00 (Pakistan)",
-    "UTC+05:30 (India, Sri Lanka)",
-    "UTC+06:00 (Bangladesh)",
-    "UTC+07:00 (Thailand, Vietnam)",
-    "UTC+08:00 (China, Singapore)",
-    "UTC+09:00 (Japan, Korea)",
-    "UTC+10:00 (Australia East)",
-    "UTC+11:00 (Solomon Islands)",
-    "UTC+12:00 (New Zealand)",
-  ];
-
-  const countries = [
-    "Afghanistan", "Albania", "Algeria", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
-    "Bahrain", "Bangladesh", "Belarus", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada",
-    "Chile", "China", "Colombia", "Croatia", "Czech Republic", "Denmark", "Ecuador", "Egypt",
-    "Estonia", "Finland", "France", "Georgia", "Germany", "Ghana", "Greece", "Hungary",
-    "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Japan",
-    "Jordan", "Kazakhstan", "Kenya", "South Korea", "Kuwait", "Latvia", "Lebanon", "Lithuania",
-    "Luxembourg", "Malaysia", "Mauritius", "Mexico", "Morocco", "Nepal", "Netherlands", "New Zealand",
-    "Norway", "Pakistan", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia",
-    "Saudi Arabia", "Singapore", "Slovakia", "Slovenia", "South Africa", "Spain", "Sri Lanka",
-    "Sweden", "Switzerland", "Thailand", "Turkey", "Ukraine", "United Arab Emirates", "United Kingdom",
-    "United States", "Uruguay", "Venezuela", "Vietnam"
-  ];
 
   return (
     <div className="min-h-screen">
@@ -148,9 +37,11 @@ export default function Meetups() {
           <p className="text-xl mb-8 opacity-90 leading-relaxed">
             {t("pages.meetups.heroDesc")}
           </p>
-          <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 text-lg rounded-lg font-semibold transition-all duration-300">
-            {t("pages.meetups.joinButton")}
-          </Button>
+          <Link href="/register">
+            <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 text-lg rounded-lg font-semibold transition-all duration-300">
+              {t("pages.meetups.attendSatsangs")}
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -278,147 +169,18 @@ export default function Meetups() {
         </div>
       </section>
 
-      {/* Registration Section */}
+      {/* Call to Action Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-2xl mx-auto px-6">
-          <Card className="shadow-lg">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold mb-4">{t("pages.meetups.joinNextTitle")}</CardTitle>
-              <p className="text-gray-600">
-                {t("pages.meetups.joinNextDesc")}
-              </p>
-            </CardHeader>
-            <CardContent className="p-8">
-              {isSubmitted ? (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 brand-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Heart className="text-white text-2xl" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-[hsl(75,64%,49%)]">{t("pages.meetups.welcomeTitle")}</h3>
-                  <p className="text-gray-600 mb-6">
-                    {t("pages.meetups.welcomeDesc")}
-                  </p>
-                  <Button 
-                    onClick={() => setIsSubmitted(false)}
-                    variant="outline"
-                    className="border-[hsl(75,64%,49%)] text-[hsl(75,64%,49%)] hover:bg-[hsl(75,64%,49%)] hover:text-white"
-                  >
-                    {t("pages.meetups.registerAnother")}
-                  </Button>
-                </div>
-              ) : (
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("pages.meetups.fullName")}</FormLabel>
-                          <FormControl>
-                            <Input placeholder={t("pages.meetups.namePlaceholder")} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("pages.meetups.email")}</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder={t("pages.meetups.emailPlaceholder")} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="country"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("pages.meetups.country")}</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder={t("pages.meetups.selectCountry")} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem key={country} value={country}>
-                                  {country}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="timezone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("pages.meetups.timezone")}</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder={t("pages.meetups.selectTimezone")} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {timezones.map((timezone) => (
-                                <SelectItem key={timezone} value={timezone}>
-                                  {timezone}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="interestedInTravel"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>
-                              {t("pages.meetups.travelInterest")}
-                            </FormLabel>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-
-                    <Button
-                      type="submit"
-                      disabled={registerMutation.isPending}
-                      className="w-full brand-primary hover:brand-bright text-white hover:text-black py-3 text-lg font-semibold transition-all duration-300"
-                    >
-                      {registerMutation.isPending ? t("pages.meetups.registering") : t("pages.meetups.registerButton")}
-                    </Button>
-                  </form>
-                </Form>
-              )}
-            </CardContent>
-          </Card>
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold mb-4">{t("pages.meetups.joinNextTitle")}</h2>
+          <p className="text-gray-600 mb-8">
+            {t("pages.meetups.joinNextDesc")}
+          </p>
+          <Link href="/register">
+            <Button className="brand-primary hover:brand-bright text-white hover:text-black px-8 py-4 text-lg rounded-lg font-semibold transition-all duration-300">
+              {t("pages.meetups.attendSatsangs")}
+            </Button>
+          </Link>
         </div>
       </section>
 

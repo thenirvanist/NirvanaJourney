@@ -116,6 +116,7 @@
       "heroSubtitle": "Join a Global Circle of Spiritual Seekers",
       "heroDesc": "Weekly online satsangs to pause, reflect, and grow — together starting April 2026.",
       "joinButton": "Join Our Community",
+      "attendSatsangs": "Attend Satsangs",
       "whatIsSatsangTitle": "What is a 'Satsang'?",
       "whatIsSatsangDesc1": "The word satsang comes from two Sanskrit roots: sat, meaning truth, purity, or the real, and sanga/sangha, meaning company, association, or community. Put together, satsang means associating with people and teachings that reflect spiritual reality rather than ignorance.",
       "whatIsSatsangDesc2": "Traditionally, a satsang is an audience with an enlightened teacher who provides spiritual instruction. However, in modern contexts, satsang can mean any gathering of people for the purpose of discussing, practicing, or contemplating spirituality.",
@@ -243,6 +244,9 @@
       "loginRequired": "Login Required",
       "loginMessage": "Please login to access your personal dashboard.",
       "loginButton": "Login to Continue",
+      "joinNewsletter": "Join the Newsletter",
+      "attendSatsangs": "Attend Satsangs",
+      "whatsappQuotes": "Get Daily Quotes on WhatsApp",
       "tabs": {
         "journeys": "Journeys",
         "sages": "Sages",
