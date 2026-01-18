@@ -27,7 +27,7 @@ const signUpSchema = z.object({
   email: z.string().email("Please enter a valid email address").min(1, "Email is required"),
   password: z.string().min(6, "Password must be at least 6 characters").min(1, "Password is required"),
   fullName: z.string().min(1, "Full name is required"),
-  subscribeNewsletter: z.boolean().default(false),
+  subscribeNewsletter: z.boolean().default(true),
 });
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
@@ -59,9 +59,27 @@ export function SupabaseSignUp({
       email: "",
       password: "",
       fullName: "",
-      subscribeNewsletter: false,
+      subscribeNewsletter: true,
     },
   });
+
+  // Helper function to subscribe user to newsletter (silent error handling)
+  const subscribeToNewsletter = async (email: string) => {
+    try {
+      if (!supabase) return;
+      
+      // Insert into newsletter_subscribers table, ignore duplicates
+      await supabase
+        .from('newsletter_subscribers')
+        .upsert(
+          { email, verified: true },
+          { onConflict: 'email', ignoreDuplicates: true }
+        );
+    } catch (error) {
+      // Silent failure - don't interrupt signup flow
+      console.log('Newsletter subscription silent error:', error);
+    }
+  };
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
@@ -130,6 +148,11 @@ export function SupabaseSignUp({
 
       // Check if user was created and needs email confirmation
       if (authData.user && !authData.user.email_confirmed_at) {
+        // If newsletter checkbox is checked, subscribe the user
+        if (data.subscribeNewsletter) {
+          await subscribeToNewsletter(data.email);
+        }
+        
         setUserEmail(data.email);
         setIsSignedUp(true);
         
@@ -140,6 +163,11 @@ export function SupabaseSignUp({
         // Don't call onSuccess here - wait until OTP verification completes
       } else if (authData.user && authData.user.email_confirmed_at) {
         // User was created and auto-confirmed (unlikely in most setups)
+        // If newsletter checkbox is checked, subscribe the user
+        if (data.subscribeNewsletter) {
+          await subscribeToNewsletter(data.email);
+        }
+        
         toast({
           title: "Welcome!",
           description: "Your account has been created successfully.",
