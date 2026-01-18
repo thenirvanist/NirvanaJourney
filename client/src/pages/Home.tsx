@@ -11,10 +11,11 @@ import MeetupsSection from "@/components/MeetupsSection";
 import InnerNutritionSection from "@/components/InnerNutritionSection";
 import SimpleSagesSection from "@/components/SimpleSagesSection";
 import TestimonialSection from "@/components/TestimonialSection";
+import WeeklyReset from "@/components/WeeklyReset";
 
 // Only lazy load non-critical sections for better performance
 const SpiritualCollage = lazy(() => import("@/components/SpiritualCollage"));
-const Newsletter = lazy(() => import("@/components/Newsletter"));
+const CurateYourFeed = lazy(() => import("@/components/CurateYourFeed"));
 const Footer = lazy(() => import("@/components/Footer"));
 
 // Loading component for lazy-loaded sections
@@ -47,6 +48,9 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       
+      {/* The Weekly Reset - Newsletter section below hero */}
+      <WeeklyReset />
+      
       {/* About Us - Hidden when not in preview mode */}
       {isPreviewMode && <InteractiveAbout />}
       
@@ -69,9 +73,9 @@ export default function Home() {
       {/* Testimonials - Hidden when not in preview mode */}
       {isPreviewMode && <TestimonialSection />}
       
-      {/* Non-critical sections with lazy loading */}
+      {/* Curate Your Feed - Social section */}
       <Suspense fallback={<SectionSkeleton />}>
-        <Newsletter />
+        <CurateYourFeed />
       </Suspense>
       
       <Suspense fallback={<SectionSkeleton />}>
