@@ -75,7 +75,11 @@ export default function Dashboard() {
       const { error } = await supabase
         .from("newsletter_subscriber")
         .upsert(
-          { email: user.email, verified: true },
+          { 
+            email: user.email, 
+            status: "active",
+            source: "dashboard"
+          },
           { onConflict: "email", ignoreDuplicates: true }
         );
       
@@ -89,11 +93,12 @@ export default function Dashboard() {
         description: "You've been added to our newsletter.",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Newsletter subscription error:", error);
+      console.error("Error details:", JSON.stringify(error, null, 2));
       toast({
         title: "Subscription Failed",
-        description: "Please try again later.",
+        description: error?.message || "Please try again later.",
         variant: "destructive",
       });
     },
