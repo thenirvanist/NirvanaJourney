@@ -76,6 +76,7 @@ export default function SimpleSagesSection() {
                     src={sage.image} 
                     alt={sage.name}
                     className="w-full h-48 object-cover"
+                    loading="lazy"
                   />
                   <div className="absolute top-3 right-3" onClick={(e) => e.preventDefault()}>
                     <BookmarkButton 

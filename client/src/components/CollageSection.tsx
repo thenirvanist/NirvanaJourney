@@ -55,6 +55,7 @@ export default function CollageSection() {
               src={image.src}
               alt={image.alt}
               className="rounded-lg shadow-lg w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+              loading="lazy"
             />
           ))}
         </div>

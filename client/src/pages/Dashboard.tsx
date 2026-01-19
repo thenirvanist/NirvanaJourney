@@ -393,6 +393,7 @@ export default function Dashboard() {
                               src={sage.image || "/api/placeholder/400/250"}
                               alt={sage.name}
                               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                             <div className="absolute top-2 right-2">
                               <Heart className="h-5 w-5 fill-red-500 text-red-500" />
@@ -433,6 +434,7 @@ export default function Dashboard() {
                               src={ashram.image || "/api/placeholder/400/250"}
                               alt={ashram.name}
                               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                             <div className="absolute top-2 right-2">
                               <Heart className="h-5 w-5 fill-red-500 text-red-500" />
@@ -473,6 +475,7 @@ export default function Dashboard() {
                               src={blog.image || "/api/placeholder/400/250"}
                               alt={blog.title}
                               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                             <div className="absolute top-2 right-2">
                               <Heart className="h-5 w-5 fill-red-500 text-red-500" />
@@ -513,6 +516,7 @@ export default function Dashboard() {
                               src={journey.image || "/api/placeholder/400/250"}
                               alt={journey.title}
                               className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
                             />
                             <div className="absolute top-2 right-2">
                               <Heart className="h-5 w-5 fill-red-500 text-red-500" />
@@ -553,6 +557,7 @@ export default function Dashboard() {
                             src={quote.image_url || "/api/placeholder/400/400"}
                             alt={`Quote by ${quote.author}`}
                             className="w-full h-auto object-cover"
+                            loading="lazy"
                           />
                           <div className="absolute top-2 right-2">
                             <Heart className="h-5 w-5 fill-red-500 text-red-500" />

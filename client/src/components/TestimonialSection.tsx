@@ -81,6 +81,7 @@ export default function TestimonialSection() {
                       src={currentTestimonial.avatar}
                       alt={currentTestimonial.name}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   ) : (
                     <span className="text-white text-2xl font-semibold">

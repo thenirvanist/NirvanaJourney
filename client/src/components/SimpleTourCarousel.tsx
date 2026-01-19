@@ -66,6 +66,7 @@ export default function SimpleTourCarousel() {
                   src={journey.image} 
                   alt={journey.title}
                   className="w-full h-48 object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute top-3 right-3">
                   <BookmarkButton 
