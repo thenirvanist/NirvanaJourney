@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Video, Users, Globe } from "lucide-react";
 import { Link } from "wouter";
 import { useTranslation } from "@/hooks/useTranslation";
-import satsangImage from "@assets/Satsang_4_1768371365026.png";
+import satsangImage from "@assets/Satsang_Final_WebP_1768813230112.webp";
 
 export default function MeetupsSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -58,6 +58,7 @@ export default function MeetupsSection() {
               src={satsangImage} 
               alt="Satsang: Truth, Love, Community gathering" 
               className="rounded-xl shadow-lg w-full"
+              loading="lazy"
             />
           </div>
         </div>

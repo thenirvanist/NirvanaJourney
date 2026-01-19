@@ -5,7 +5,7 @@ import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import satsangImage from "@assets/Satsang_4_1768371365026.png";
+import satsangImage from "@assets/Satsang_Final_WebP_1768813230112.webp";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const meetupsBreadcrumb = createBreadcrumbSchema([
@@ -134,6 +134,7 @@ export default function Meetups() {
                 src={satsangImage} 
                 alt="Satsang: Truth, Love, Community gathering" 
                 className="rounded-xl shadow-lg w-full"
+                loading="lazy"
               />
             </div>
           </div>
