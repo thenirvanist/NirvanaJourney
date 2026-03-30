@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
@@ -26,11 +26,6 @@ const LETTERBOX_IMAGES = [
 export default function HomeSacredJourneys() {
   const [activeImage, setActiveImage] = useState(0);
   const [prevImage, setPrevImage] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRef0 = useRef<HTMLDivElement>(null);
-  const cardRef1 = useRef<HTMLDivElement>(null);
-  const cardRef2 = useRef<HTMLDivElement>(null);
-  const cardRefs = [cardRef0, cardRef1, cardRef2];
 
   const { data: journeys } = useJourneys();
 
@@ -48,34 +43,10 @@ export default function HomeSacredJourneys() {
     return () => clearTimeout(timer);
   }, [prevImage]);
 
-  useEffect(() => {
-    const PARALLAX_OFFSETS = [-35, 0, 35];
-
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const totalHeight = windowHeight + rect.height;
-      const progress = 1 - rect.bottom / totalHeight;
-
-      cardRefs.forEach((ref, i) => {
-        if (ref.current) {
-          const y = PARALLAX_OFFSETS[i] * progress;
-          ref.current.style.transform = `translateY(${y}px)`;
-          ref.current.style.transition = "transform 0.1s linear";
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const displayedJourneys = journeys?.slice(0, 3) || [];
 
   return (
-    <section className="bg-white">
+    <section className="bg-[#F7F2E8]">
       {/* Section header */}
       <div className="py-16 text-center max-w-3xl mx-auto px-6">
         <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5 tracking-tight">
@@ -93,12 +64,8 @@ export default function HomeSacredJourneys() {
             key={i}
             className="absolute inset-0 w-full h-full"
             style={{
-              opacity: i === activeImage ? 1 : i === prevImage ? 0 : 0,
-              transition: i === activeImage
-                ? "opacity 1.4s ease-in-out"
-                : i === prevImage
-                ? "opacity 1.4s ease-in-out"
-                : "none",
+              opacity: i === activeImage ? 1 : 0,
+              transition: i === activeImage || i === prevImage ? "opacity 1.4s ease-in-out" : "none",
               zIndex: i === activeImage ? 2 : i === prevImage ? 1 : 0,
             }}
           >
@@ -162,63 +129,50 @@ export default function HomeSacredJourneys() {
         </div>
       </div>
 
-      {/* Scroll-parallax journey cards */}
+      {/* Journey cards — aligned straight, no parallax */}
       {displayedJourneys.length > 0 && (
-        <div ref={sectionRef} className="py-16 px-6 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start" style={{ perspective: "1000px" }}>
-            {displayedJourneys.map((journey, i) => (
-              <div
-                key={journey.id}
-                ref={cardRefs[i]}
-                style={{ willChange: "transform" }}
-              >
-                <Link
-                  href="/sacred-journeys#journeys-grid"
-                >
-                  <div className="group cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                    {/* Card image */}
-                    <div className="relative overflow-hidden h-52">
-                      <img
-                        src={journey.image}
-                        alt={journey.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-
-                    {/* Card body */}
-                    <div className="p-6">
-                      <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">
-                        {journey.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed">
-                        {journey.description}
-                      </p>
-
-                      <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
-                          {journey.location}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
-                          {journey.duration}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-[hsl(75,64%,39%)] text-sm">
-                          {journey.price}
-                        </span>
-                        <span className="text-xs text-[hsl(75,64%,49%)] font-medium group-hover:translate-x-1 transition-transform duration-200 flex items-center gap-1">
-                          Learn more <ArrowRight className="w-3.5 h-3.5" />
-                        </span>
-                      </div>
-                    </div>
+        <div className="py-16 px-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {displayedJourneys.map((journey) => (
+              <Link key={journey.id} href="/sacred-journeys#journeys-grid">
+                <div className="group cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100 h-full flex flex-col">
+                  {/* Card image */}
+                  <div className="relative overflow-hidden h-52 flex-shrink-0">
+                    <img
+                      src={journey.image}
+                      alt={journey.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-                </Link>
-              </div>
+
+                  {/* Card body */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">
+                      {journey.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed flex-grow">
+                      {journey.description}
+                    </p>
+
+                    <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
+                        {journey.location}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
+                        {journey.duration}
+                      </span>
+                    </div>
+
+                    <span className="text-xs text-[hsl(75,64%,49%)] font-medium group-hover:translate-x-1 transition-transform duration-200 flex items-center gap-1 mt-auto">
+                      Learn more <ArrowRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
