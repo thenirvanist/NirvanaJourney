@@ -116,7 +116,7 @@ export default function SacredJourneys() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {(journeys || []).slice(0, 6).map((journey) => (
+              {(journeys || []).map((journey) => (
                 <Link key={journey.id} href={`/journeys/${journey.id}`} onClick={() => window.scrollTo(0, 0)}>
                   <div className="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                     <div className="relative overflow-hidden h-56">
