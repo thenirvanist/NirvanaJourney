@@ -10,7 +10,7 @@ export default function SimpleSagesSection() {
 
   if (isLoading) {
     return (
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[#F7F2E8]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
             <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
@@ -26,7 +26,7 @@ export default function SimpleSagesSection() {
 
   if (error) {
     return (
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[#F7F2E8]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
             <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
@@ -41,7 +41,7 @@ export default function SimpleSagesSection() {
 
   if (!sages || sages.length === 0) {
     return (
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-[#F7F2E8]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center">
             <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>
@@ -53,7 +53,7 @@ export default function SimpleSagesSection() {
   }
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[#F7F2E8]">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-6">{t("sections.sages.title")}</h2>

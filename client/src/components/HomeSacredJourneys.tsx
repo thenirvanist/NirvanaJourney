@@ -43,6 +43,12 @@ export default function HomeSacredJourneys() {
     return () => clearTimeout(timer);
   }, [prevImage]);
 
+  const TITLE_OVERRIDES = [
+    "Gandhi's Spiritual Journey",
+    "Holy Ganges Spiritual Journey",
+    "The Himalayan Spiritual Journey",
+  ];
+
   const displayedJourneys = journeys?.slice(0, 3) || [];
 
   return (
@@ -58,7 +64,7 @@ export default function HomeSacredJourneys() {
       </div>
 
       {/* Letterbox image montage */}
-      <div className="relative w-full overflow-hidden" style={{ height: "40vh", minHeight: "260px", maxHeight: "480px" }}>
+      <div className="relative w-full overflow-hidden" style={{ height: "48vh", minHeight: "312px", maxHeight: "576px" }}>
         {LETTERBOX_IMAGES.map((img, i) => (
           <div
             key={i}
@@ -133,46 +139,39 @@ export default function HomeSacredJourneys() {
       {displayedJourneys.length > 0 && (
         <div className="py-16 px-6 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {displayedJourneys.map((journey) => (
-              <Link key={journey.id} href="/sacred-journeys#journeys-grid">
-                <div className="group cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100 h-full flex flex-col">
-                  {/* Card image */}
-                  <div className="relative overflow-hidden h-52 flex-shrink-0">
-                    <img
-                      src={journey.image}
-                      alt={journey.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
+            {displayedJourneys.map((journey, i) => (
+              <div key={journey.id} className="rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 h-full flex flex-col">
+                {/* Card image */}
+                <div className="relative overflow-hidden h-52 flex-shrink-0">
+                  <img
+                    src={journey.image}
+                    alt={TITLE_OVERRIDES[i]}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
 
-                  {/* Card body */}
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">
-                      {journey.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed flex-grow">
-                      {journey.description}
-                    </p>
+                {/* Card body */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">
+                    {TITLE_OVERRIDES[i]}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed flex-grow">
+                    {journey.description}
+                  </p>
 
-                    <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
-                        {journey.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
-                        {journey.duration}
-                      </span>
-                    </div>
-
-                    <span className="text-xs text-[hsl(75,64%,49%)] font-medium group-hover:translate-x-1 transition-transform duration-200 flex items-center gap-1 mt-auto">
-                      Learn more <ArrowRight className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
+                      {journey.location}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
+                      {journey.duration}
                     </span>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>

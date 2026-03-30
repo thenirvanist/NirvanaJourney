@@ -2,7 +2,7 @@ import { SiFacebook, SiWhatsapp, SiInstagram, SiLinkedin, SiX } from "react-icon
 
 export default function CurateYourFeed() {
   return (
-    <section className="py-20 bg-[#F7F2E8] text-gray-900">
+    <section className="py-20 bg-white text-gray-900">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold mb-6">Curate Your Feed</h2>
         <p className="text-xl mb-8 text-gray-700">
