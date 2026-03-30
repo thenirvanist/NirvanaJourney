@@ -174,7 +174,6 @@ export default function HomeSacredJourneys() {
               >
                 <Link
                   href="/sacred-journeys#journeys-grid"
-                  onClick={() => window.scrollTo(0, 0)}
                 >
                   <div className="group cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow duration-400 border border-gray-100">
                     {/* Card image */}

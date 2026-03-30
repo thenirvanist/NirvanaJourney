@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import Navigation from "@/components/Navigation";
@@ -16,16 +16,15 @@ const breadcrumb = createBreadcrumbSchema([
 
 export default function SacredJourneys() {
   const { data: journeys, isLoading } = useJourneys();
-  const [location] = useLocation();
 
   useEffect(() => {
-    if (location.includes("#journeys-grid")) {
+    if (window.location.hash === "#journeys-grid") {
       const el = document.getElementById("journeys-grid");
       if (el) {
-        setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+        setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
       }
     }
-  }, [location]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
