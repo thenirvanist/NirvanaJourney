@@ -175,7 +175,7 @@ export default function HomeSacredJourneys() {
                 <Link
                   href="/sacred-journeys#journeys-grid"
                 >
-                  <div className="group cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow duration-400 border border-gray-100">
+                  <div className="group cursor-pointer rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
                     {/* Card image */}
                     <div className="relative overflow-hidden h-52">
                       <img
