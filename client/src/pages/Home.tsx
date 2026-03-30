@@ -4,10 +4,9 @@ import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import InteractiveAbout from "@/components/InteractiveAbout";
 import usePreviewMode from "@/hooks/usePreviewMode";
-// Import critical sections directly to ensure immediate data loading
-import SimpleTourCarousel from "@/components/SimpleTourCarousel";
 import QuotesCarousel from "@/components/QuotesCarousel";
 import MeetupsSection from "@/components/MeetupsSection";
+import HomeSacredJourneys from "@/components/HomeSacredJourneys";
 import InnerNutritionSection from "@/components/InnerNutritionSection";
 import SimpleSagesSection from "@/components/SimpleSagesSection";
 import TestimonialSection from "@/components/TestimonialSection";
@@ -61,12 +60,10 @@ export default function Home() {
         </Suspense>
       )}
       
-      {/* Sacred Journeys - Hidden when not in preview mode */}
-      {isPreviewMode && <SimpleTourCarousel />}
-      
       {/* Always visible sections */}
       <QuotesCarousel />
       <MeetupsSection />
+      <HomeSacredJourneys />
       <InnerNutritionSection />
       <SimpleSagesSection />
       

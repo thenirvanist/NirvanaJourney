@@ -35,11 +35,13 @@ import WhyIndianPhilosophies from "@/pages/about/WhyIndianPhilosophies";
 import UnderstandingIndianPhilosophies from "@/pages/about/UnderstandingIndianPhilosophies";
 import AboutUs from "@/pages/about/AboutUs";
 import HowWillWeExplore from "@/pages/about/HowWillWeExplore";
+import SacredJourneys from "@/pages/SacredJourneys";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/sacred-journeys" component={SacredJourneys} />
       <Route path="/journeys" component={Journeys} />
       <Route path="/journeys/:id" component={JourneyDetail} />
       <Route path="/meetups" component={Meetups} />
