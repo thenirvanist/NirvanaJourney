@@ -406,10 +406,10 @@ export default function JourneyDetail() {
           <p className="text-white/80 text-lg md:text-xl italic font-light max-w-2xl mx-auto leading-relaxed">
             {journey.description}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-8 text-white/70 text-sm tracking-wide">
-            <span className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {journey.location}</span>
-            <span className="w-1 h-1 rounded-full bg-white/40" />
-            <span className="flex items-center gap-2"><Clock className="w-4 h-4" /> {journey.duration}</span>
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-white/50 text-xs tracking-widest uppercase">
+            <span>{journey.location}</span>
+            <span className="w-1 h-1 rounded-full bg-white/30" />
+            <span>{journey.duration}</span>
           </div>
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
@@ -456,7 +456,7 @@ export default function JourneyDetail() {
               <div className="relative w-full rounded-2xl overflow-hidden shadow-lg bg-black" style={{ paddingTop: "56.25%" }}>
                 <iframe
                   className="absolute inset-0 w-full h-full"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  src="https://www.youtube.com/embed/ScMzIvxBSi4"
                   title="Founder's Journey Overview"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -542,7 +542,7 @@ export default function JourneyDetail() {
             </div>
 
             {/* Day cards grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {PLACEHOLDER_DAYS.map((day) => (
                 <FlipCard
                   key={day.day}
@@ -567,8 +567,8 @@ export default function JourneyDetail() {
 
             {/* Optional add-ons */}
             <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Optional Add-Ons</h3>
-              <p className="text-gray-500 text-sm mb-6">Toggle any add-on to see the trip price update instantly.</p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Add to Your Trip</h3>
+              <p className="text-gray-500 text-sm mb-6">Select any optional experience to add it to your journey — price updates instantly.</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {OPTIONAL_ADDONS.map((addon) => {
                   const isOn = activeAddons.has(addon.id);
