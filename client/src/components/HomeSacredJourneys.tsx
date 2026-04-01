@@ -8,6 +8,12 @@ import monkImg from "@assets/Monk_Meditating_1775043392015.webp";
 import himalayaMtnImg from "@assets/Himalayan_Mountain_1775043392015.webp";
 import meditationImg from "@assets/Meditation_1775043392016.webp";
 
+const CARD_IMAGE_OVERRIDES = [
+  himalayaMtnImg,
+  monkImg,
+  himalayaImg,
+];
+
 const LETTERBOX_IMAGES = [
   { url: himalayaImg, alt: "Himalayan peaks with rhododendron forests" },
   { url: monkImg, alt: "Monk meditating before Himalayan range" },
@@ -136,7 +142,7 @@ export default function HomeSacredJourneys() {
                 {/* Card image */}
                 <div className="relative overflow-hidden h-52 flex-shrink-0">
                   <img
-                    src={journey.image}
+                    src={CARD_IMAGE_OVERRIDES[i] ?? journey.image}
                     alt={TITLE_OVERRIDES[i]}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"

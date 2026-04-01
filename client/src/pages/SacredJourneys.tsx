@@ -14,16 +14,32 @@ import rishikeshImg from "@assets/Rishikesh_1775042874525.webp";
 import himalayaImg from "@assets/Himalaya_1775043392013.webp";
 import monkImg from "@assets/Monk_Meditating_1775043392015.webp";
 import meditationImg from "@assets/Meditation_1775043392016.webp";
+import himalayaMtnImg from "@assets/Himalayan_Mountain_1775043392015.webp";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
   { name: "Sacred Journeys", url: "https://www.thenirvanist.com/sacred-journeys" },
 ]);
 
-const CARD_TITLES = [
-  { title: "GANDHI'S SPIRITUAL JOURNEY", subtitle: "Walk the path of the Mahatma" },
-  { title: "HOLY GANGES SPIRITUAL JOURNEY", subtitle: "Surrender to the sacred river" },
-  { title: "THE HIMALAYAN SPIRITUAL JOURNEY", subtitle: "Rise into the abode of the gods" },
+const CARD_DATA = [
+  {
+    title: "GANDHI'S SPIRITUAL JOURNEY",
+    subtitle: "Walk the path of the Mahatma",
+    image: himalayaMtnImg,
+    imageAlt: "Misty Himalayan mountain with temple",
+  },
+  {
+    title: "HOLY GANGES SPIRITUAL JOURNEY",
+    subtitle: "Surrender to the sacred river",
+    image: monkImg,
+    imageAlt: "Monk meditating before the Himalayas",
+  },
+  {
+    title: "THE HIMALAYAN SPIRITUAL JOURNEY",
+    subtitle: "Rise into the abode of the gods",
+    image: himalayaImg,
+    imageAlt: "Himalayan peaks with rhododendron forests",
+  },
 ];
 
 const EXPERTISE = [
@@ -84,51 +100,35 @@ const COMPARISON_ROWS = [
 ];
 
 function JourneyCards() {
-  const { data: journeys, isLoading } = useJourneys();
-
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-        {[...Array(3)].map((_, i) => (
+  return (
+    <div className="max-w-6xl mx-auto px-6 py-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {CARD_DATA.map((card) => (
           <div
-            key={i}
-            className={`bg-gray-200 animate-pulse ${i === 2 ? "md:col-span-2" : ""}`}
-            style={{ height: "480px" }}
-          />
+            key={card.title}
+            className="relative overflow-hidden group cursor-pointer rounded-sm"
+            style={{ height: "460px" }}
+          >
+            <img
+              src={card.image}
+              alt={card.imageAlt}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-black/45 group-hover:bg-black/60 transition-colors duration-500" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+              <div className="w-10 h-px bg-white/60 mb-4" />
+              <h2 className="text-white text-xl font-bold tracking-[0.15em] mb-3 leading-tight">
+                {card.title}
+              </h2>
+              <div className="w-6 h-px bg-white/60 mb-3" />
+              <p className="text-white/85 text-sm md:text-base italic font-light">
+                {card.subtitle}
+              </p>
+            </div>
+          </div>
         ))}
       </div>
-    );
-  }
-
-  const displayed = (journeys || []).slice(0, 3);
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-      {displayed.map((journey, i) => (
-        <div
-          key={journey.id}
-          className={`relative overflow-hidden group cursor-pointer ${i === 2 ? "md:col-span-2" : ""}`}
-          style={{ height: i === 2 ? "400px" : "480px" }}
-        >
-          <img
-            src={journey.image}
-            alt={CARD_TITLES[i]?.title || journey.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/55 transition-colors duration-500" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
-            <div className="w-12 h-px bg-white/60 mb-5" />
-            <h2 className="text-white text-2xl md:text-3xl font-bold tracking-[0.15em] mb-3 leading-tight">
-              {CARD_TITLES[i]?.title || journey.title.toUpperCase()}
-            </h2>
-            <div className="w-8 h-px bg-white/60 mb-4" />
-            <p className="text-white/85 text-base md:text-lg italic font-light">
-              {CARD_TITLES[i]?.subtitle}
-            </p>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
