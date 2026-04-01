@@ -70,14 +70,15 @@ export default function SimpleSagesSection() {
               onClick={() => window.scrollTo(0, 0)}
               className="block"
             >
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer h-full flex flex-col">
-                <div className="relative flex-shrink-0">
+              <div className="group bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer h-full flex flex-col">
+                <div className="relative overflow-hidden flex-shrink-0">
                   <img 
                     src={sage.image} 
                     alt={sage.name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute top-3 right-3" onClick={(e) => e.preventDefault()}>
                     <BookmarkButton 
                       contentType="sage" 

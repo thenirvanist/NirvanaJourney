@@ -140,15 +140,16 @@ export default function HomeSacredJourneys() {
         <div className="py-16 px-6 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {displayedJourneys.map((journey, i) => (
-              <div key={journey.id} className="rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 h-full flex flex-col">
+              <div key={journey.id} className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
                 {/* Card image */}
                 <div className="relative overflow-hidden h-52 flex-shrink-0">
                   <img
                     src={journey.image}
                     alt={TITLE_OVERRIDES[i]}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
 
                 {/* Card body */}
