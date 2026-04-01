@@ -5,6 +5,7 @@ import { ArrowRight, MapPin, Clock, ChevronLeft, ChevronRight, Star, Quote } fro
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import TheShift from "@/components/TheShift";
 import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import { useJourneys } from "@/hooks/useSupabaseQuery";
@@ -285,6 +286,9 @@ export default function SacredJourneys() {
       <section className="bg-white">
         <JourneyCards />
       </section>
+
+      {/* The Shift — expanding accordion pillars */}
+      <TheShift />
 
       {/* Our Expertise */}
       <section className="py-20 bg-[#F7F2E8]">
