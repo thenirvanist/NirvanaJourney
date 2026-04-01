@@ -101,34 +101,55 @@ const COMPARISON_ROWS = [
 ];
 
 function JourneyCards() {
+  const { data: journeys } = useJourneys();
+
   return (
     <div className="max-w-6xl mx-auto px-6 py-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {CARD_DATA.map((card) => (
-          <div
-            key={card.title}
-            className="relative overflow-hidden group cursor-pointer rounded-sm"
-            style={{ height: "460px" }}
-          >
-            <img
-              src={card.image}
-              alt={card.imageAlt}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black/45 group-hover:bg-black/60 transition-colors duration-500" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
-              <div className="w-10 h-px bg-white/60 mb-4" />
-              <h2 className="text-white text-xl font-bold tracking-[0.15em] mb-3 leading-tight">
-                {card.title}
-              </h2>
-              <div className="w-6 h-px bg-white/60 mb-3" />
-              <p className="text-white/85 text-sm md:text-base italic font-light">
-                {card.subtitle}
-              </p>
+        {CARD_DATA.map((card, i) => {
+          const journeyId = journeys?.[i]?.id;
+          const inner = (
+            <>
+              <img
+                src={card.image}
+                alt={card.imageAlt}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-black/45 group-hover:bg-black/60 transition-colors duration-500" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+                <div className="w-10 h-px bg-white/60 mb-4" />
+                <h2 className="text-white text-xl font-bold tracking-[0.15em] mb-3 leading-tight">
+                  {card.title}
+                </h2>
+                <div className="w-6 h-px bg-white/60 mb-3" />
+                <p className="text-white/85 text-sm md:text-base italic font-light">
+                  {card.subtitle}
+                </p>
+              </div>
+            </>
+          );
+
+          return journeyId ? (
+            <Link
+              key={card.title}
+              href={`/journeys/${journeyId}`}
+              className="relative overflow-hidden group cursor-pointer rounded-sm block"
+              style={{ height: "460px" }}
+              onClick={() => window.scrollTo(0, 0)}
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div
+              key={card.title}
+              className="relative overflow-hidden group cursor-pointer rounded-sm"
+              style={{ height: "460px" }}
+            >
+              {inner}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
