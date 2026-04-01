@@ -1,11 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import { useRoute, Link } from "wouter";
-import { MapPin, Clock, Check, X, ChevronDown, Plus, Minus, MessageCircle, RotateCcw } from "lucide-react";
+import { Check, X, ChevronDown, Plus, Minus, MessageCircle, RotateCcw } from "lucide-react";
 import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema, createTripSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useJourney } from "@/hooks/useSupabaseQuery";
+import gandhiImg from "@assets/Monk_Meditating_1775056505285.webp";
+import gangesImg from "@assets/Rishikesh_1775056505289.webp";
+import himalayaImg from "@assets/Himalaya_1775056505289.webp";
+
+/** Maps journey title keywords → local hero image asset */
+function resolveHeroImage(title: string, fallback: string | null): string {
+  const t = title.toLowerCase();
+  if (t.includes("gandhi")) return gandhiImg;
+  if (t.includes("ganges") || t.includes("ganga")) return gangesImg;
+  if (t.includes("himalay")) return himalayaImg;
+  return fallback || gandhiImg;
+}
 
 /* ─── Static placeholder content ─────────────────────────────────── */
 
@@ -379,7 +391,7 @@ export default function JourneyDetail() {
     url: journeyUrl,
   });
 
-  const heroImage = journey.heroImage || journey.image;
+  const heroImage = resolveHeroImage(journey.title, journey.heroImage || journey.image);
 
   return (
     <div className="min-h-screen bg-white">

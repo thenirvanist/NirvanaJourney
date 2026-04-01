@@ -12,10 +12,10 @@ import { useJourneys } from "@/hooks/useSupabaseQuery";
 import { useQuery } from "@tanstack/react-query";
 import type { Testimonial } from "@shared/schema";
 import rishikeshImg from "@assets/Rishikesh_1775042874525.webp";
-import himalayaImg from "@assets/Himalaya_1775043392013.webp";
-import monkImg from "@assets/Monk_Meditating_1775043392015.webp";
-import meditationImg from "@assets/Meditation_1775043392016.webp";
-import himalayaMtnImg from "@assets/Himalayan_Mountain_1775043392015.webp";
+import gandhiImg from "@assets/Monk_Meditating_1775056505285.webp";
+import gangesImg from "@assets/Rishikesh_1775056505289.webp";
+import himalayaImg from "@assets/Himalaya_1775056505289.webp";
+import meditationImg from "@assets/Meditation_1775056572859.webp";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
@@ -26,20 +26,20 @@ const CARD_DATA = [
   {
     title: "GANDHI'S SPIRITUAL JOURNEY",
     subtitle: "Walk the path of the Mahatma",
-    image: himalayaMtnImg,
-    imageAlt: "Misty Himalayan mountain with temple",
+    image: gandhiImg,
+    imageAlt: "Monk in red robe seated before the Himalayan panorama",
   },
   {
     title: "HOLY GANGES SPIRITUAL JOURNEY",
     subtitle: "Surrender to the sacred river",
-    image: monkImg,
-    imageAlt: "Monk meditating before the Himalayas",
+    image: gangesImg,
+    imageAlt: "Yogi performing aarti at sunset on the sacred Ganges",
   },
   {
     title: "THE HIMALAYAN SPIRITUAL JOURNEY",
     subtitle: "Rise into the abode of the gods",
     image: himalayaImg,
-    imageAlt: "Himalayan peaks with rhododendron forests",
+    imageAlt: "Himalayan peaks with rhododendron forests in bloom",
   },
 ];
 
@@ -48,21 +48,21 @@ const EXPERTISE = [
     title: "Experience Deep Transformation",
     desc: "Every itinerary is designed for seekers — with time built in for silence, reflection, and genuine encounter. We facilitate inner growth through a blend of sacred locations and curated content. Your evolution begins before you depart and continues long after you return, ensuring the insights you gain stay with you for life.",
     image: himalayaImg,
-    imageAlt: "Himalayan landscape",
+    imageAlt: "Himalayan peaks with rhododendron forests in bloom",
     imageLeft: false,
   },
   {
     title: "Independent Travel, Expert Support",
     desc: "Navigate your path with total autonomy. Our user friendly app provides all the knowledge you need in your pocket, allowing you to explore at your own pace. You have the freedom to travel solo or with a guide, supported by high-quality assistance whenever you need it.",
-    image: monkImg,
-    imageAlt: "Monk meditating in mountains",
+    image: gandhiImg,
+    imageAlt: "Monk in red robe meditating before the Himalayan range",
     imageLeft: true,
   },
   {
     title: "Ancient Wisdom for the Modern World",
     desc: "Our spiritually passionate Western-Indian team comes with 25+ years experience in spiritual trips, customer experience design, innovation, learning expeditions and matchmaking. We design diligently researched meaningful experiences for the rational seeker, focusing on authentic spiritual impact and practical learning.",
     image: meditationImg,
-    imageAlt: "Meditation on a cliff",
+    imageAlt: "Meditator seated on a cliff edge overlooking the valley",
     imageLeft: false,
   },
 ];

@@ -3,22 +3,22 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { useJourneys } from "@/hooks/useSupabaseQuery";
-import himalayaImg from "@assets/Himalaya_1775043392013.webp";
-import monkImg from "@assets/Monk_Meditating_1775043392015.webp";
-import himalayaMtnImg from "@assets/Himalayan_Mountain_1775043392015.webp";
-import meditationImg from "@assets/Meditation_1775043392016.webp";
+import gandhiImg from "@assets/Monk_Meditating_1775056505285.webp";
+import gangesImg from "@assets/Rishikesh_1775056505289.webp";
+import himalayaImg from "@assets/Himalaya_1775056505289.webp";
+import meditationImg from "@assets/Meditation_1775056572859.webp";
 
 const CARD_IMAGE_OVERRIDES = [
-  himalayaMtnImg,
-  monkImg,
+  gandhiImg,
+  gangesImg,
   himalayaImg,
 ];
 
 const LETTERBOX_IMAGES = [
-  { url: himalayaImg, alt: "Himalayan peaks with rhododendron forests" },
-  { url: monkImg, alt: "Monk meditating before Himalayan range" },
-  { url: himalayaMtnImg, alt: "Himalayan mountain temple at dusk" },
-  { url: meditationImg, alt: "Meditation on a cliff overlooking the valley" },
+  { url: gandhiImg, alt: "Monk in red robe meditating before the Himalayan range" },
+  { url: gangesImg, alt: "Yogi performing aarti at sunset on the sacred Ganges" },
+  { url: himalayaImg, alt: "Himalayan peaks with rhododendron forests in bloom" },
+  { url: meditationImg, alt: "Meditator seated on a cliff edge overlooking the valley" },
 ];
 
 export default function HomeSacredJourneys() {
