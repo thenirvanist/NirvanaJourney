@@ -112,7 +112,7 @@ function JourneyCards() {
           const inner = (
             <>
               <img
-                src={dbImage || card.image}
+                src={card.image}
                 alt={card.imageAlt}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"

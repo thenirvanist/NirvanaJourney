@@ -5,19 +5,14 @@ import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema, createTripSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useJourney } from "@/hooks/useSupabaseQuery";
+import { useJourney, useJourneys } from "@/hooks/useSupabaseQuery";
 import gandhiImg from "@assets/Monk_Meditating_1775056505285.webp";
 import gangesImg from "@assets/Rishikesh_1775056505289.webp";
 import himalayaImg from "@assets/Himalaya_1775056505289.webp";
+import meditationImg from "@assets/Meditation_1775056572859.webp";
 
-/** Maps journey title keywords → local hero image asset */
-function resolveHeroImage(title: string, fallback: string | null): string {
-  const t = title.toLowerCase();
-  if (t.includes("gandhi")) return gandhiImg;
-  if (t.includes("ganges") || t.includes("ganga")) return gangesImg;
-  if (t.includes("himalay")) return himalayaImg;
-  return fallback || gandhiImg;
-}
+/** Local hero images indexed the same order journeys appear in the DB */
+const JOURNEY_HERO_IMAGES = [gandhiImg, gangesImg, himalayaImg];
 
 /* ─── Static placeholder content ─────────────────────────────────── */
 
@@ -62,7 +57,7 @@ const PLACEHOLDER_DAYS = [
     day: "Day 5",
     title: "Meeting the Teachers",
     subtitle: "Wisdom passed directly, human to human",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&fit=crop",
+    image: meditationImg,
     description:
       "Private and small-group audience with a local spiritual teacher. Questions are welcomed; depth is the goal. Afternoon session with a practitioner of an indigenous healing art — Ayurveda, Jyotish, or Vastu depending on your journey.",
     textLeft: false,
@@ -306,6 +301,7 @@ export default function JourneyDetail() {
   const [, params] = useRoute("/journeys/:id");
   const journeyId = params?.id ? parseInt(params.id) : 0;
   const { data: journey, isLoading, error } = useJourney(journeyId);
+  const { data: allJourneys } = useJourneys();
 
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [tier, setTier] = useState<Tier>("standard");
@@ -391,7 +387,8 @@ export default function JourneyDetail() {
     url: journeyUrl,
   });
 
-  const heroImage = resolveHeroImage(journey.title, journey.heroImage || journey.image);
+  const journeyIndex = allJourneys?.findIndex((j) => j.id === journeyId) ?? -1;
+  const heroImage = JOURNEY_HERO_IMAGES[journeyIndex] ?? gandhiImg;
 
   return (
     <div className="min-h-screen bg-white">
