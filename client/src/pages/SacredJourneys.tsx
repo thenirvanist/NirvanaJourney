@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Clock, ChevronLeft, ChevronRight, Star, Quote, Check, X, Minus } from "lucide-react";
+import { ArrowRight, MapPin, Clock, ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -10,30 +10,43 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import { useJourneys } from "@/hooks/useSupabaseQuery";
 import { useQuery } from "@tanstack/react-query";
 import type { Testimonial } from "@shared/schema";
+import rishikeshImg from "@assets/Rishikesh_1775042874525.webp";
+import himalayaImg from "@assets/Himalaya_1775043392013.webp";
+import monkImg from "@assets/Monk_Meditating_1775043392015.webp";
+import meditationImg from "@assets/Meditation_1775043392016.webp";
 
 const breadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "https://www.thenirvanist.com" },
   { name: "Sacred Journeys", url: "https://www.thenirvanist.com/sacred-journeys" },
 ]);
 
-const HERO_IMAGE =
-  "https://images.unsplash.com/photo-1561361058-c24cecae35ca?w=1600&q=80";
+const CARD_TITLES = [
+  { title: "GANDHI'S SPIRITUAL JOURNEY", subtitle: "Walk the path of the Mahatma" },
+  { title: "HOLY GANGES SPIRITUAL JOURNEY", subtitle: "Surrender to the sacred river" },
+  { title: "THE HIMALAYAN SPIRITUAL JOURNEY", subtitle: "Rise into the abode of the gods" },
+];
 
-const WHY_CARDS = [
+const EXPERTISE = [
   {
-    icon: "🌿",
     title: "Experience Deep Transformation",
     desc: "Every itinerary is designed for seekers — with time built in for silence, reflection, and genuine encounter. We facilitate inner growth through a blend of sacred locations and curated content. Your evolution begins before you depart and continues long after you return, ensuring the insights you gain stay with you for life.",
+    image: himalayaImg,
+    imageAlt: "Himalayan landscape",
+    imageLeft: false,
   },
   {
-    icon: "🧭",
     title: "Independent Travel, Expert Support",
     desc: "Navigate your path with total autonomy. Our user friendly app provides all the knowledge you need in your pocket, allowing you to explore at your own pace. You have the freedom to travel solo or with a guide, supported by high-quality assistance whenever you need it.",
+    image: monkImg,
+    imageAlt: "Monk meditating in mountains",
+    imageLeft: true,
   },
   {
-    icon: "🏛️",
     title: "Ancient Wisdom for the Modern World",
     desc: "Our spiritually passionate Western-Indian team comes with 25+ years experience in spiritual trips, customer experience design, innovation, learning expeditions and matchmaking. We design diligently researched meaningful experiences for the rational seeker, focusing on authentic spiritual impact and practical learning.",
+    image: meditationImg,
+    imageAlt: "Meditation on a cliff",
+    imageLeft: false,
   },
 ];
 
@@ -70,88 +83,52 @@ const COMPARISON_ROWS = [
   },
 ];
 
-function JourneyCarousel() {
+function JourneyCards() {
   const { data: journeys, isLoading } = useJourneys();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const cards = journeys ? [...journeys, ...journeys] : [];
 
   if (isLoading) {
     return (
-      <div className="flex gap-6 px-6 py-4">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="flex-shrink-0 w-72 h-96 bg-gray-200 rounded-2xl animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+        {[...Array(3)].map((_, i) => (
+          <div
+            key={i}
+            className={`bg-gray-200 animate-pulse ${i === 2 ? "md:col-span-2" : ""}`}
+            style={{ height: "480px" }}
+          />
         ))}
       </div>
     );
   }
 
-  return (
-    <div
-      className="overflow-hidden"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      <div
-        ref={trackRef}
-        className="flex gap-6 px-6"
-        style={{
-          animation: `journeyScroll 28s linear infinite`,
-          animationPlayState: isPaused ? "paused" : "running",
-          width: "max-content",
-        }}
-      >
-        {cards.map((journey, i) => (
-          <div
-            key={`${journey.id}-${i}`}
-            className="flex-shrink-0 w-72 rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col"
-            style={{ height: "400px" }}
-          >
-            <div className="relative overflow-hidden h-44 flex-shrink-0">
-              <img
-                src={journey.image}
-                alt={journey.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div className="p-5 flex flex-col flex-grow">
-              <h3 className="text-base font-bold text-gray-900 mb-2 leading-snug">
-                {journey.title}
-              </h3>
-              <p className="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed flex-grow">
-                {journey.description}
-              </p>
-              <div className="flex items-center gap-3 text-xs text-gray-500 mb-4">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3 h-3 text-[hsl(75,64%,49%)]" />
-                  {journey.location}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-[hsl(75,64%,49%)]" />
-                  {journey.duration}
-                </span>
-              </div>
-              <div className="mt-auto">
-                <Link href={`/journeys/${journey.id}`} onClick={() => window.scrollTo(0, 0)}>
-                  <Button className="w-full brand-primary hover:brand-bright text-white hover:text-black text-sm font-semibold transition-all duration-300">
-                    View Journey
-                    <ArrowRight className="ml-2 w-3.5 h-3.5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+  const displayed = (journeys || []).slice(0, 3);
 
-      <style>{`
-        @keyframes journeyScroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+      {displayed.map((journey, i) => (
+        <div
+          key={journey.id}
+          className={`relative overflow-hidden group cursor-pointer ${i === 2 ? "md:col-span-2" : ""}`}
+          style={{ height: i === 2 ? "400px" : "480px" }}
+        >
+          <img
+            src={journey.image}
+            alt={CARD_TITLES[i]?.title || journey.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/55 transition-colors duration-500" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+            <div className="w-12 h-px bg-white/60 mb-5" />
+            <h2 className="text-white text-2xl md:text-3xl font-bold tracking-[0.15em] mb-3 leading-tight">
+              {CARD_TITLES[i]?.title || journey.title.toUpperCase()}
+            </h2>
+            <div className="w-8 h-px bg-white/60 mb-4" />
+            <p className="text-white/85 text-base md:text-lg italic font-light">
+              {CARD_TITLES[i]?.subtitle}
+            </p>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -189,7 +166,7 @@ function TestimonialsSection() {
     );
   }
 
-  const t = testimonials[currentIndex];
+  const current = testimonials[currentIndex];
 
   return (
     <section className="py-20 bg-[#F7F2E8]">
@@ -203,39 +180,26 @@ function TestimonialsSection() {
           <Card className="bg-white shadow-xl border-0 overflow-hidden">
             <CardContent className="p-10 md:p-14 text-center">
               <Quote className="w-12 h-12 text-[hsl(75,64%,49%)] mx-auto mb-6 opacity-20" />
-
               <div className="flex justify-center mb-5">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 ${
-                      i < t.rating
-                        ? "text-[hsl(75,64%,49%)] fill-current"
-                        : "text-gray-300"
-                    }`}
+                    className={`w-5 h-5 ${i < current.rating ? "text-[hsl(75,64%,49%)] fill-current" : "text-gray-300"}`}
                   />
                 ))}
               </div>
-
               <blockquote className="text-xl md:text-2xl font-light text-gray-800 leading-relaxed mb-8 italic">
-                "{t.content}"
+                "{current.content}"
               </blockquote>
-
               <div className="flex items-center justify-center gap-4">
-                {t.avatar && (
-                  <img
-                    src={t.avatar}
-                    alt={t.name}
-                    className="w-14 h-14 rounded-full object-cover"
-                  />
+                {current.avatar && (
+                  <img src={current.avatar} alt={current.name} className="w-14 h-14 rounded-full object-cover" />
                 )}
                 <div className="text-left">
-                  <p className="font-semibold text-gray-900">{t.name}</p>
-                  <p className="text-gray-500 text-sm">{t.location}</p>
-                  {t.journeyTitle && (
-                    <p className="text-[hsl(75,64%,49%)] text-xs font-medium mt-0.5">
-                      {t.journeyTitle}
-                    </p>
+                  <p className="font-semibold text-gray-900">{current.name}</p>
+                  <p className="text-gray-500 text-sm">{current.location}</p>
+                  {current.journeyTitle && (
+                    <p className="text-[hsl(75,64%,49%)] text-xs font-medium mt-0.5">{current.journeyTitle}</p>
                   )}
                 </div>
               </div>
@@ -249,21 +213,19 @@ function TestimonialsSection() {
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-
             <div className="flex items-center gap-2">
-              {testimonials.slice(0, Math.min(testimonials.length, 15)).map((_, idx) => (
+              {testimonials.slice(0, 15).map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => { setCurrentIndex(idx); setIsAutoPlaying(false); }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  className={`rounded-full transition-all duration-300 ${
                     idx === currentIndex
-                      ? "bg-[hsl(75,64%,49%)] scale-125"
-                      : "bg-gray-300 hover:bg-gray-400"
+                      ? "w-3 h-3 bg-[hsl(75,64%,49%)] scale-125"
+                      : "w-2.5 h-2.5 bg-gray-300 hover:bg-gray-400"
                   }`}
                 />
               ))}
             </div>
-
             <button
               onClick={() => go(1)}
               className="w-11 h-11 rounded-full brand-primary flex items-center justify-center text-white hover:opacity-90 transition"
@@ -291,10 +253,7 @@ export default function SacredJourneys() {
       {/* Hero */}
       <section
         className="relative w-full flex items-end justify-center bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${HERO_IMAGE})`,
-          minHeight: "70vh",
-        }}
+        style={{ backgroundImage: `url(${rishikeshImg})`, minHeight: "70vh" }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         <div className="relative z-10 text-center text-white px-6 pb-20 max-w-4xl mx-auto">
@@ -310,53 +269,68 @@ export default function SacredJourneys() {
         </div>
       </section>
 
-      {/* Why Do You Need One? */}
-      <section className="py-20 bg-white">
+      {/* Intro paragraph */}
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
+            A sacred journey is not a holiday — it is an intentional step toward something deeper.
+            We curate pilgrimages across India's most spiritually potent landscapes: ancient temples,
+            mountain monasteries, sacred rivers, and living wisdom traditions. Each journey is
+            designed not for tourists, but for genuine seekers ready to let the landscape transform them.
+          </p>
+        </div>
+      </section>
+
+      {/* Journey Cards — full-image overlay style */}
+      <section className="bg-white">
+        <JourneyCards />
+      </section>
+
+      {/* Our Expertise */}
+      <section className="py-20 bg-[#F7F2E8]">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Do You Need One?
-            </h2>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Expertise</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              A sacred journey is not a holiday. It is an intentional step toward something deeper.
+              Why thousands of seekers trust us to design their most important journey.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {WHY_CARDS.map((card) => (
-              <div
-                key={card.title}
-                className="bg-[#F7F2E8] rounded-2xl p-8 flex flex-col hover:shadow-lg transition-shadow duration-300"
-              >
-                <span className="text-4xl mb-5">{card.icon}</span>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">{card.title}</h3>
-                <p className="text-gray-600 leading-relaxed text-sm flex-grow">{card.desc}</p>
+          <div className="space-y-20">
+            {EXPERTISE.map((item) => (
+              <div key={item.title} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                {item.imageLeft ? (
+                  <>
+                    <div className="rounded-2xl overflow-hidden shadow-lg h-72 md:h-80">
+                      <img src={item.image} alt={item.imageAlt} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5">{item.title}</h3>
+                      <p className="text-gray-600 leading-relaxed text-lg">{item.desc}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5">{item.title}</h3>
+                      <p className="text-gray-600 leading-relaxed text-lg">{item.desc}</p>
+                    </div>
+                    <div className="rounded-2xl overflow-hidden shadow-lg h-72 md:h-80">
+                      <img src={item.image} alt={item.imageAlt} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Sacred Journeys fast-moving carousel */}
-      <section className="py-20 bg-[#F7F2E8]">
-        <div className="max-w-7xl mx-auto px-6 mb-10">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Sacred Journeys</h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Each pilgrimage opens a different door into the sacred.
-            </p>
-          </div>
-        </div>
-        <JourneyCarousel />
-      </section>
-
       {/* How Are We Different — comparison table */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              How Are We Different
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How Are We Different</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
               A transparent comparison so you can make the right choice for your journey.
             </p>
@@ -366,15 +340,9 @@ export default function SacredJourneys() {
             <table className="w-full border-collapse bg-white">
               <thead>
                 <tr className="bg-[#F7F2E8]">
-                  <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">
-                    Characteristics
-                  </th>
-                  <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">
-                    Sacred Trip
-                  </th>
-                  <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">
-                    Coordinators / Organisers
-                  </th>
+                  <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">Characteristics</th>
+                  <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">Self Organised Trip</th>
+                  <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">Commercial Organisers</th>
                   <th className="text-left px-6 py-4 text-sm font-bold text-gray-700 w-1/4">
                     <span className="text-[hsl(75,64%,39%)]">The Nirvanist Way</span>
                   </th>
@@ -382,18 +350,11 @@ export default function SacredJourneys() {
               </thead>
               <tbody>
                 {COMPARISON_ROWS.map((row, idx) => (
-                  <tr
-                    key={row.characteristic}
-                    className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                  >
-                    <td className="px-6 py-4 text-sm font-semibold text-gray-800">
-                      {row.characteristic}
-                    </td>
+                  <tr key={row.characteristic} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                    <td className="px-6 py-4 text-sm font-semibold text-gray-800">{row.characteristic}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{row.sacredTrip}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{row.coordinators}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-[hsl(75,64%,39%)]">
-                      {row.nirvanist}
-                    </td>
+                    <td className="px-6 py-4 text-sm font-medium text-[hsl(75,64%,39%)]">{row.nirvanist}</td>
                   </tr>
                 ))}
               </tbody>

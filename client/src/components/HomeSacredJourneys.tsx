@@ -3,24 +3,16 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Clock } from "lucide-react";
 import { useJourneys } from "@/hooks/useSupabaseQuery";
+import himalayaImg from "@assets/Himalaya_1775043392013.webp";
+import monkImg from "@assets/Monk_Meditating_1775043392015.webp";
+import himalayaMtnImg from "@assets/Himalayan_Mountain_1775043392015.webp";
+import meditationImg from "@assets/Meditation_1775043392016.webp";
 
 const LETTERBOX_IMAGES = [
-  {
-    url: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1600&q=80&fit=crop",
-    alt: "Ancient Hindu temple in the Himalayas"
-  },
-  {
-    url: "https://images.unsplash.com/photo-1561361058-c24cecae35ca?w=1600&q=80&fit=crop",
-    alt: "Ganga Aarti ceremony at Varanasi"
-  },
-  {
-    url: "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1600&q=80&fit=crop",
-    alt: "Sacred South Indian temple at dawn"
-  },
-  {
-    url: "https://images.unsplash.com/photo-1533050487297-09b450131914?w=1600&q=80&fit=crop",
-    alt: "Buddhist monks in Dharamshala"
-  }
+  { url: himalayaImg, alt: "Himalayan peaks with rhododendron forests" },
+  { url: monkImg, alt: "Monk meditating before Himalayan range" },
+  { url: himalayaMtnImg, alt: "Himalayan mountain temple at dusk" },
+  { url: meditationImg, alt: "Meditation on a cliff overlooking the valley" },
 ];
 
 export default function HomeSacredJourneys() {

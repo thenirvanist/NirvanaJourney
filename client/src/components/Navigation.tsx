@@ -1,11 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, User, LogOut, Heart, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageDropdown } from "./LanguageDropdown";
-import usePreviewMode from "@/hooks/usePreviewMode";
 import { useTranslation } from "@/hooks/useTranslation";
 import {
   DropdownMenu,
@@ -14,39 +13,35 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const insightsSubItems = [
+  { href: "/inner-nutrition", label: "Inner Nutrition" },
+  { href: "/daily-quotes", label: "Daily Quotes" },
+];
+
+const aboutSubItems = [
+  { href: "/about/why-indian-philosophies", labelKey: "navigation.whyIndianPhilosophies" as const },
+  { href: "/about/understanding", labelKey: "navigation.understandingPhilosophies" as const },
+  { href: "/about/us", labelKey: "navigation.aboutUs" as const },
+  { href: "/about/how-we-explore", labelKey: "navigation.howWeExplore" as const },
+];
+
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [insightsOpen, setInsightsOpen] = useState(false);
   const [location] = useLocation();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
-  const isPreviewMode = usePreviewMode();
   const { t } = useTranslation();
 
-  const allNavItems = [
-    { href: "/sacred-journeys", labelKey: "navigation.journeys" as const, hidden: false },
-    { href: "/journeys", labelKey: "navigation.journeys" as const, hidden: true },
-    { href: "/meetups", labelKey: "navigation.meetups" as const, hidden: false },
-    { href: "/sages", labelKey: "navigation.sages" as const, hidden: false },
-    { href: "/ashrams", labelKey: "navigation.ashrams" as const, hidden: true },
-    { href: "/inner-nutrition", labelKey: "navigation.innerNutrition" as const, hidden: false },
-    { href: "/daily-quotes", labelKey: "navigation.dailyQuotes" as const, hidden: false },
-  ];
-
-  const aboutSubItems = [
-    { href: "/about/why-indian-philosophies", labelKey: "navigation.whyIndianPhilosophies" as const },
-    { href: "/about/understanding", labelKey: "navigation.understandingPhilosophies" as const },
-    { href: "/about/us", labelKey: "navigation.aboutUs" as const },
-    { href: "/about/how-we-explore", labelKey: "navigation.howWeExplore" as const },
-  ];
-
-  const isAboutActive = () => location.startsWith("/about");
-  
-  const navItems = useMemo(() => 
-    allNavItems.filter(item => isPreviewMode || !item.hidden),
-    [isPreviewMode]
-  );
-
   const isActive = (href: string) => location === href;
+  const isAboutActive = () => location.startsWith("/about");
+  const isInsightsActive = () =>
+    location.startsWith("/inner-nutrition") || location.startsWith("/daily-quotes");
+
+  const navBtnClass = (active: boolean) =>
+    `text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 ${
+      active ? "bg-[hsl(70,71%,62%)] text-black" : ""
+    }`;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-30 backdrop-blur-sm">
@@ -55,31 +50,55 @@ export default function Navigation() {
           <Link href="/" className="rounded-lg hover:bg-[hsl(70,71%,62%)] p-2 transition-all duration-300">
             <Logo />
           </Link>
-          
+
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <Button
-                  variant="ghost"
-                  className={`text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 ${
-                    isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
-                  }`}
-                >
-                  {t(item.labelKey)}
+          <div className="hidden md:flex items-center space-x-6">
+            {/* Sacred Journeys */}
+            <Link href="/sacred-journeys">
+              <Button variant="ghost" className={navBtnClass(isActive("/sacred-journeys"))}>
+                {t("navigation.journeys")}
+              </Button>
+            </Link>
+
+            {/* Meetups / Satsangs */}
+            <Link href="/meetups">
+              <Button variant="ghost" className={navBtnClass(isActive("/meetups"))}>
+                {t("navigation.meetups")}
+              </Button>
+            </Link>
+
+            {/* Insights Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className={navBtnClass(isInsightsActive())}>
+                  Insights
+                  <ChevronDown className="ml-1 w-4 h-4" />
                 </Button>
-              </Link>
-            ))}
-            
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-white border shadow-lg rounded-lg mt-2">
+                {insightsSubItems.map((item) => (
+                  <DropdownMenuItem key={item.href} asChild className="cursor-pointer">
+                    <Link href={item.href} className="w-full">
+                      <span className={`w-full px-2 py-1 ${isActive(item.href) ? "text-[#70c92e] font-semibold" : "text-gray-700 hover:text-[#70c92e]"}`}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Sages */}
+            <Link href="/sages">
+              <Button variant="ghost" className={navBtnClass(isActive("/sages"))}>
+                {t("navigation.sages")}
+              </Button>
+            </Link>
+
             {/* About Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={`text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 ${
-                    isAboutActive() ? "bg-[hsl(70,71%,62%)] text-black" : ""
-                  }`}
-                >
+                <Button variant="ghost" className={navBtnClass(isAboutActive())}>
                   {t("navigation.about")}
                   <ChevronDown className="ml-1 w-4 h-4" />
                 </Button>
@@ -96,8 +115,8 @@ export default function Navigation() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            
-            {/* Language and Authentication Section */}
+
+            {/* Language and Auth */}
             <div className="flex items-center space-x-4 pl-4 border-l border-white/20">
               <LanguageDropdown />
               {isLoading ? (
@@ -108,12 +127,7 @@ export default function Navigation() {
                     {t("navigation.welcome")}, {user.firstName}
                   </div>
                   <Link href="/dashboard">
-                    <Button
-                      variant="ghost"
-                      className={`text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-3 py-2 rounded-lg transition-all duration-300 ${
-                        isActive("/dashboard") ? "bg-[hsl(70,71%,62%)] text-black" : ""
-                      }`}
-                    >
+                    <Button variant="ghost" className={navBtnClass(isActive("/dashboard"))}>
                       <Heart className="w-4 h-4 mr-1 fill-red-500 text-red-500" />
                       {t("navigation.myCollection")}
                     </Button>
@@ -130,10 +144,7 @@ export default function Navigation() {
               ) : (
                 <div className="flex items-center space-x-2">
                   <Link href="/login">
-                    <Button
-                      variant="ghost"
-                      className="text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300"
-                    >
+                    <Button variant="ghost" className="text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300">
                       <User className="w-4 h-4 mr-1" />
                       {t("navigation.login")}
                     </Button>
@@ -147,7 +158,7 @@ export default function Navigation() {
               )}
             </div>
           </div>
-          
+
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
@@ -157,35 +168,67 @@ export default function Navigation() {
             {isOpen ? <X className="text-xl" /> : <Menu className="text-xl" />}
           </Button>
         </div>
-        
+
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-white/20">
             <div className="flex flex-col space-y-2 mt-4">
-              {navItems.map((item) => (
-                <Link 
-                  key={item.href} 
-                  href={item.href}
-                  onClick={() => setTimeout(() => setIsOpen(false), 100)}
-                >
-                  <Button
-                    variant="ghost"
-                    className={`w-full text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 justify-start ${
-                      isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
-                    }`}
-                  >
-                    {t(item.labelKey)}
-                  </Button>
-                </Link>
-              ))}
-              
-              {/* Mobile About Section */}
-              <div className="mt-2">
+              {/* Sacred Journeys */}
+              <Link href="/sacred-journeys" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/sacred-journeys"))}`}>
+                  {t("navigation.journeys")}
+                </Button>
+              </Link>
+
+              {/* Meetups */}
+              <Link href="/meetups" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/meetups"))}`}>
+                  {t("navigation.meetups")}
+                </Button>
+              </Link>
+
+              {/* Insights expandable */}
+              <div>
                 <Button
                   variant="ghost"
-                  className={`w-full text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 justify-between ${
-                    isAboutActive() ? "bg-[hsl(70,71%,62%)] text-black" : ""
-                  }`}
+                  className={`w-full justify-between ${navBtnClass(isInsightsActive())}`}
+                  onClick={() => setInsightsOpen(!insightsOpen)}
+                >
+                  Insights
+                  <ChevronDown className={`w-4 h-4 transition-transform ${insightsOpen ? "rotate-180" : ""}`} />
+                </Button>
+                {insightsOpen && (
+                  <div className="ml-4 mt-1 space-y-1">
+                    {insightsSubItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => { setIsOpen(false); setInsightsOpen(false); }}
+                      >
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start text-sm ${navBtnClass(isActive(item.href))}`}
+                        >
+                          {item.label}
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Sages */}
+              <Link href="/sages" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/sages"))}`}>
+                  {t("navigation.sages")}
+                </Button>
+              </Link>
+
+              {/* About expandable */}
+              <div>
+                <Button
+                  variant="ghost"
+                  className={`w-full justify-between ${navBtnClass(isAboutActive())}`}
                   onClick={() => setAboutOpen(!aboutOpen)}
                 >
                   {t("navigation.about")}
@@ -194,21 +237,14 @@ export default function Navigation() {
                 {aboutOpen && (
                   <div className="ml-4 mt-1 space-y-1">
                     {aboutSubItems.map((item) => (
-                      <Link 
-                        key={item.href} 
+                      <Link
+                        key={item.href}
                         href={item.href}
-                        onClick={() => {
-                          setTimeout(() => {
-                            setIsOpen(false);
-                            setAboutOpen(false);
-                          }, 100);
-                        }}
+                        onClick={() => { setIsOpen(false); setAboutOpen(false); }}
                       >
                         <Button
                           variant="ghost"
-                          className={`w-full text-white/80 hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300 justify-start text-sm ${
-                            isActive(item.href) ? "bg-[hsl(70,71%,62%)] text-black" : ""
-                          }`}
+                          className={`w-full justify-start text-sm ${navBtnClass(isActive(item.href))}`}
                         >
                           {t(item.labelKey)}
                         </Button>
@@ -217,13 +253,13 @@ export default function Navigation() {
                   </div>
                 )}
               </div>
-              
-              {/* Mobile Language Selection */}
+
+              {/* Language */}
               <div className="px-4 py-2">
                 <LanguageDropdown />
               </div>
-              
-              {/* Mobile Authentication Section */}
+
+              {/* Auth */}
               <div className="pt-2 border-t border-white/20 mt-4">
                 {isLoading ? (
                   <div className="text-white text-center py-2">{t("navigation.loading")}</div>
@@ -235,11 +271,7 @@ export default function Navigation() {
                     <Link href="/dashboard">
                       <Button
                         variant="ghost"
-                        className={`w-full px-4 py-2 rounded-lg transition-all duration-300 justify-start ${
-                          isActive("/dashboard") 
-                            ? "bg-[hsl(70,71%,62%)] text-black" 
-                            : "text-white hover:bg-[hsl(70,71%,62%)] hover:text-black"
-                        }`}
+                        className={`w-full justify-start ${navBtnClass(isActive("/dashboard"))}`}
                         onClick={() => setIsOpen(false)}
                       >
                         <Heart className="w-4 h-4 mr-2 fill-red-500 text-red-500" />
@@ -248,10 +280,7 @@ export default function Navigation() {
                     </Link>
                     <Button
                       variant="ghost"
-                      onClick={() => {
-                        logout();
-                        setIsOpen(false);
-                      }}
+                      onClick={() => { logout(); setIsOpen(false); }}
                       className="w-full text-white hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg transition-all duration-300 justify-start"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
