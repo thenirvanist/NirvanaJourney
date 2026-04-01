@@ -64,7 +64,7 @@ export default function HomeSacredJourneys() {
       </div>
 
       {/* Letterbox image montage */}
-      <div className="relative w-full overflow-hidden" style={{ height: "48vh", minHeight: "312px", maxHeight: "576px" }}>
+      <div className="relative w-full overflow-hidden" style={{ height: "58vh", minHeight: "374px", maxHeight: "691px" }}>
         {LETTERBOX_IMAGES.map((img, i) => (
           <div
             key={i}
@@ -154,7 +154,7 @@ export default function HomeSacredJourneys() {
 
                 {/* Card body */}
                 <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug group-hover:text-[hsl(75,64%,49%)] transition-colors duration-300">
                     {TITLE_OVERRIDES[i]}
                   </h3>
                   <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed flex-grow">

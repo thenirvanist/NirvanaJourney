@@ -23,6 +23,7 @@ export default function Navigation() {
   const { t } = useTranslation();
 
   const allNavItems = [
+    { href: "/sacred-journeys", labelKey: "navigation.journeys" as const, hidden: false },
     { href: "/journeys", labelKey: "navigation.journeys" as const, hidden: true },
     { href: "/meetups", labelKey: "navigation.meetups" as const, hidden: false },
     { href: "/sages", labelKey: "navigation.sages" as const, hidden: false },

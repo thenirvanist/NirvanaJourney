@@ -88,7 +88,7 @@ export default function SimpleSagesSection() {
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-semibold mb-2">{sage.name}</h3>
+                  <h3 className="text-xl font-semibold mb-2 group-hover:text-[hsl(75,64%,49%)] transition-colors duration-300">{sage.name}</h3>
                   <p className="text-gray-600 mb-3 line-clamp-2">{sage.description}</p>
                   <p className="text-sm text-gray-500 mb-4">{sage.location}</p>
                   
