@@ -137,7 +137,7 @@ export default function TheShift() {
                 className="absolute inset-0 flex flex-col justify-end px-8 pb-10 transition-opacity duration-300"
                 style={{
                   opacity: isActive ? 1 : 0,
-                  transitionDelay: isActive ? "0.25s" : "0s",
+                  transitionDelay: isActive ? "0.3s" : "0s",
                 }}
               >
                 <p
