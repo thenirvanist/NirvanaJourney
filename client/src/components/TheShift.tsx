@@ -101,61 +101,53 @@ export default function TheShift() {
                 }}
               />
 
-              {/* Collapsed state — vertical number + title */}
+              {/* Collapsed state — horizontal number + title, centred */}
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-300"
+                className="absolute inset-0 flex flex-col items-center justify-center px-3 text-center transition-opacity duration-300"
                 style={{ opacity: isActive ? 0 : 1 }}
               >
-                <div
-                  style={{
-                    writingMode: "vertical-rl",
-                    textOrientation: "mixed",
-                    transform: "rotate(180deg)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "14px",
-                  }}
+                <span
+                  className="text-white/50 font-light mb-2 block"
+                  style={{ fontSize: "11px", letterSpacing: "0.22em" }}
                 >
-                  <span
-                    className="text-white/50 font-light"
-                    style={{ fontSize: "11px", letterSpacing: "0.18em" }}
-                  >
-                    {pillar.number}
-                  </span>
-                  <span
-                    className="text-white font-semibold tracking-widest uppercase"
-                    style={{ fontSize: "13px", letterSpacing: "0.2em" }}
-                  >
-                    {pillar.title}
-                  </span>
-                </div>
+                  {pillar.number}
+                </span>
+                <div
+                  className="w-6 mb-2 mx-auto"
+                  style={{ height: "1px", background: "rgba(255,255,255,0.35)" }}
+                />
+                <span
+                  className="text-white font-semibold uppercase leading-snug block"
+                  style={{ fontSize: "12px", letterSpacing: "0.18em" }}
+                >
+                  {pillar.title}
+                </span>
               </div>
 
-              {/* Expanded state — horizontal content */}
+              {/* Expanded state — centred vertically and horizontally */}
               <div
-                className="absolute inset-0 flex flex-col justify-end px-8 pb-10 transition-opacity duration-300"
+                className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center transition-opacity duration-300"
                 style={{
                   opacity: isActive ? 1 : 0,
                   transitionDelay: isActive ? "0.3s" : "0s",
                 }}
               >
                 <p
-                  className="text-white/55 font-light mb-2"
+                  className="text-white/55 font-light mb-3"
                   style={{ fontSize: "11px", letterSpacing: "0.22em" }}
                 >
                   {pillar.number}
                 </p>
                 <div
-                  className="w-8 mb-3"
-                  style={{ height: "1px", background: "rgba(255,255,255,0.4)" }}
+                  className="w-10 mb-4 mx-auto"
+                  style={{ height: "1px", background: "rgba(255,255,255,0.45)" }}
                 />
-                <h3 className="text-white text-xl font-bold tracking-wider uppercase mb-4 leading-tight">
+                <h3 className="text-white text-xl font-bold tracking-wider uppercase mb-5 leading-tight">
                   {pillar.title}
                 </h3>
                 <p
-                  className="text-white/80 font-light leading-relaxed"
-                  style={{ fontSize: "14px", maxWidth: "260px" }}
+                  className="text-white/80 font-light leading-relaxed mx-auto"
+                  style={{ fontSize: "14px", maxWidth: "240px" }}
                 >
                   {pillar.description}
                 </p>
