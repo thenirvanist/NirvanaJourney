@@ -2,109 +2,7 @@
 
 ## Overview
 
-The Nirvanist is a full-stack spiritual tourism platform that connects seekers with transformative spiritual journeys, sage wisdom, ashram retreats, and global meetups. The application facilitates spiritual growth through curated experiences in sacred destinations worldwide.
-
-## Recent Changes (October 24, 2025)
-✓ Updated brand assets with new logo variations (color, white, black)
-✓ Implemented hero video autoplay with Heritage Film India footage
-✓ Added transparency effects to navigation and partner strip
-✓ Created interactive "About Us" section with word-by-word animation (sparklin.com style)
-✓ Built dynamic spiritual collage section with hover animations
-✓ Fixed meetup button placement to bottom of image
-✓ Integrated OpenAI API key for future chatbot functionality
-✓ Added PostgreSQL database with Drizzle ORM integration
-✓ Migrated from in-memory storage to persistent database storage
-✓ Seeded database with initial spiritual journeys, sages, and ashram data
-✓ Increased logo size by 15% in navigation bar
-✓ Changed navigation "Journeys" text to "Sacred Journeys"
-✓ Updated interactive text section background from black to white
-✓ Reverted collage section back to static image grid with hover effects
-✓ Implemented alternating background pattern: white and #F7F2E8 sections
-✓ Enhanced Sacred Journey cards with proper carousel functionality and navigation arrows
-✓ Expanded database with 6 spiritual journeys, 5 sages, and 5 ashrams
-✓ Redesigned Sages and Ashrams sections with 5-image carousels and improved visual design
-✓ Fixed loading issues and added proper error handling throughout components
-✓ Resolved homepage data loading issues with improved conditional rendering logic
-✓ Standardized Sacred Journey cards with fixed CTA button positioning using flexbox layout
-✓ Added full-width hero images to all main service pages (Sacred Journeys, Meetups, Ashrams)
-✓ Complete overhaul of Sacred Journeys page with new structure:
-  - Hero section with full-width background image
-  - Fast-moving TourCarousel with clickable journey cards
-  - "Why Do You Need One?" section with 3-column benefits
-  - "How Are We Different" sections (Pricing First, Tech First, Partnership First) with alternating image/text layout
-  - Fast-moving testimonial carousel with 15+ testimonials and auto-rotation
-✓ Created individual journey detail pages with Overview/Description/Itinerary tabs
-✓ Added testimonials database table with comprehensive seed data
-✓ Enhanced journey schema with fullDescription, heroImage, and overview fields
-✓ Implemented clickable journey cards linking to individual detail pages
-✓ Built testimonial carousel with auto-play, navigation arrows, and featured testimonials
-✓ Complete redesign of Sages main page with advanced functionality:
-  - Grid layout displaying 3-4 sage cards per row (responsive: 2/3/4 columns)
-  - Card content: Image, Location, Core Teachings, Notable Work, "Read Full Biography" CTA
-  - Search bar for filtering sages by name, teachings, or books
-  - Filter buttons: All, Living Sages, Modern Sages, Ancient Sages, Hindu, Buddhist, Sufi, Jain
-  - Real-time dynamic filtering without page reload
-  - Individual sage biography pages with detailed information
-✓ Enhanced sages database with new fields: location, category, era, status
-✓ Seeded database with 9 comprehensive sage profiles across traditions
-✓ Created individual sage detail pages with full biography and teachings
-✓ Complete redesign of Ashrams main page with advanced functionality:
-  - Grid layout displaying 3-4 ashram cards per row (responsive: 2/3/4 columns)
-  - Card content: Image, Location, Focus, Founders, Key Facilities, "Read More" CTA
-  - Search bar for filtering ashrams by name, location, or focus
-  - Filter buttons: All, North India, South India, West India, East India, Central India
-  - Real-time dynamic filtering without page reload
-  - Individual ashram detail pages with comprehensive information
-✓ Enhanced ashrams database with new fields: region, focus, founders
-✓ Seeded database with 10 comprehensive ashram profiles across India
-✓ Created individual ashram detail pages with full descriptions and contact information
-✓ Implemented comprehensive authentication system with user registration, login, and password reset
-✓ Added email verification for user registrations and newsletter subscriptions  
-✓ Created secure login/register/forgot password pages with form validation
-✓ Integrated authentication state management throughout navigation and UI
-✓ Enhanced newsletter subscription with email verification workflow
-✓ Added authentication middleware and JWT token-based security
-✓ Created database schema for user authentication and session management
-✓ Configured project for GitHub + Netlify deployment with serverless functions
-✓ Added Netlify configuration files (netlify.toml, _headers, _redirects)
-✓ Created comprehensive deployment documentation and README
-✓ Set up environment variables template for production deployment
-✓ Optimized build process for Netlify Functions architecture
-✓ Integrated 5-provider social authentication system with Supabase:
-  - Google, Apple, Facebook, X.com (Twitter), and Microsoft OAuth login
-  - Added SocialAuth component with branded styling and loading states
-  - Integrated social auth into existing Login and Register pages
-  - Created OAuth callback handler for authentication redirects
-  - Added proper error handling and toast notifications
-✓ Implemented comprehensive performance optimizations for faster loading:
-  - Lazy loading with React.lazy() and Suspense for below-the-fold components
-  - Code splitting to reduce initial bundle size
-  - Optimized hero section with delayed video loading and static fallback
-  - Resource hints (preconnect, dns-prefetch) for faster font loading
-  - Critical CSS inlined for instant above-the-fold rendering
-  - Created LazyImage component with intersection observer for image optimization
-  - Priority-based query loading system (high/normal/low) with extended cache times
-  - Loading skeletons to prevent layout shift
-  - Mobile-optimized animations and responsive design improvements
-  - GPU-accelerated CSS animations with will-change properties
-  - Accessibility support for reduced motion preferences
-✓ Implemented comprehensive SEO optimization with sitemap and robots.txt:
-  - Created static sitemap.xml with all pages, dynamic IDs, and proper priorities
-  - Generated robots.txt with crawl permissions and search engine directives
-  - Built dynamic SEO routes for real-time sitemap generation from database
-  - Included all journeys, sages, ashrams detail pages with individual URLs
-  - Configured proper crawl delays and asset permissions for optimal indexing
-  - Added comprehensive SEO implementation guide with deployment instructions
-✓ Migrated ALL content queries to use direct Supabase client hooks instead of backend API endpoints:
-  - Created centralized useSupabaseQuery.ts hook with functions for all content types
-  - Implemented useBlogPosts() and useBlogPost(slug) for blog content
-  - Fixed production deployment issues with Netlify serverless functions
-  - All content (Journeys, Sages, Ashrams, Meetups, Testimonials, Daily Wisdom, Blog Posts) now use direct Supabase queries
-✓ Updated homepage section titles for clarity and consistency:
-  - Changed "Global Spiritual Meetups" → "Spiritual Meetups"
-  - Changed "Wisdom of the Sages" → "Biographies of the Sages"
-  - Changed "What Our Travelers Say" → "Testimonials"
-  - Standardized "About Us" and "Sacred Experiences" title formatting to match other sections
+The Nirvanist is a full-stack spiritual tourism platform designed to connect individuals with transformative spiritual experiences. It facilitates spiritual growth through curated global journeys, wisdom teachings, ashram retreats, and community meetups in sacred destinations. The platform aims to be a comprehensive resource for seekers, offering unique spiritual tourism opportunities and fostering a global community.
 
 ## User Preferences
 
@@ -114,127 +12,49 @@ Preferred communication style: Simple, everyday language.
 
 ### Frontend Architecture
 - **Framework**: React 18 with TypeScript
-- **Routing**: Wouter for lightweight client-side routing
-- **Styling**: Tailwind CSS with shadcn/ui component library
-- **State Management**: TanStack Query for server state management
-- **UI Framework**: Radix UI primitives with custom styling
-- **Build Tool**: Vite for fast development and production builds
+- **Routing**: Wouter
+- **Styling**: Tailwind CSS with shadcn/ui and Radix UI primitives
+- **State Management**: TanStack Query for server state
+- **Build Tool**: Vite
 
 ### Backend Architecture
-- **Runtime**: Node.js with Express.js framework
-- **Language**: TypeScript throughout the application
-- **API Design**: RESTful API with clear endpoint structure
-- **File Structure**: Modular organization with separate concerns
-- **Storage**: PostgreSQL database with Drizzle ORM for type-safe operations
+- **Runtime**: Node.js with Express.js
+- **Language**: TypeScript
+- **API Design**: RESTful API
+- **File Structure**: Modular organization
 
 ### Database Architecture
-- **ORM**: Drizzle ORM for type-safe database operations
-- **Database**: PostgreSQL (configured for Neon serverless)
-- **Schema Management**: Drizzle Kit for migrations and schema management
-- **Connection**: Neon serverless driver for PostgreSQL
+- **ORM**: Drizzle ORM
+- **Database**: PostgreSQL (Neon serverless)
+- **Schema Management**: Drizzle Kit
 
-## Key Components
+### UI/UX Decisions
+- Dynamic and interactive elements: SVG maps, auto-sliding carousels, hover effects, word-by-word animations.
+- Responsive design with a mobile-first approach.
+- Theming includes alternating background patterns (white and #F7F2E8).
 
-### Core Entities
-1. **Journeys**: Sacred retreats and spiritual experiences with pricing, locations, and itineraries
-2. **Sages**: Spiritual teachers and masters with biographies, teachings, and books
-3. **Ashrams**: Sacred spaces and retreat centers with facilities and contact information
-4. **Meetups**: Global spiritual gatherings with online satsangs and community features
-5. **Users**: Complete authentication system with registration, login, email verification, and password reset
-6. **Blog Posts**: Spiritual content and insights
-7. **Testimonials**: User experiences and feedback
-8. **Contact Messages**: Customer inquiry management
-9. **Newsletter**: Subscription system for spiritual insights
+### Technical Implementations
+- **Content Querying**: All content queries (Journeys, Sages, Ashrams, Meetups, Testimonials, Daily Wisdom, Blog Posts) use direct Supabase client hooks with TanStack Query for caching, bypassing backend API endpoints for reads. Backend API routes are primarily for mutations and authentication.
+- **Authentication**: Comprehensive system with user registration, login, password reset, email verification, and 5-provider social authentication (Google, Apple, Facebook, X.com, Microsoft) via Supabase.
+- **Search & Filtering**: Real-time dynamic filtering for Sages and Ashrams based on various criteria.
+- **Performance**: Lazy loading, code splitting, optimized hero sections, resource hints, critical CSS inlining, image optimization with Intersection Observer, loading skeletons, GPU-accelerated animations, and accessibility support for reduced motion.
+- **SEO**: Static and dynamic sitemaps, robots.txt, and dynamic SEO routes for content pages.
 
-### Frontend Components
-- **Navigation**: Fixed header with responsive design and brand integration
-- **Hero Section**: Video background with call-to-action
-- **Interactive Sections**: Scroll-triggered animations and carousels
-- **Chatbot**: AI-powered spiritual guidance using OpenAI integration
-- **Forms**: Contact, registration, and newsletter subscription forms
-- **Responsive Design**: Mobile-first approach with adaptive layouts
-
-### Backend Services
-- **Storage Layer**: Abstracted database operations with interface pattern
-- **Route Handlers**: RESTful endpoints for all entities
-- **OpenAI Integration**: Spiritual chatbot with contextual responses
-- **Error Handling**: Centralized error management
-- **Validation**: Zod schema validation for data integrity
-
-## Data Flow
-
-### Client-Server Communication
-**IMPORTANT: All content queries now use direct Supabase client hooks instead of backend API endpoints.**
-
-1. Frontend makes direct Supabase queries using hooks from `client/src/hooks/useSupabaseQuery.ts`
-2. Supabase client connects directly to the database with anon key and RLS policies
-3. Content is fetched and cached using TanStack Query
-4. This pattern is used for ALL content: Journeys, Sages, Ashrams, Meetups, Testimonials, Daily Wisdom, and Blog Posts
-5. Backend API routes still exist for mutations (create, update, delete) and authentication
-
-**Why this pattern:**
-- Fixes Netlify serverless function deployment issues
-- Reduces backend complexity and improves performance
-- Provides better caching with TanStack Query
-- Works seamlessly in production without serverless function overhead
-
-### Real-time Features
-- Chatbot interactions with OpenAI API
-- Form submissions with immediate feedback
-- Toast notifications for user actions
-
-### State Management
-- Server state managed by TanStack Query with caching
-- Local state managed by React hooks
-- Form state handled by React Hook Form with Zod validation
+### Feature Specifications
+- **Heal Page**: Custom SVG world map with country-specific data and tooltips, a multi-step donation form, transparency ledger, and donor leaderboard.
+- **Spiritual Journeys**: Detailed pages with overview, description, itinerary tabs, and testimonial carousels.
+- **Sages & Ashrams**: Grid layouts with search, filtering, and individual detail pages.
 
 ## External Dependencies
 
 ### Core Dependencies
 - **Database**: Neon PostgreSQL serverless database
 - **AI Service**: OpenAI API for chatbot functionality
-- **UI Components**: Radix UI primitives
-- **Styling**: Tailwind CSS framework
+- **UI Components**: Radix UI primitives, shadcn/ui
+- **Styling**: Tailwind CSS
 - **Fonts**: Google Fonts (Inter family)
-- **Icons**: Lucide React icon library
-
-### Development Tools
-- **Build**: Vite with React plugin
-- **TypeScript**: Full type safety across stack
-- **ESBuild**: Server bundling for production
-- **PostCSS**: CSS processing with Tailwind
+- **Icons**: Lucide React
 
 ### Third-party Integrations
-- **Replit**: Development environment integration
-- **Cartographer**: Replit-specific development tools
-- **Connect-pg-simple**: PostgreSQL session store
-
-## Deployment Strategy
-
-### Development Environment
-- Vite dev server for frontend with HMR
-- TSX for server development with hot reload
-- Replit-specific plugins for cloud development
-
-### Production Build
-- Vite builds optimized frontend bundle
-- ESBuild bundles server code for Node.js
-- Static assets served from Express
-- Database migrations handled via Drizzle Kit
-
-### Environment Configuration
-- Database URL from environment variables
-- OpenAI API key configuration
-- Production vs development environment detection
-- Graceful fallbacks for missing configurations
-
-### File Structure
-```
-/client           - React frontend application
-/server           - Express backend services  
-/shared           - Common types and schemas
-/migrations       - Database migration files
-/dist             - Production build output
-```
-
-The application follows a monorepo structure with clear separation between frontend, backend, and shared code, enabling efficient development and deployment workflows.
+- **Supabase**: For social authentication and direct database client interactions.
+- **Connect-pg-simple**: For PostgreSQL session store.

@@ -1011,6 +1011,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Heal routes
+  app.post("/api/heal/donate", async (req, res) => {
+    try {
+      const { db } = await import('./db.js');
+      const { healDonations } = await import('@shared/schema');
+      const data = req.body;
+      const donation = await db.insert(healDonations).values({
+        donorName: data.donorName || 'Anonymous',
+        email: data.email || '',
+        contentType: data.contentType || 'quotes',
+        contentUrl: data.contentUrl || null,
+        countries: data.countries || [],
+        duration: data.duration || '7 Days',
+        budgetUsd: Number(data.budgetUsd) || 10,
+        dedication: data.dedication || null,
+        anonymous: Boolean(data.anonymous),
+        status: 'pending',
+        campaignReach: 0,
+        campaignReactions: 0,
+      }).returning();
+      res.json({ success: true, donation: donation[0] });
+    } catch (error) {
+      console.error("Heal donate error:", error);
+      res.status(500).json({ message: "Failed to submit donation" });
+    }
+  });
+
+  app.get("/api/heal/donations", async (req, res) => {
+    try {
+      const { db } = await import('./db.js');
+      const { healDonations } = await import('@shared/schema');
+      const { gte, lte, ilike, and } = await import('drizzle-orm');
+      const { date, search } = req.query as { date?: string; search?: string };
+
+      const conditions = [];
+
+      if (date) {
+        const start = new Date(date);
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(date);
+        end.setHours(23, 59, 59, 999);
+        conditions.push(gte(healDonations.createdAt, start));
+        conditions.push(lte(healDonations.createdAt, end));
+      }
+      if (search) {
+        conditions.push(ilike(healDonations.donorName, `%${search}%`));
+      }
+
+      const donations = conditions.length > 0
+        ? await db.select().from(healDonations).where(and(...conditions)).orderBy(healDonations.createdAt)
+        : await db.select().from(healDonations).orderBy(healDonations.createdAt);
+
+      res.json(donations);
+    } catch (error) {
+      console.error("Heal donations fetch error:", error);
+      res.status(500).json({ message: "Failed to fetch donations" });
+    }
+  });
+
+  app.get("/api/heal/stats", async (req, res) => {
+    try {
+      const { db } = await import('./db.js');
+      const { healCampaigns } = await import('@shared/schema');
+      const { sql: drizzleSql } = await import('drizzle-orm');
+      const result = await db.select({
+        totalReach: drizzleSql<number>`SUM(total_reach)`,
+        totalReactions: drizzleSql<number>`SUM(total_reactions)`,
+        totalShares: drizzleSql<number>`SUM(total_shares)`,
+        totalComments: drizzleSql<number>`SUM(total_comments)`,
+      }).from(healCampaigns);
+      res.json(result[0] || { totalReach: 0, totalReactions: 0, totalShares: 0, totalComments: 0 });
+    } catch (error) {
+      console.error("Heal stats error:", error);
+      res.status(500).json({ message: "Failed to fetch stats" });
+    }
+  });
+
+  app.get("/api/heal/leaderboard", async (req, res) => {
+    try {
+      const { db } = await import('./db.js');
+      const { healDonations } = await import('@shared/schema');
+      const { sql: drizzleSql, desc } = await import('drizzle-orm');
+      const { search } = req.query as { search?: string };
+      const { ilike } = await import('drizzle-orm');
+
+      let baseQuery = db.select({
+        donorName: healDonations.donorName,
+        totalAmount: drizzleSql<number>`SUM(budget_usd)`,
+        totalReach: drizzleSql<number>`SUM(campaign_reach)`,
+        anonymous: healDonations.anonymous,
+      }).from(healDonations);
+
+      const grouped = await baseQuery
+        .groupBy(healDonations.donorName, healDonations.anonymous)
+        .orderBy(desc(drizzleSql`SUM(budget_usd)`))
+        .limit(10);
+
+      const filtered = search
+        ? grouped.filter(d => d.donorName.toLowerCase().includes((search as string).toLowerCase()))
+        : grouped;
+
+      res.json(filtered.map((d, i) => ({
+        rank: i + 1,
+        donorName: d.anonymous ? 'Anonymous' : d.donorName,
+        totalAmount: d.totalAmount,
+        totalReach: d.totalReach,
+      })));
+    } catch (error) {
+      console.error("Heal leaderboard error:", error);
+      res.status(500).json({ message: "Failed to fetch leaderboard" });
+    }
+  });
+
+  app.get("/api/heal/campaigns", async (req, res) => {
+    try {
+      const { db } = await import('./db.js');
+      const { healCampaigns } = await import('@shared/schema');
+      const campaigns = await db.select().from(healCampaigns);
+      res.json(campaigns);
+    } catch (error) {
+      console.error("Heal campaigns error:", error);
+      res.status(500).json({ message: "Failed to fetch campaigns" });
+    }
+  });
+
   // Register SEO routes for sitemap.xml and robots.txt
   registerSEORoutes(app);
 

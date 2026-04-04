@@ -175,6 +175,36 @@ export const translationCache = pgTable("translation_cache", {
   uniqueTranslation: unique().on(table.contentType, table.contentId, table.fieldName, table.language),
 }));
 
+// Heal donations table
+export const healDonations = pgTable("heal_donations", {
+  id: serial("id").primaryKey(),
+  donorName: text("donor_name").notNull(),
+  email: text("email").notNull(),
+  contentType: text("content_type").notNull().default("quotes"),
+  contentUrl: text("content_url"),
+  countries: text("countries").array(),
+  duration: text("duration").notNull(),
+  budgetUsd: integer("budget_usd").notNull(),
+  dedication: text("dedication"),
+  anonymous: boolean("anonymous").default(false),
+  status: text("status").default("pending"),
+  campaignReach: integer("campaign_reach").default(0),
+  campaignReactions: integer("campaign_reactions").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Heal campaigns table (per-country aggregate stats)
+export const healCampaigns = pgTable("heal_campaigns", {
+  id: serial("id").primaryKey(),
+  countryCode: text("country_code").notNull().unique(),
+  countryName: text("country_name").notNull(),
+  totalReach: integer("total_reach").default(0),
+  totalReactions: integer("total_reactions").default(0),
+  totalShares: integer("total_shares").default(0),
+  totalComments: integer("total_comments").default(0),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({ id: true });
 export const insertJourneySchema = createInsertSchema(journeys).omit({ id: true });
@@ -190,6 +220,8 @@ export const insertDailyWisdomSchema = createInsertSchema(dailyWisdom).omit({ id
 export const insertAuthUserSchema = createInsertSchema(authUsers).omit({ id: true, createdAt: true, updatedAt: true });
 export const insertBookmarkSchema = createInsertSchema(bookmarks).omit({ id: true, createdAt: true });
 export const insertTranslationCacheSchema = createInsertSchema(translationCache).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertHealDonationSchema = createInsertSchema(healDonations).omit({ id: true, createdAt: true });
+export const insertHealCampaignSchema = createInsertSchema(healCampaigns).omit({ id: true });
 
 // Login and authentication schemas
 export const loginSchema = z.object({
@@ -242,6 +274,10 @@ export type Bookmark = typeof bookmarks.$inferSelect;
 export type InsertBookmark = z.infer<typeof insertBookmarkSchema>;
 export type TranslationCache = typeof translationCache.$inferSelect;
 export type InsertTranslationCache = z.infer<typeof insertTranslationCacheSchema>;
+export type HealDonation = typeof healDonations.$inferSelect;
+export type InsertHealDonation = z.infer<typeof insertHealDonationSchema>;
+export type HealCampaign = typeof healCampaigns.$inferSelect;
+export type InsertHealCampaign = z.infer<typeof insertHealCampaignSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type RegisterData = z.infer<typeof registerSchema>;
 export type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;

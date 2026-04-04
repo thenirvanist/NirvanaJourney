@@ -36,6 +36,7 @@ import UnderstandingIndianPhilosophies from "@/pages/about/UnderstandingIndianPh
 import AboutUs from "@/pages/about/AboutUs";
 import HowWillWeExplore from "@/pages/about/HowWillWeExplore";
 import SacredJourneys from "@/pages/SacredJourneys";
+import Heal from "@/pages/Heal";
 
 function Router() {
   return (
@@ -68,6 +69,7 @@ function Router() {
       <Route path="/about/understanding" component={UnderstandingIndianPhilosophies} />
       <Route path="/about/us" component={AboutUs} />
       <Route path="/about/how-we-explore" component={HowWillWeExplore} />
+      <Route path="/heal" component={Heal} />
       <Route component={NotFound} />
     </Switch>
   );

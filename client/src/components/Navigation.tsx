@@ -95,6 +95,13 @@ export default function Navigation() {
               </Button>
             </Link>
 
+            {/* Heal */}
+            <Link href="/heal">
+              <Button variant="ghost" className={navBtnClass(isActive("/heal"))}>
+                Heal
+              </Button>
+            </Link>
+
             {/* About Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -147,11 +154,6 @@ export default function Navigation() {
                     <Button variant="ghost" className="text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-4 py-2 rounded-lg transition-all duration-300">
                       <User className="w-4 h-4 mr-1" />
                       {t("navigation.login")}
-                    </Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button className="bg-[hsl(70,71%,62%)] text-black hover:bg-[hsl(70,71%,72%)] px-4 py-2 rounded-lg transition-all duration-300">
-                      {t("navigation.signUp")}
                     </Button>
                   </Link>
                 </div>
@@ -221,6 +223,13 @@ export default function Navigation() {
               <Link href="/sages" onClick={() => setIsOpen(false)}>
                 <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/sages"))}`}>
                   {t("navigation.sages")}
+                </Button>
+              </Link>
+
+              {/* Heal */}
+              <Link href="/heal" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/heal"))}`}>
+                  Heal
                 </Button>
               </Link>
 
@@ -297,14 +306,6 @@ export default function Navigation() {
                       >
                         <User className="w-4 h-4 mr-2" />
                         {t("navigation.login")}
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button
-                        className="w-full bg-[hsl(70,71%,62%)] text-black hover:bg-[hsl(70,71%,72%)] px-4 py-2 rounded-lg transition-all duration-300"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {t("navigation.signUp")}
                       </Button>
                     </Link>
                   </div>
