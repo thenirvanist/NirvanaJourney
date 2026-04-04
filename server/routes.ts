@@ -1052,7 +1052,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         campaignReach: 0,
         campaignReactions: 0,
       }).returning();
-      res.json({ success: true, donation: donation[0] });
+      const { email: _email, ...safeDonation } = donation[0];
+      res.json({ success: true, donation: safeDonation });
     } catch (error) {
       console.error("Heal donate error:", error);
       res.status(500).json({ message: "Failed to submit donation" });
@@ -1080,9 +1081,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         conditions.push(ilike(healDonations.donorName, `%${search}%`));
       }
 
+      const safeSelect = {
+        id: healDonations.id,
+        createdAt: healDonations.createdAt,
+        contentType: healDonations.contentType,
+        contentTitle: healDonations.contentTitle,
+        donorName: healDonations.donorName,
+        anonymous: healDonations.anonymous,
+        countries: healDonations.countries,
+        duration: healDonations.duration,
+        campaignReach: healDonations.campaignReach,
+        campaignReactions: healDonations.campaignReactions,
+        status: healDonations.status,
+      };
+
       const donations = conditions.length > 0
-        ? await db.select().from(healDonations).where(and(...conditions)).orderBy(healDonations.createdAt)
-        : await db.select().from(healDonations).orderBy(healDonations.createdAt);
+        ? await db.select(safeSelect).from(healDonations).where(and(...conditions)).orderBy(healDonations.createdAt)
+        : await db.select(safeSelect).from(healDonations).orderBy(healDonations.createdAt);
 
       res.json(donations);
     } catch (error) {

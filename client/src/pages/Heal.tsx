@@ -5,6 +5,9 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HealWorldMap from "@/components/HealWorldMap";
 import type { HealDonation } from "@shared/schema";
+
+type PublicHealDonation = Omit<HealDonation, "email" | "budgetUsd" | "contentUrl">;
+
 import {
   Heart,
   Eye,
@@ -154,7 +157,7 @@ export default function Heal() {
     queryKey: ["/api/heal/stats"],
   });
 
-  const { data: donations = [] } = useQuery<HealDonation[]>({
+  const { data: donations = [] } = useQuery<PublicHealDonation[]>({
     queryKey: ["/api/heal/donations", ledgerDate, ledgerSearch],
     queryFn: async () => {
       const params = new URLSearchParams();
