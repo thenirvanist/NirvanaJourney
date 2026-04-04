@@ -209,7 +209,7 @@ export default function Heal() {
 
   // Testimonial auto-slide
   useEffect(() => {
-    const id = setInterval(() => setTestimonialIdx((i) => (i + 4 >= TESTIMONIALS.length ? 0 : i + 1)), 3000);
+    const id = setInterval(() => setTestimonialIdx((i) => (i + 1 > TESTIMONIALS.length - 4 ? 0 : i + 1)), 3000);
     return () => clearInterval(id);
   }, []);
 

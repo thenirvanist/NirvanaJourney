@@ -1095,9 +1095,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: healDonations.status,
       };
 
+      const { desc: descOrder } = await import('drizzle-orm');
+
       const donations = conditions.length > 0
-        ? await db.select(safeSelect).from(healDonations).where(and(...conditions)).orderBy(healDonations.createdAt)
-        : await db.select(safeSelect).from(healDonations).orderBy(healDonations.createdAt);
+        ? await db.select(safeSelect).from(healDonations).where(and(...conditions)).orderBy(descOrder(healDonations.createdAt))
+        : await db.select(safeSelect).from(healDonations).orderBy(descOrder(healDonations.createdAt));
 
       res.json(donations);
     } catch (error) {
