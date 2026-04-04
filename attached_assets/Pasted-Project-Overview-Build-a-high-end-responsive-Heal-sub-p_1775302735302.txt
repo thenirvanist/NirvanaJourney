@@ -1,0 +1,83 @@
+Project Overview: Build a high-end, responsive "Heal" sub-page for thenirvanist.com. This page is a digital philanthropy engine allowing users to sponsor spiritual content to be boosted in conflict and high-stress regions via Meta Ads.
+
+1. Navigation & Architecture
+Modification: Remove the 'Signup' tab from the main nav. Insert a new tab 'Heal' between 'Sages' and 'Above'.
+
+Routing: The 'Heal' tab links to a secondary page /heal.
+
+2. The Hero Section: "The Global Peace Grid"
+Map Component: Render a custom, interactive SVG World Map covering 80% of the viewport.
+
+Geopolitical Requirement: The map must show the entire region of Kashmir (including Aksai Chin) as part of India.
+
+Color Logic (The Legend):
+
+Oceans: Off-white (#F9F9F9).
+
+Neutral: Light Grey (#D1D1D1).
+
+Mid Need (Economic/Indirect Impact): Light Brand Green.
+
+High Need (Active Conflict: Sudan, Ukraine, Gaza, etc.): Dark Brand Green.
+
+Non-Accessible: Dark Grey.
+
+Dynamic Data (Meta API): * Hover State: Show a tooltip with "Reach Power": Estimated Views per $1 (calculated via Meta API CPM data).
+
+Toggle Switch: A prominent "Results" toggle on the bottom right. When active, countries display the actual "Accounts Reached" via active Nirvanist campaigns.
+
+Interaction: Clicking a country scrolls the user to the Submission Form and auto-populates the "Country" field.
+
+Overlay Title: "Help Us Heal The World" (Minimalist typography, positioned not to obscure landmasses).
+
+3. Success Bar & Testimonials
+Live Stats Bar: Immediately below the Hero, show a 4-column horizontal grid fetching real-time totals from the Meta API: [Views] | [Likes] | [Shares] | [Comments].
+
+Testimonial Carousel: A sleek, auto-sliding strip showing 4 testimonials per screen. Elegant, minimalist cards.
+
+4. Narrative & Quote
+Intro Copy: Implement the "Our world at present needs more than ever..." text provided in the brief. Use high-legibility, serif typography for a "Sage" feel.
+
+How it Works: A clean 5-point list explaining the process (Daily quotes, user selection, 24-hour start time, attribution, and impact report).
+
+Divider: A narrow strip with the quote: "If you light a lamp for someone, it will also brighten your own path" — Nichiren Daishonin.
+
+5. The "Heal" Submission Form (Step-by-Step Card UI)
+Build an elegant, multi-step card form (show only one active step at a time):
+
+Content Type: Dropdown [Spiritual Quotes (Default), Spiritual Article]. If Article, show a URL/Title text box.
+
+Location: Multi-select dropdown for Countries (Auto-filled if clicked from map).
+
+Duration: Selection buttons [3 Days, 7 Days, 1 Month, 3 Months, Custom].
+
+Budget: [ $10, $25, $50, Custom ].
+
+Attribution: Text area for "Dedication" (e.g., "In memory of my father"). Include an "Anonymous" checkbox.
+
+Payment: Integration placeholder for Stripe/PayPal.
+
+6. Transparency & Leaderboard Dashboards
+Dashboard 1: Transparency Ledger
+
+Columns: [Date], [Content], [Donor], [Results (Views/Reactions)], [Country].
+
+Functionality: Default to "Today." Include a Date-Picker (Calendar) for historical views and a Search Bar to filter by Donor name.
+
+Dashboard 2: Donor Hall of Grace
+
+Columns: [Rank #], [Donor Name], [Total Amount], [Total Souls Reached].
+
+Functionality: Top 10 by default. Search/Filter by Donor name.
+
+7. Technical Stack & Integrity
+Backend: Node.js/Express.
+
+Database: PostgreSQL (to store donations, attributions, and campaign mappings).
+
+API Integration: Connect to Meta Marketing API to pull CPM (Cost per Mille) for map tooltips and actual Reach/Engagement for the success bar.
+
+Aesthetic: High-contrast, minimalist, spiritual. No cluttered borders. Use whitespace to create a sense of "Zen."
+
+The Nirvanist Strategic Note for Replit:
+Agent, please ensure the Map logic is robust—if the Meta API fails to return a specific country's CPM, default to a regional average. Prioritize the custom geometry for the India/Kashmir border as requested.
