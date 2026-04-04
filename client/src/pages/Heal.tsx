@@ -232,8 +232,10 @@ export default function Heal() {
 
   const canProceed = () => {
     if (step === 1 && form.countries.length === 0) return false;
-    if (step === 4 && !form.anonymous && !form.donorName) return false;
-    if (step === 4 && !form.email) return false;
+    if (step === 2 && form.duration === "Custom" && !form.customDuration.trim()) return false;
+    if (step === 3 && form.budgetUsd === "Custom" && (!form.customBudget || Number(form.customBudget) < 1)) return false;
+    if (step === 4 && !form.anonymous && !form.donorName.trim()) return false;
+    if (step === 4 && !form.email.trim()) return false;
     return true;
   };
 
