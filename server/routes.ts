@@ -1019,12 +1019,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         donorName: z.string().min(1).default('Anonymous'),
         email: z.string().email("Valid email required"),
         contentType: z.enum(["quotes", "article"]).default("quotes"),
-        contentUrl: z.string().url().optional().or(z.literal('')).transform(v => v || null),
-        contentTitle: z.string().optional().transform(v => v || null),
+        contentUrl: z.union([z.string().url(), z.literal(''), z.null()]).optional().transform(v => v || null),
+        contentTitle: z.string().nullish().transform(v => v || null),
         countries: z.array(z.string()).min(1, "At least one country required"),
         duration: z.string().min(1),
         budgetUsd: z.number().int().min(1, "Budget must be at least $1"),
-        dedication: z.string().optional().transform(v => v || null),
+        dedication: z.string().nullish().transform(v => v || null),
         anonymous: z.boolean().default(false),
       });
 
@@ -1117,21 +1117,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { search } = req.query as { search?: string };
       const { ilike } = await import('drizzle-orm');
 
-      let baseQuery = db.select({
+      const baseSelect = db.select({
         donorName: healDonations.donorName,
         totalAmount: drizzleSql<number>`SUM(budget_usd)`,
         totalReach: drizzleSql<number>`SUM(campaign_reach)`,
         anonymous: healDonations.anonymous,
       }).from(healDonations);
 
-      const grouped = await baseQuery
+      const filtered = await (search
+        ? baseSelect.where(ilike(healDonations.donorName, `%${search}%`))
+        : baseSelect
+      )
         .groupBy(healDonations.donorName, healDonations.anonymous)
         .orderBy(desc(drizzleSql`SUM(budget_usd)`))
         .limit(10);
-
-      const filtered = search
-        ? grouped.filter(d => d.donorName.toLowerCase().includes((search as string).toLowerCase()))
-        : grouped;
 
       res.json(filtered.map((d, i) => ({
         rank: i + 1,
