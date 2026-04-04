@@ -4,8 +4,8 @@ import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HealWorldMap from "@/components/HealWorldMap";
+import type { HealDonation } from "@shared/schema";
 import {
-  Globe,
   Heart,
   Eye,
   ThumbsUp,
@@ -15,13 +15,28 @@ import {
   ChevronRight,
   Search,
   Calendar,
-  ChevronDown,
   CheckCircle2,
   CreditCard,
   X,
 } from "lucide-react";
 
-// ─── Country list ───────────────────────────────────────────────────────────
+// ─── Typed API response shapes ────────────────────────────────────────────────
+
+interface HealStats {
+  totalReach: number | string;
+  totalReactions: number | string;
+  totalShares: number | string;
+  totalComments: number | string;
+}
+
+interface HealLeaderboardRow {
+  rank: number;
+  donorName: string;
+  totalAmount: number | string;
+  totalReach: number | string;
+}
+
+// ─── Country list ─────────────────────────────────────────────────────────────
 const COUNTRY_LIST = [
   "Afghanistan","Algeria","Angola","Argentina","Australia","Bangladesh",
   "Bolivia","Brazil","Burkina Faso","Cameroon","Canada","Central African Republic",
@@ -36,7 +51,7 @@ const COUNTRY_LIST = [
   "Uzbekistan","Venezuela","Vietnam","Yemen","Zimbabwe",
 ];
 
-// ─── Testimonials ────────────────────────────────────────────────────────────
+// ─── Testimonials ─────────────────────────────────────────────────────────────
 const TESTIMONIALS = [
   { name: "Priya Sharma", loc: "Mumbai, India", text: "I dedicated a campaign to my late mother. Within days I received messages from people in Sudan saying these quotes brought them peace. There are no words." },
   { name: "James O.", loc: "London, UK", text: "Sponsoring content into conflict zones felt like sending light into darkness. The transparency ledger showed real reach — 84,000 people in one week." },
@@ -47,30 +62,32 @@ const TESTIMONIALS = [
   { name: "David Chen", loc: "Singapore", text: "The Nichiren quote on their page stopped me cold. I signed up immediately. Best $50 I've ever spent." },
 ];
 
-// ─── How it Works ────────────────────────────────────────────────────────────
+// ─── How it Works ─────────────────────────────────────────────────────────────
 const HOW_IT_WORKS = [
   { n: "01", title: "Choose Your Content", desc: "Select a spiritual quote from our curated library or submit a URL to an article you believe carries wisdom worth sharing." },
   { n: "02", title: "Pick Your Region", desc: "Use our interactive map to select the countries you want to reach — from active conflict zones to economically vulnerable regions." },
   { n: "03", title: "Set Your Duration & Budget", desc: "Choose how long the campaign runs and how much you want to invest. Even $10 can reach thousands." },
-  { n: "04", title: "Dedicate Your Campaign", desc: "Optionally dedicate your campaign to someone — a loved one, a cause, or simply your own aspiration for a more peaceful world." },
+  { n: "04", title: "Dedicate Your Campaign", desc: "Optionally dedicate your campaign to someone — a loved one, a cause, or simply your aspiration for a more peaceful world." },
   { n: "05", title: "We Do the Rest", desc: "Our team manages the Meta Ad placements, optimising for genuine reach in your chosen region and content type." },
 ];
 
 // ─── Helper ──────────────────────────────────────────────────────────────────
-const fmt = (n: number) =>
-  n >= 1_000_000
-    ? `${(n / 1_000_000).toFixed(1)}M`
-    : n >= 1_000
-    ? `${Math.round(n / 1_000)}K`
-    : String(n);
+const fmt = (n: number | string) => {
+  const num = Number(n);
+  if (isNaN(num)) return "—";
+  if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
+  if (num >= 1_000) return `${Math.round(num / 1_000)}K`;
+  return String(num);
+};
 
-// ─── Multi-step form state ────────────────────────────────────────────────────
+// ─── Form state type ──────────────────────────────────────────────────────────
 interface FormData {
-  contentType: string;
+  contentType: "quotes" | "article";
   contentUrl: string;
+  contentTitle: string;
   countries: string[];
   duration: string;
-  budgetUsd: number | string;
+  budgetUsd: number | "Custom";
   customBudget: string;
   customDuration: string;
   donorName: string;
@@ -82,6 +99,7 @@ interface FormData {
 const INITIAL_FORM: FormData = {
   contentType: "quotes",
   contentUrl: "",
+  contentTitle: "",
   countries: [],
   duration: "7 Days",
   budgetUsd: 25,
@@ -93,7 +111,6 @@ const INITIAL_FORM: FormData = {
   anonymous: false,
 };
 
-// ─── Steps ───────────────────────────────────────────────────────────────────
 const STEPS = [
   "Content Type",
   "Location",
@@ -102,6 +119,20 @@ const STEPS = [
   "Attribution",
   "Payment",
 ];
+
+// ─── Donate mutation payload ──────────────────────────────────────────────────
+interface DonateMutationInput {
+  donorName: string;
+  email: string;
+  contentType: "quotes" | "article";
+  contentUrl: string | null;
+  contentTitle: string | null;
+  countries: string[];
+  duration: string;
+  budgetUsd: number;
+  dedication: string | null;
+  anonymous: boolean;
+}
 
 export default function Heal() {
   const { toast } = useToast();
@@ -119,43 +150,45 @@ export default function Heal() {
   const [hallSearch, setHallSearch] = useState("");
 
   // Queries
-  const { data: stats } = useQuery<{
-    totalReach: number;
-    totalReactions: number;
-    totalShares: number;
-    totalComments: number;
-  }>({ queryKey: ["/api/heal/stats"] });
+  const { data: stats } = useQuery<HealStats>({
+    queryKey: ["/api/heal/stats"],
+  });
 
-  const { data: donations = [] } = useQuery<any[]>({
+  const { data: donations = [] } = useQuery<HealDonation[]>({
     queryKey: ["/api/heal/donations", ledgerDate, ledgerSearch],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (ledgerDate) params.set("date", ledgerDate);
       if (ledgerSearch) params.set("search", ledgerSearch);
       const res = await fetch(`/api/heal/donations?${params}`);
-      return res.json();
+      if (!res.ok) throw new Error("Failed to fetch donations");
+      return res.json() as Promise<HealDonation[]>;
     },
   });
 
-  const { data: leaderboard = [] } = useQuery<any[]>({
+  const { data: leaderboard = [] } = useQuery<HealLeaderboardRow[]>({
     queryKey: ["/api/heal/leaderboard", hallSearch],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (hallSearch) params.set("search", hallSearch);
       const res = await fetch(`/api/heal/leaderboard?${params}`);
-      return res.json();
+      if (!res.ok) throw new Error("Failed to fetch leaderboard");
+      return res.json() as Promise<HealLeaderboardRow[]>;
     },
   });
 
   // Donate mutation
   const donateMutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: DonateMutationInput) => {
       const res = await fetch("/api/heal/donate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ message: "Failed" }));
+        throw new Error((err as { message: string }).message);
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -166,8 +199,8 @@ export default function Heal() {
       setForm(INITIAL_FORM);
       setStep(0);
     },
-    onError: () => {
-      toast({ title: "Submission failed", description: "Please try again.", variant: "destructive" });
+    onError: (err: Error) => {
+      toast({ title: "Submission failed", description: err.message, variant: "destructive" });
     },
   });
 
@@ -199,26 +232,35 @@ export default function Heal() {
 
   const canProceed = () => {
     if (step === 1 && form.countries.length === 0) return false;
-    if (step === 4 && !form.donorName && !form.anonymous) return false;
+    if (step === 4 && !form.anonymous && !form.donorName) return false;
     if (step === 4 && !form.email) return false;
     return true;
   };
+
+  const resolvedBudget = (): number => {
+    if (form.budgetUsd === "Custom") return Number(form.customBudget) || 0;
+    return Number(form.budgetUsd);
+  };
+
+  const resolvedDuration = (): string =>
+    form.duration === "Custom" ? form.customDuration : form.duration;
 
   const handleSubmit = () => {
     donateMutation.mutate({
       donorName: form.anonymous ? "Anonymous" : form.donorName,
       email: form.email,
       contentType: form.contentType,
-      contentUrl: form.contentUrl,
+      contentUrl: form.contentUrl || null,
+      contentTitle: form.contentTitle || null,
       countries: form.countries,
-      duration: form.duration === "Custom" ? form.customDuration : form.duration,
-      budgetUsd: form.budgetUsd === "Custom" ? Number(form.customBudget) : Number(form.budgetUsd),
-      dedication: form.dedication,
+      duration: resolvedDuration(),
+      budgetUsd: resolvedBudget(),
+      dedication: form.dedication || null,
       anonymous: form.anonymous,
     });
   };
 
-  const statItems = [
+  const statItems: { icon: React.ElementType; label: string; value: number | string | undefined }[] = [
     { icon: Eye, label: "Total Views", value: stats?.totalReach },
     { icon: ThumbsUp, label: "Likes", value: stats?.totalReactions },
     { icon: Share2, label: "Shares", value: stats?.totalShares },
@@ -235,7 +277,6 @@ export default function Heal() {
           <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/60 to-transparent z-10" />
         </div>
 
-        {/* Title overlay */}
         <div className="relative z-20 text-center pt-10 pb-4 px-6">
           <p className="text-[#a3cc2a] uppercase tracking-[0.25em] text-xs mb-3 font-light">
             The Global Peace Grid
@@ -249,7 +290,6 @@ export default function Heal() {
           </p>
         </div>
 
-        {/* World map */}
         <div className="relative flex-1 px-2 sm:px-6 pb-4" style={{ minHeight: "420px" }}>
           <HealWorldMap onCountryClick={handleMapClick} />
         </div>
@@ -262,7 +302,7 @@ export default function Heal() {
             <div key={label} className="text-center">
               <Icon className="w-6 h-6 mx-auto mb-2 text-[#c8f088]" />
               <div className="text-3xl md:text-4xl font-serif font-light">
-                {value ? fmt(Number(value)) : "—"}
+                {value != null ? fmt(value) : "—"}
               </div>
               <div className="text-xs uppercase tracking-widest mt-1 text-[#c8f088]">{label}</div>
             </div>
@@ -309,14 +349,14 @@ export default function Heal() {
           <div>
             <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-6">How It Works</p>
             <div className="space-y-5">
-              {HOW_IT_WORKS.map((step) => (
-                <div key={step.n} className="flex gap-4">
+              {HOW_IT_WORKS.map((s) => (
+                <div key={s.n} className="flex gap-4">
                   <div className="text-2xl font-serif text-[#a3cc2a] leading-none mt-1 w-8 flex-shrink-0">
-                    {step.n}
+                    {s.n}
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 mb-1">{step.title}</div>
-                    <div className="text-gray-500 text-sm leading-relaxed">{step.desc}</div>
+                    <div className="font-semibold text-gray-900 mb-1">{s.title}</div>
+                    <div className="text-gray-500 text-sm leading-relaxed">{s.desc}</div>
                   </div>
                 </div>
               ))}
@@ -372,12 +412,13 @@ export default function Heal() {
 
           {/* Form card */}
           <div className="bg-white rounded-2xl shadow-md p-8">
+
             {/* Step 1: Content Type */}
             {step === 0 && (
               <div className="space-y-5">
                 <h3 className="font-serif text-xl text-gray-900 mb-4">What content would you like to sponsor?</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  {["quotes", "article"].map((ct) => (
+                  {(["quotes", "article"] as const).map((ct) => (
                     <button
                       key={ct}
                       onClick={() => setForm((f) => ({ ...f, contentType: ct }))}
@@ -399,15 +440,27 @@ export default function Heal() {
                   ))}
                 </div>
                 {form.contentType === "article" && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Article URL</label>
-                    <input
-                      type="url"
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a3cc2a]"
-                      placeholder="https://..."
-                      value={form.contentUrl}
-                      onChange={(e) => setForm((f) => ({ ...f, contentUrl: e.target.value }))}
-                    />
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Article Title</label>
+                      <input
+                        type="text"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a3cc2a]"
+                        placeholder="Title of the article or teaching"
+                        value={form.contentTitle}
+                        onChange={(e) => setForm((f) => ({ ...f, contentTitle: e.target.value }))}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Article URL</label>
+                      <input
+                        type="url"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a3cc2a]"
+                        placeholder="https://..."
+                        value={form.contentUrl}
+                        onChange={(e) => setForm((f) => ({ ...f, contentUrl: e.target.value }))}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -462,7 +515,7 @@ export default function Heal() {
               <div className="space-y-4">
                 <h3 className="font-serif text-xl text-gray-900">How long should the campaign run?</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {["3 Days", "7 Days", "1 Month", "3 Months", "Custom"].map((d) => (
+                  {(["3 Days", "7 Days", "1 Month", "3 Months", "Custom"] as const).map((d) => (
                     <button
                       key={d}
                       onClick={() => setForm((f) => ({ ...f, duration: d }))}
@@ -493,7 +546,7 @@ export default function Heal() {
               <div className="space-y-4">
                 <h3 className="font-serif text-xl text-gray-900">What is your budget?</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {[10, 25, 50, "Custom"].map((b) => (
+                  {([10, 25, 50, "Custom"] as const).map((b) => (
                     <button
                       key={String(b)}
                       onClick={() => setForm((f) => ({ ...f, budgetUsd: b }))}
@@ -530,17 +583,15 @@ export default function Heal() {
             {step === 4 && (
               <div className="space-y-5">
                 <h3 className="font-serif text-xl text-gray-900">Who is this campaign from?</h3>
-                <div>
-                  <label className="flex items-center gap-2 cursor-pointer mb-4">
-                    <input
-                      type="checkbox"
-                      checked={form.anonymous}
-                      onChange={(e) => setForm((f) => ({ ...f, anonymous: e.target.checked }))}
-                      className="w-4 h-4 accent-[#4a7c10]"
-                    />
-                    <span className="text-sm text-gray-700">Make this campaign anonymous</span>
-                  </label>
-                </div>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.anonymous}
+                    onChange={(e) => setForm((f) => ({ ...f, anonymous: e.target.checked }))}
+                    className="w-4 h-4 accent-[#4a7c10]"
+                  />
+                  <span className="text-sm text-gray-700">Make this campaign anonymous</span>
+                </label>
                 {!form.anonymous && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
@@ -586,18 +637,24 @@ export default function Heal() {
                     <span className="text-gray-600">Content</span>
                     <span className="font-medium">{form.contentType === "quotes" ? "Spiritual Quotes" : "Spiritual Article"}</span>
                   </div>
+                  {form.contentTitle && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Title</span>
+                      <span className="font-medium text-right max-w-[60%]">{form.contentTitle}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-gray-600">Countries</span>
                     <span className="font-medium">{form.countries.join(", ") || "—"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Duration</span>
-                    <span className="font-medium">{form.duration === "Custom" ? form.customDuration : form.duration}</span>
+                    <span className="font-medium">{resolvedDuration()}</span>
                   </div>
                   <div className="flex justify-between border-t pt-2 mt-2">
                     <span className="text-gray-900 font-semibold">Total</span>
                     <span className="font-bold text-[#4a7c10]">
-                      ${form.budgetUsd === "Custom" ? form.customBudget || "—" : form.budgetUsd}
+                      ${resolvedBudget() || "—"}
                     </span>
                   </div>
                 </div>
@@ -695,24 +752,24 @@ export default function Heal() {
                     </td>
                   </tr>
                 ) : (
-                  donations.map((d: any, i: number) => (
-                    <tr key={d.id || i} className="hover:bg-gray-50 transition-colors">
+                  donations.map((d) => (
+                    <tr key={d.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-4 py-3 text-gray-500">
                         {d.createdAt ? new Date(d.createdAt).toLocaleDateString() : "—"}
                       </td>
                       <td className="px-4 py-3 text-gray-700">
-                        {d.contentType === "quotes" ? "Spiritual Quotes" : "Article"}
+                        {d.contentType === "quotes" ? "Spiritual Quotes" : (d.contentTitle ?? "Article")}
                       </td>
                       <td className="px-4 py-3 font-medium text-gray-900">
                         {d.anonymous ? "Anonymous" : d.donorName}
                       </td>
                       <td className="px-4 py-3">
-                        <span className="text-[#4a7c10]">{fmt(d.campaignReach || 0)}</span>
+                        <span className="text-[#4a7c10]">{fmt(d.campaignReach ?? 0)}</span>
                         <span className="text-gray-300 mx-1">/</span>
-                        <span className="text-gray-500">{fmt(d.campaignReactions || 0)}</span>
+                        <span className="text-gray-500">{fmt(d.campaignReactions ?? 0)}</span>
                       </td>
                       <td className="px-4 py-3 text-gray-500">
-                        {(d.countries || []).join(", ") || "—"}
+                        {(d.countries ?? []).join(", ") || "—"}
                       </td>
                     </tr>
                   ))
@@ -761,7 +818,7 @@ export default function Heal() {
                     </td>
                   </tr>
                 ) : (
-                  leaderboard.map((d: any) => (
+                  leaderboard.map((d) => (
                     <tr key={d.rank} className="hover:bg-[#fafdf5] transition-colors">
                       <td className="px-5 py-3">
                         {d.rank <= 3 ? (
@@ -773,8 +830,8 @@ export default function Heal() {
                         )}
                       </td>
                       <td className="px-5 py-3 font-medium text-gray-900">{d.donorName}</td>
-                      <td className="px-5 py-3 text-[#4a7c10] font-semibold">${d.totalAmount}</td>
-                      <td className="px-5 py-3 text-gray-700">{fmt(d.totalReach || 0)}</td>
+                      <td className="px-5 py-3 text-[#4a7c10] font-semibold">${fmt(d.totalAmount)}</td>
+                      <td className="px-5 py-3 text-gray-700">{fmt(d.totalReach)}</td>
                     </tr>
                   ))
                 )}

@@ -1014,19 +1014,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Heal routes
   app.post("/api/heal/donate", async (req, res) => {
     try {
+      const { z } = await import('zod');
+      const healDonateSchema = z.object({
+        donorName: z.string().min(1).default('Anonymous'),
+        email: z.string().email("Valid email required"),
+        contentType: z.enum(["quotes", "article"]).default("quotes"),
+        contentUrl: z.string().url().optional().or(z.literal('')).transform(v => v || null),
+        contentTitle: z.string().optional().transform(v => v || null),
+        countries: z.array(z.string()).min(1, "At least one country required"),
+        duration: z.string().min(1),
+        budgetUsd: z.number().int().min(1, "Budget must be at least $1"),
+        dedication: z.string().optional().transform(v => v || null),
+        anonymous: z.boolean().default(false),
+      });
+
+      const parsed = healDonateSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "Validation failed", errors: parsed.error.flatten() });
+      }
+
       const { db } = await import('./db.js');
       const { healDonations } = await import('@shared/schema');
-      const data = req.body;
+      const data = parsed.data;
+
       const donation = await db.insert(healDonations).values({
-        donorName: data.donorName || 'Anonymous',
-        email: data.email || '',
-        contentType: data.contentType || 'quotes',
-        contentUrl: data.contentUrl || null,
-        countries: data.countries || [],
-        duration: data.duration || '7 Days',
-        budgetUsd: Number(data.budgetUsd) || 10,
-        dedication: data.dedication || null,
-        anonymous: Boolean(data.anonymous),
+        donorName: data.anonymous ? 'Anonymous' : data.donorName,
+        email: data.email,
+        contentType: data.contentType,
+        contentUrl: data.contentUrl ?? null,
+        contentTitle: data.contentTitle ?? null,
+        countries: data.countries,
+        duration: data.duration,
+        budgetUsd: data.budgetUsd,
+        dedication: data.dedication ?? null,
+        anonymous: data.anonymous,
         status: 'pending',
         campaignReach: 0,
         campaignReactions: 0,

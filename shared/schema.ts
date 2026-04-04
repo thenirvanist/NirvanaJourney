@@ -182,6 +182,7 @@ export const healDonations = pgTable("heal_donations", {
   email: text("email").notNull(),
   contentType: text("content_type").notNull().default("quotes"),
   contentUrl: text("content_url"),
+  contentTitle: text("content_title"),
   countries: text("countries").array(),
   duration: text("duration").notNull(),
   budgetUsd: integer("budget_usd").notNull(),

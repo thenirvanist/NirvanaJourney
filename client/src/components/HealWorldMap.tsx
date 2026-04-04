@@ -13,7 +13,7 @@ interface Tooltip {
   x: number;
   y: number;
   country: CountryData;
-  campaignData?: { reach: number; reactions: number };
+  campaignData?: CampaignRecord;
 }
 
 const toSVG = (lon: number, lat: number): [number, number] => [
@@ -484,6 +484,12 @@ const formatNum = (n: number) =>
     ? `${(n / 1_000).toFixed(0)}K`
     : String(n);
 
+interface CampaignRecord {
+  countryCode: string;
+  totalReach: number;
+  totalReactions: number;
+}
+
 interface Props {
   onCountryClick?: (countryName: string) => void;
 }
@@ -494,7 +500,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
   const [showResults, setShowResults] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const { data: campaigns = [] } = useQuery<{ countryCode: string; totalReach: number; totalReactions: number }[]>({
+  const { data: campaigns = [] } = useQuery<CampaignRecord[]>({
     queryKey: ["/api/heal/campaigns"],
   });
 
@@ -535,7 +541,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         style={{ background: "#F0EDE6" }}
       >
         {/* Ocean */}
-        <rect x="0" y="0" width="900" height="450" fill="#E8F4FD" />
+        <rect x="0" y="0" width="900" height="450" fill="#F9F9F9" />
 
         {/* Graticule lines */}
         {[-60, -30, 0, 30, 60].map((lat) => (
@@ -545,7 +551,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
             y1={toSVG(0, lat)[1]}
             x2="900"
             y2={toSVG(0, lat)[1]}
-            stroke="#C8DCF0"
+            stroke="#E0DADA"
             strokeWidth="0.5"
           />
         ))}
@@ -556,7 +562,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
             y1="0"
             x2={toSVG(lon, 0)[0]}
             y2="450"
-            stroke="#C8DCF0"
+            stroke="#E0DADA"
             strokeWidth="0.5"
           />
         ))}

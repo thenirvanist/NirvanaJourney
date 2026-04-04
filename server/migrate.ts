@@ -171,6 +171,11 @@ export async function runMigrations() {
       );
     `);
 
+    // Add content_title column if missing (idempotent ALTER TABLE)
+    await db.execute(sql`
+      ALTER TABLE heal_donations ADD COLUMN IF NOT EXISTS content_title TEXT;
+    `);
+
     // Seed heal_campaigns with initial data (ON CONFLICT DO NOTHING is idempotent)
     await db.execute(sql`
       INSERT INTO heal_campaigns (country_code, country_name, total_reach, total_reactions, total_shares, total_comments) VALUES
