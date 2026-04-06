@@ -1,471 +1,109 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { feature as topoFeature } from "topojson-client";
 
-interface CountryData {
-  code: string;
+// ── ISO 3166-1 numeric (3-char string) → alpha-2 ───────────────────────────
+const ISO: Record<string, string> = {
+  "004":"AF","008":"AL","010":"AQ","012":"DZ","024":"AO","031":"AZ","032":"AR",
+  "036":"AU","040":"AT","044":"BS","050":"BD","051":"AM","056":"BE","064":"BT",
+  "068":"BO","070":"BA","072":"BW","076":"BR","084":"BZ","090":"SB","096":"BN",
+  "100":"BG","104":"MM","108":"BI","112":"BY","116":"KH","120":"CM","124":"CA",
+  "140":"CF","144":"LK","148":"TD","152":"CL","156":"CN","158":"TW","170":"CO",
+  "178":"CG","180":"CD","188":"CR","191":"HR","192":"CU","196":"CY","203":"CZ",
+  "204":"BJ","208":"DK","214":"DO","218":"EC","222":"SV","226":"GQ","231":"ET",
+  "232":"ER","233":"EE","238":"FK","242":"FJ","246":"FI","250":"FR","260":"TF",
+  "262":"DJ","266":"GA","268":"GE","270":"GM","275":"PS","276":"DE","288":"GH",
+  "300":"GR","304":"GL","320":"GT","324":"GN","328":"GY","332":"HT","340":"HN",
+  "348":"HU","352":"IS","356":"IN","360":"ID","364":"IR","368":"IQ","372":"IE",
+  "376":"IL","380":"IT","384":"CI","388":"JM","392":"JP","398":"KZ","400":"JO",
+  "404":"KE","408":"KP","410":"KR","414":"KW","417":"KG","418":"LA","422":"LB",
+  "426":"LS","428":"LV","430":"LR","434":"LY","440":"LT","442":"LU","450":"MG",
+  "454":"MW","458":"MY","466":"ML","478":"MR","484":"MX","496":"MN","498":"MD",
+  "499":"ME","504":"MA","508":"MZ","512":"OM","516":"NA","524":"NP","528":"NL",
+  "540":"NC","548":"VU","554":"NZ","558":"NI","562":"NE","566":"NG","578":"NO",
+  "586":"PK","591":"PA","598":"PG","600":"PY","604":"PE","608":"PH","616":"PL",
+  "620":"PT","624":"GW","626":"TL","630":"PR","634":"QA","642":"RO","643":"RU",
+  "646":"RW","682":"SA","686":"SN","688":"RS","694":"SL","703":"SK","704":"VN",
+  "705":"SI","706":"SO","710":"ZA","716":"ZW","724":"ES","728":"SS","729":"SD",
+  "732":"EH","740":"SR","748":"SZ","752":"SE","756":"CH","760":"SY","762":"TJ",
+  "764":"TH","768":"TG","780":"TT","784":"AE","788":"TN","792":"TR","795":"TM",
+  "800":"UG","804":"UA","807":"MK","818":"EG","826":"GB","834":"TZ","840":"US",
+  "854":"BF","858":"UY","860":"UZ","862":"VE","887":"YE","894":"ZM",
+};
+
+// ── Country configuration: category & CPM for the 63 Heal countries ─────────
+interface CountryConfig {
   name: string;
   category: "high" | "mid" | "neutral" | "inaccessible";
-  points: [number, number][];
   cpm: number;
 }
 
-interface Tooltip {
-  x: number;
-  y: number;
-  country: CountryData;
-  campaignData?: CampaignRecord;
-}
-
-const toSVG = (lon: number, lat: number): [number, number] => [
-  (lon + 180) * 2.5,
-  (90 - lat) * 2.5,
-];
-
-const polyPath = (pts: [number, number][]): string =>
-  pts
-    .map(([lon, lat], i) => {
-      const [x, y] = toSVG(lon, lat);
-      return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(" ") + " Z";
-
-const COUNTRIES: CountryData[] = [
-  // ── HIGH NEED (active conflict zones) — geographic outlines ────────────
-  {
-    code: "SD",
-    name: "Sudan",
-    category: "high",
-    cpm: 0.28,
-    points: [[22,22],[24,22],[25,23],[36,23],[38,21],[38,15],[37,10],[34,8],[30,8],[22,8]],
-  },
-  {
-    code: "UA",
-    name: "Ukraine",
-    category: "high",
-    cpm: 1.2,
-    points: [[22,52],[28,52],[32,52],[35,51],[38,50],[40,48],[39,46],[37,44],[34,44],[30,44],[26,46],[23,48]],
-  },
-  {
-    code: "PS",
-    name: "Palestine",
-    category: "high",
-    cpm: 0.85,
-    points: [[34.2,31.8],[35.2,31.8],[35.5,31.2],[35.0,31.0],[34.9,29.5],[34.2,29.5]],
-  },
-  {
-    code: "MM",
-    name: "Myanmar",
-    category: "high",
-    cpm: 0.32,
-    points: [[92,28],[96,26],[100,26],[101,23],[100,20],[100,15],[99,10],[97,8],[94,10],[93,16],[92,20],[92,24]],
-  },
-  {
-    code: "YE",
-    name: "Yemen",
-    category: "high",
-    cpm: 0.45,
-    points: [[43,19],[48,19],[52,19],[54,17],[54,13],[51,12],[45,12],[43,13],[43,16]],
-  },
-  {
-    code: "SY",
-    name: "Syria",
-    category: "high",
-    cpm: 0.9,
-    points: [[36,37],[42,37],[42,35],[42,34],[40,33],[38,33],[36,34],[36,36]],
-  },
-  {
-    code: "SO",
-    name: "Somalia",
-    category: "high",
-    cpm: 0.22,
-    points: [[41,12],[44,12],[48,11],[51,11],[51,8],[50,5],[47,3],[44,-1],[41,-1],[41,5],[41,8]],
-  },
-  {
-    code: "AF",
-    name: "Afghanistan",
-    category: "high",
-    cpm: 0.38,
-    points: [[61,38],[66,38],[68,37],[71,38],[74,37],[75,36],[74,29],[66,29],[61,30],[61,34]],
-  },
-  {
-    code: "LY",
-    name: "Libya",
-    category: "high",
-    cpm: 0.68,
-    points: [[9,33],[13,33],[16,32],[20,33],[24,33],[25,31],[25,20],[25,19],[12,19],[9,19]],
-  },
-  {
-    code: "ML",
-    name: "Mali",
-    category: "high",
-    cpm: 0.21,
-    points: [[-5,25],[4,25],[4,22],[2,18],[2,14],[0,14],[0,12],[-3,10],[-4,11],[-5,14],[-5,18]],
-  },
-  {
-    code: "CD",
-    name: "DR Congo",
-    category: "high",
-    cpm: 0.19,
-    points: [[12,5],[16,5],[20,4],[24,4],[28,3],[30,2],[31,0],[31,-5],[30,-9],[29,-13],[28,-14],[22,-14],[16,-14],[12,-10],[12,-4],[12,2]],
-  },
-  {
-    code: "ET",
-    name: "Ethiopia",
-    category: "high",
-    cpm: 0.25,
-    points: [[33,15],[36,15],[40,15],[46,13],[48,12],[48,10],[46,8],[44,4],[42,4],[39,4],[36,5],[34,8],[33,12]],
-  },
-  {
-    code: "CF",
-    name: "Central African Republic",
-    category: "high",
-    cpm: 0.18,
-    points: [[14,11],[18,11],[22,11],[26,11],[27,10],[27,7],[25,5],[22,4],[18,5],[16,4],[14,6]],
-  },
-  // ── MID NEED (economic / indirect impact) — geographic outlines ─────────
-  {
-    code: "IQ",
-    name: "Iraq",
-    category: "mid",
-    cpm: 0.72,
-    points: [[38,37],[42,38],[46,37],[48,36],[48,33],[46,30],[44,29],[40,29],[39,31],[38,33]],
-  },
-  {
-    code: "PK",
-    name: "Pakistan",
-    category: "mid",
-    cpm: 0.3,
-    points: [[61,37],[66,37],[70,36],[72,37],[75,36],[74,29],[72,26],[68,23],[62,23],[60,25],[60,32]],
-  },
-  {
-    code: "BD",
-    name: "Bangladesh",
-    category: "mid",
-    cpm: 0.29,
-    points: [[88.1,26.6],[92.7,26.6],[92.6,24.0],[91.8,22.8],[89.2,21.8],[88.1,22.5]],
-  },
-  {
-    code: "VE",
-    name: "Venezuela",
-    category: "mid",
-    cpm: 0.55,
-    points: [[-73,12],[-66,12],[-60,11],[-59,6],[-61,4],[-63,4],[-68,2],[-72,4],[-73,7]],
-  },
-  {
-    code: "HT",
-    name: "Haiti",
-    category: "mid",
-    cpm: 0.48,
-    points: [[-74.5,20],[-72.5,20],[-72.0,18.5],[-74.0,18.5]],
-  },
-  {
-    code: "NG",
-    name: "Nigeria",
-    category: "mid",
-    cpm: 0.24,
-    points: [[3,14],[12,14],[14,13],[15,11],[14,8],[13,6],[8,4],[4,4],[3,6],[2,8],[2,12]],
-  },
-  {
-    code: "NE",
-    name: "Niger",
-    category: "mid",
-    cpm: 0.2,
-    points: [[2,24],[14,24],[15,22],[16,16],[15,14],[14,14],[13,12],[8,12],[3,12],[2,14],[2,18]],
-  },
-  {
-    code: "TD",
-    name: "Chad",
-    category: "mid",
-    cpm: 0.19,
-    points: [[13,24],[16,24],[24,22],[24,14],[24,12],[22,10],[20,10],[17,8],[16,8],[13,8],[13,14]],
-  },
-  {
-    code: "BF",
-    name: "Burkina Faso",
-    category: "mid",
-    cpm: 0.2,
-    points: [[-5,15],[0,15],[2,14],[2,12],[0,10],[-2,10],[-5,11],[-5,14]],
-  },
-  {
-    code: "MZ",
-    name: "Mozambique",
-    category: "mid",
-    cpm: 0.21,
-    points: [[32,-10],[36,-12],[36,-16],[36,-20],[35,-24],[34,-26],[33,-27],[32,-25],[34,-22],[34,-18],[32,-14]],
-  },
-  {
-    code: "LB",
-    name: "Lebanon",
-    category: "mid",
-    cpm: 0.95,
-    points: [[35.1,34.7],[36.6,34.7],[36.6,33.1],[35.1,33.1]],
-  },
-  {
-    code: "IR",
-    name: "Iran",
-    category: "mid",
-    cpm: 0.58,
-    points: [[44,40],[50,40],[54,38],[60,38],[62,37],[63,36],[63,30],[60,26],[56,26],[52,26],[48,24],[44,28],[44,32],[44,36]],
-  },
-  {
-    code: "MR",
-    name: "Mauritania",
-    category: "mid",
-    cpm: 0.22,
-    points: [[-17,27],[-9,27],[-5,24],[-5,18],[-7,18],[-12,16],[-17,16]],
-  },
-  {
-    code: "GN",
-    name: "Guinea",
-    category: "mid",
-    cpm: 0.2,
-    points: [[-15,12],[-11,12],[-8.5,11],[-8.5,7.5],[-11,7.5],[-14,8],[-15,9]],
-  },
-  // ── INACCESSIBLE ────────────────────────────────────────────────────────
-  {
-    code: "KP",
-    name: "North Korea",
-    category: "inaccessible",
-    cpm: 0,
-    points: [[124,42],[130,42],[130,40],[129,38],[126,37],[124,39],[124,41]],
-  },
-  {
-    code: "CU",
-    name: "Cuba",
-    category: "inaccessible",
-    cpm: 0,
-    points: [[-84,22],[-80,23],[-76,23],[-74,22],[-75,20],[-82,20],[-84,21]],
-  },
-  // ── NEUTRAL / BACKGROUND — generous coverage to avoid map gaps ───────────
-  {
-    code: "RU",
-    name: "Russia",
-    category: "neutral",
-    cpm: 1.5,
-    // European Russia + Siberia — drawn wide to cover northern landmass
-    points: [[26,74],[55,76],[90,76],[120,76],[150,74],[168,70],[180,68],[180,50],[162,52],[142,50],[120,52],[100,48],[78,50],[58,54],[48,54],[38,56],[26,68]],
-  },
-  {
-    code: "CA",
-    name: "Canada",
-    category: "neutral",
-    cpm: 8.2,
-    points: [[-141,74],[-86,74],[-55,74],[-52,46],[-64,44],[-76,44],[-82,44],[-90,46],[-100,49],[-120,49],[-135,54],[-141,62]],
-  },
-  {
-    code: "US",
-    name: "United States",
-    category: "neutral",
-    cpm: 14.8,
-    points: [[-125,50],[-95,50],[-70,46],[-66,44],[-64,36],[-76,32],[-80,24],[-90,25],[-97,25],[-106,31],[-120,32],[-125,36]],
-  },
-  {
-    code: "MX",
-    name: "Mexico",
-    category: "neutral",
-    cpm: 1.8,
-    points: [[-118,32],[-100,28],[-97,24],[-94,18],[-88,16],[-90,16],[-92,16],[-94,20],[-118,24]],
-  },
-  {
-    code: "BR",
-    name: "Brazil",
-    category: "neutral",
-    cpm: 1.2,
-    points: [[-74,5],[-52,4],[-35,5],[-35,-10],[-38,-15],[-42,-22],[-48,-28],[-53,-34],[-56,-34],[-68,-34],[-74,-16],[-74,-8],[-72,0]],
-  },
-  {
-    code: "AR",
-    name: "Argentina",
-    category: "neutral",
-    cpm: 1.5,
-    points: [[-68,-22],[-52,-22],[-52,-28],[-60,-40],[-66,-56],[-74,-50],[-74,-38],[-68,-32]],
-  },
-  {
-    code: "CL",
-    name: "Chile",
-    category: "neutral",
-    cpm: 2.1,
-    points: [[-68,-18],[-70,-20],[-74,-38],[-72,-52],[-68,-56],[-66,-56],[-65,-52],[-65,-38],[-66,-24]],
-  },
-  {
-    code: "CO",
-    name: "Colombia",
-    category: "neutral",
-    cpm: 0.8,
-    points: [[-78,8],[-72,12],[-67,12],[-66,2],[-68,-2],[-74,-2],[-78,0]],
-  },
-  {
-    code: "PE",
-    name: "Peru",
-    category: "neutral",
-    cpm: 0.7,
-    points: [[-82,0],[-74,2],[-70,0],[-70,-6],[-68,-14],[-68,-18],[-76,-16],[-82,-8]],
-  },
-  {
-    code: "GL",
-    name: "Greenland",
-    category: "neutral",
-    cpm: 0,
-    points: [[-74,76],[-18,83],[-14,76],[-22,70],[-32,65],[-50,60],[-74,63]],
-  },
-  {
-    code: "CN",
-    name: "China",
-    category: "neutral",
-    cpm: 0.65,
-    points: [[73,50],[80,50],[88,50],[96,50],[108,54],[122,48],[132,48],[136,48],[136,40],[120,30],[116,22],[108,18],[102,22],[100,22],[92,28],[86,28],[78,36],[74,38],[73,42]],
-  },
-  {
-    code: "MN",
-    name: "Mongolia",
-    category: "neutral",
-    cpm: 0.4,
-    points: [[88,50],[96,50],[108,52],[120,50],[120,42],[112,42],[106,44],[98,42],[88,44]],
-  },
-  {
-    code: "IN",
-    name: "India",
-    category: "neutral",
-    cpm: 0.3,
-    points: [[68,36],[74,36],[78,34],[82,32],[86,28],[92,26],[92,22],[88,20],[80,26],[76,20],[72,20],[68,22],[66,24],[68,28],[68,32]],
-  },
-  {
-    code: "KZ",
-    name: "Kazakhstan",
-    category: "neutral",
-    cpm: 0.6,
-    points: [[50,56],[60,56],[68,55],[78,56],[84,52],[86,50],[80,44],[72,40],[62,40],[52,44],[50,48]],
-  },
-  {
-    code: "SA",
-    name: "Saudi Arabia",
-    category: "neutral",
-    cpm: 1.2,
-    points: [[36,30],[38,30],[42,32],[50,32],[56,28],[56,22],[54,18],[50,16],[44,14],[40,16],[36,22],[36,26]],
-  },
-  {
-    code: "TR",
-    name: "Turkey",
-    category: "neutral",
-    cpm: 0.95,
-    points: [[26,42],[32,42],[36,42],[40,40],[44,40],[44,37],[42,36],[38,36],[32,36],[26,38],[26,40]],
-  },
-  {
-    code: "EG",
-    name: "Egypt",
-    category: "neutral",
-    cpm: 0.55,
-    points: [[24,32],[32,32],[36,30],[37,22],[34,22],[32,20],[24,22]],
-  },
-  {
-    code: "DZ",
-    name: "Algeria",
-    category: "neutral",
-    cpm: 0.4,
-    points: [[-8,38],[8,38],[9,34],[9,28],[4,24],[2,20],[0,18],[-5,18],[-8,22],[-8,30]],
-  },
-  {
-    code: "MA",
-    name: "Morocco",
-    category: "neutral",
-    cpm: 0.6,
-    points: [[-14,36],[-2,36],[-1,34],[-2,32],[-2,28],[-8,28],[-14,30],[-14,34]],
-  },
-  {
-    code: "EU",
-    name: "Europe",
-    category: "neutral",
-    cpm: 6.5,
-    // Continental Europe + Scandinavia — drawn as solid landmass block
-    points: [[-10,72],[32,74],[44,66],[46,48],[38,36],[30,34],[18,36],[6,36],[-4,42],[-10,44],[-6,50],[12,58],[14,66],[-2,68],[-10,70]],
-  },
-  {
-    code: "JP",
-    name: "Japan",
-    category: "neutral",
-    cpm: 4.2,
-    // Main islands approximation
-    points: [[130,32],[132,34],[134,36],[138,38],[141,40],[141,44],[138,44],[134,36],[132,34],[130,32]],
-  },
-  {
-    code: "KR",
-    name: "South Korea",
-    category: "neutral",
-    cpm: 2.8,
-    points: [[126,38],[130,38],[130,34],[127,34],[126,36]],
-  },
-  {
-    code: "ID",
-    name: "Indonesia",
-    category: "neutral",
-    cpm: 0.45,
-    // Simplified Sumatra + Java + Borneo + Papua strip
-    points: [[95,6],[104,6],[106,2],[112,-2],[118,-6],[124,-8],[130,-4],[136,-4],[142,-8],[142,-10],[130,-10],[120,-10],[112,-8],[104,-8],[98,-4],[95,2]],
-  },
-  {
-    code: "PH",
-    name: "Philippines",
-    category: "neutral",
-    cpm: 0.5,
-    points: [[116,20],[120,22],[124,18],[126,14],[126,8],[120,6],[116,10],[116,16]],
-  },
-  {
-    code: "VN",
-    name: "Vietnam",
-    category: "neutral",
-    cpm: 0.4,
-    points: [[104,24],[108,24],[108,20],[108,16],[106,12],[104,10],[102,10],[102,16],[103,20]],
-  },
-  {
-    code: "TH",
-    name: "Thailand",
-    category: "neutral",
-    cpm: 0.6,
-    points: [[98,20],[102,22],[102,14],[102,10],[100,6],[98,8],[97,12],[97,16],[98,18]],
-  },
-  {
-    code: "AU",
-    name: "Australia",
-    category: "neutral",
-    cpm: 5.8,
-    points: [[114,-22],[120,-18],[124,-14],[130,-12],[138,-14],[142,-20],[144,-22],[150,-24],[154,-28],[150,-38],[144,-38],[136,-36],[128,-34],[114,-32],[113,-26]],
-  },
-  {
-    code: "ZA",
-    name: "South Africa",
-    category: "neutral",
-    cpm: 0.8,
-    points: [[16,-28],[22,-28],[28,-28],[32,-28],[34,-30],[34,-34],[28,-36],[22,-34],[18,-34],[16,-32]],
-  },
-  {
-    code: "AO",
-    name: "Angola",
-    category: "neutral",
-    cpm: 0.3,
-    points: [[12,-5],[16,-5],[20,-6],[24,-6],[24,-18],[20,-22],[14,-18],[12,-12]],
-  },
-  {
-    code: "TZ",
-    name: "Tanzania",
-    category: "neutral",
-    cpm: 0.28,
-    points: [[30,-1],[34,-1],[40,-3],[40,-9],[38,-11],[36,-11],[34,-12],[30,-10],[29,-6],[30,-2]],
-  },
-  {
-    code: "KE",
-    name: "Kenya",
-    category: "neutral",
-    cpm: 0.35,
-    points: [[34,5],[38,4],[42,2],[42,-1],[40,-4],[34,-4],[34,-1]],
-  },
-  {
-    code: "MG",
-    name: "Madagascar",
-    category: "neutral",
-    cpm: 0.22,
-    points: [[44,-12],[48,-14],[50,-16],[50,-22],[48,-26],[44,-26],[44,-20],[44,-14]],
-  },
-];
+const COUNTRY_CONFIG: Record<string, CountryConfig> = {
+  // HIGH NEED — active conflict zones
+  "SD": { name: "Sudan",                    category: "high",         cpm: 0.28 },
+  "UA": { name: "Ukraine",                  category: "high",         cpm: 1.2  },
+  "PS": { name: "Palestine",                category: "high",         cpm: 0.85 },
+  "MM": { name: "Myanmar",                  category: "high",         cpm: 0.32 },
+  "YE": { name: "Yemen",                    category: "high",         cpm: 0.45 },
+  "SY": { name: "Syria",                    category: "high",         cpm: 0.9  },
+  "SO": { name: "Somalia",                  category: "high",         cpm: 0.22 },
+  "AF": { name: "Afghanistan",              category: "high",         cpm: 0.38 },
+  "LY": { name: "Libya",                    category: "high",         cpm: 0.68 },
+  "ML": { name: "Mali",                     category: "high",         cpm: 0.21 },
+  "CD": { name: "DR Congo",                 category: "high",         cpm: 0.19 },
+  "ET": { name: "Ethiopia",                 category: "high",         cpm: 0.25 },
+  "CF": { name: "Cent. African Republic",   category: "high",         cpm: 0.18 },
+  // MID NEED — economic / indirect impact
+  "IQ": { name: "Iraq",                     category: "mid",          cpm: 0.72 },
+  "PK": { name: "Pakistan",                 category: "mid",          cpm: 0.3  },
+  "BD": { name: "Bangladesh",               category: "mid",          cpm: 0.29 },
+  "VE": { name: "Venezuela",                category: "mid",          cpm: 0.55 },
+  "HT": { name: "Haiti",                    category: "mid",          cpm: 0.48 },
+  "NG": { name: "Nigeria",                  category: "mid",          cpm: 0.24 },
+  "NE": { name: "Niger",                    category: "mid",          cpm: 0.2  },
+  "TD": { name: "Chad",                     category: "mid",          cpm: 0.19 },
+  "BF": { name: "Burkina Faso",             category: "mid",          cpm: 0.2  },
+  "MZ": { name: "Mozambique",               category: "mid",          cpm: 0.21 },
+  "LB": { name: "Lebanon",                  category: "mid",          cpm: 0.95 },
+  "IR": { name: "Iran",                     category: "mid",          cpm: 0.58 },
+  "MR": { name: "Mauritania",               category: "mid",          cpm: 0.22 },
+  "GN": { name: "Guinea",                   category: "mid",          cpm: 0.2  },
+  // INACCESSIBLE
+  "KP": { name: "North Korea",              category: "inaccessible", cpm: 0    },
+  "CU": { name: "Cuba",                     category: "inaccessible", cpm: 0    },
+  // NEUTRAL / ACCESSIBLE
+  "RU": { name: "Russia",                   category: "neutral",      cpm: 1.5  },
+  "CA": { name: "Canada",                   category: "neutral",      cpm: 8.2  },
+  "US": { name: "United States",            category: "neutral",      cpm: 14.8 },
+  "MX": { name: "Mexico",                   category: "neutral",      cpm: 1.8  },
+  "BR": { name: "Brazil",                   category: "neutral",      cpm: 1.2  },
+  "AR": { name: "Argentina",                category: "neutral",      cpm: 1.5  },
+  "CL": { name: "Chile",                    category: "neutral",      cpm: 2.1  },
+  "CO": { name: "Colombia",                 category: "neutral",      cpm: 0.8  },
+  "PE": { name: "Peru",                     category: "neutral",      cpm: 0.7  },
+  "GL": { name: "Greenland",                category: "neutral",      cpm: 0    },
+  "CN": { name: "China",                    category: "neutral",      cpm: 0.65 },
+  "MN": { name: "Mongolia",                 category: "neutral",      cpm: 0.4  },
+  "IN": { name: "India",                    category: "neutral",      cpm: 0.3  },
+  "KZ": { name: "Kazakhstan",               category: "neutral",      cpm: 0.6  },
+  "SA": { name: "Saudi Arabia",             category: "neutral",      cpm: 1.2  },
+  "TR": { name: "Turkey",                   category: "neutral",      cpm: 0.95 },
+  "EG": { name: "Egypt",                    category: "neutral",      cpm: 0.55 },
+  "DZ": { name: "Algeria",                  category: "neutral",      cpm: 0.4  },
+  "MA": { name: "Morocco",                  category: "neutral",      cpm: 0.6  },
+  "JP": { name: "Japan",                    category: "neutral",      cpm: 4.2  },
+  "KR": { name: "South Korea",              category: "neutral",      cpm: 2.8  },
+  "ID": { name: "Indonesia",                category: "neutral",      cpm: 0.45 },
+  "PH": { name: "Philippines",              category: "neutral",      cpm: 0.5  },
+  "VN": { name: "Vietnam",                  category: "neutral",      cpm: 0.4  },
+  "TH": { name: "Thailand",                 category: "neutral",      cpm: 0.6  },
+  "AU": { name: "Australia",                category: "neutral",      cpm: 5.8  },
+  "ZA": { name: "South Africa",             category: "neutral",      cpm: 0.8  },
+  "AO": { name: "Angola",                   category: "neutral",      cpm: 0.3  },
+  "TZ": { name: "Tanzania",                 category: "neutral",      cpm: 0.28 },
+  "KE": { name: "Kenya",                    category: "neutral",      cpm: 0.35 },
+  "MG": { name: "Madagascar",               category: "neutral",      cpm: 0.22 },
+};
 
 const CATEGORY_COLOR: Record<string, string> = {
   high: "#4a7c10",
@@ -481,12 +119,63 @@ const CATEGORY_HOVER: Record<string, string> = {
   inaccessible: "#909090",
 };
 
+// ── India Kashmir supplement — disputed territories shown in India's colour ──
+// Defined as simple [lon, lat] rectangle outlines (rough approximation of the
+// three disputed sub-regions that India claims but does not fully administer).
+const KASHMIR_SUPPLEMENT: [number, number][][] = [
+  // Gilgit-Baltistan (Pakistan-administered)
+  [[72.0,37.5],[77.8,37.5],[77.8,34.5],[72.0,34.5]],
+  // Azad Kashmir (Pakistan-administered)
+  [[73.2,36.0],[74.7,36.0],[74.7,33.3],[73.2,33.3]],
+  // Aksai Chin (China-administered)
+  [[78.5,36.2],[80.3,36.2],[80.3,34.4],[78.5,34.4]],
+];
+
+// ── Projection helpers ──────────────────────────────────────────────────────
+const coord2xy = (lon: number, lat: number) =>
+  `${((lon + 180) * 2.5).toFixed(2)},${((90 - lat) * 2.5).toFixed(2)}`;
+
+const ring2d = (ring: number[][]): string =>
+  ring.map((c, i) => (i === 0 ? "M" : "L") + coord2xy(c[0], c[1])).join(" ") + " Z";
+
+const geom2path = (geom: { type: string; coordinates: unknown } | null): string => {
+  if (!geom) return "";
+  if (geom.type === "Polygon") {
+    return (geom.coordinates as number[][][]).map(ring2d).join(" ");
+  }
+  if (geom.type === "MultiPolygon") {
+    return (geom.coordinates as number[][][][])
+      .flatMap((poly) => poly.map(ring2d))
+      .join(" ");
+  }
+  return "";
+};
+
+const kashmirPath = (ring: [number, number][]): string =>
+  ring.map((c, i) => (i === 0 ? "M" : "L") + coord2xy(c[0], c[1])).join(" ") + " Z";
+
 const formatNum = (n: number) =>
-  n >= 1_000_000
-    ? `${(n / 1_000_000).toFixed(1)}M`
-    : n >= 1_000
-    ? `${(n / 1_000).toFixed(0)}K`
-    : String(n);
+  n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M`
+  : n >= 1_000   ? `${(n / 1_000).toFixed(0)}K`
+  : String(n);
+
+const reachPerDollar = (cpm: number) => (cpm > 0 ? Math.round(1000 / cpm) : 0);
+
+// ── Types ───────────────────────────────────────────────────────────────────
+interface WorldFeature {
+  numericId: string;
+  alpha2: string | null;
+  config: CountryConfig | null;
+  path: string;
+}
+
+interface TooltipState {
+  x: number;
+  y: number;
+  config: CountryConfig;
+  alpha2: string;
+  campaignData?: { totalReach: number; totalReactions: number };
+}
 
 interface CampaignRecord {
   countryCode: string;
@@ -498,9 +187,14 @@ interface Props {
   onCountryClick?: (countryName: string) => void;
 }
 
+// ── z-order: neutral behind, high in front ──────────────────────────────────
+const RENDER_ORDER: Record<string, number> = { neutral: 0, inaccessible: 1, mid: 2, high: 3 };
+
 export default function HealWorldMap({ onCountryClick }: Props) {
+  const [worldFeatures, setWorldFeatures] = useState<WorldFeature[]>([]);
+  const [loading, setLoading] = useState(true);
   const [hovered, setHovered] = useState<string | null>(null);
-  const [tooltip, setTooltip] = useState<Tooltip | null>(null);
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [showResults, setShowResults] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -508,33 +202,51 @@ export default function HealWorldMap({ onCountryClick }: Props) {
     queryKey: ["/api/heal/campaigns"],
   });
 
-  const campaignMap = Object.fromEntries(
-    campaigns.map((c) => [c.countryCode, c])
-  );
+  const campaignMap = Object.fromEntries(campaigns.map((c) => [c.countryCode, c]));
 
-  const handleMouseMove = (e: React.MouseEvent, country: CountryData) => {
+  // Load world-atlas TopoJSON and convert to SVG paths
+  useEffect(() => {
+    fetch("/countries-110m.json")
+      .then((r) => r.json())
+      .then((topo) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const geo = topoFeature(topo as any, (topo as any).objects.countries) as any;
+        const features: WorldFeature[] = [];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        for (const f of geo.features as any[]) {
+          const numericId = String(f.id);
+          if (numericId === "010") continue; // skip Antarctica
+          const alpha2 = ISO[numericId] || null;
+          const config = alpha2 ? (COUNTRY_CONFIG[alpha2] || null) : null;
+          const path = geom2path(f.geometry);
+          if (!path) continue;
+          features.push({ numericId, alpha2, config, path });
+        }
+        features.sort((a, b) => {
+          const catA = a.config?.category ?? "neutral";
+          const catB = b.config?.category ?? "neutral";
+          return RENDER_ORDER[catA] - RENDER_ORDER[catB];
+        });
+        setWorldFeatures(features);
+        setLoading(false);
+      });
+  }, []);
+
+  const handleMouseMove = (
+    e: React.MouseEvent,
+    config: CountryConfig,
+    alpha2: string,
+  ) => {
     const svgEl = svgRef.current;
     if (!svgEl) return;
     const rect = svgEl.getBoundingClientRect();
-    const scaleX = 900 / rect.width;
-    const scaleY = 400 / rect.height;
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY + 25;
-    setTooltip({
-      x,
-      y,
-      country,
-      campaignData: campaignMap[country.code],
-    });
+    const x = (e.clientX - rect.left) * (900 / rect.width);
+    const y = (e.clientY - rect.top) * (400 / rect.height) + 25;
+    setTooltip({ x, y, config, alpha2, campaignData: campaignMap[alpha2] });
   };
 
-  const reachPerDollar = (cpm: number) =>
-    cpm > 0 ? Math.round(1000 / cpm) : 0;
-
-  const neutralFirst = [...COUNTRIES].sort((a, b) => {
-    const order = { neutral: 0, inaccessible: 1, mid: 2, high: 3 };
-    return order[a.category] - order[b.category];
-  });
+  const indiaFill =
+    hovered === "IN" ? CATEGORY_HOVER["neutral"] : CATEGORY_COLOR["neutral"];
 
   return (
     <div className="relative w-full select-none">
@@ -550,99 +262,110 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         {[-60, -30, 0, 30, 60].map((lat) => (
           <line
             key={lat}
-            x1="0"
-            y1={toSVG(0, lat)[1]}
-            x2="900"
-            y2={toSVG(0, lat)[1]}
-            stroke="#E0DADA"
-            strokeWidth="0.5"
+            x1="0" y1={((90 - lat) * 2.5).toFixed(1)}
+            x2="900" y2={((90 - lat) * 2.5).toFixed(1)}
+            stroke="#E0DADA" strokeWidth="0.5"
           />
         ))}
         {[-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150].map((lon) => (
           <line
             key={lon}
-            x1={toSVG(lon, 0)[0]}
-            y1="0"
-            x2={toSVG(lon, 0)[0]}
-            y2="450"
-            stroke="#E0DADA"
-            strokeWidth="0.5"
+            x1={((lon + 180) * 2.5).toFixed(1)} y1="0"
+            x2={((lon + 180) * 2.5).toFixed(1)} y2="450"
+            stroke="#E0DADA" strokeWidth="0.5"
           />
         ))}
 
-        {/* Country paths */}
-        {neutralFirst.map((country) => {
-          const isHov = hovered === country.code;
-          const fill = isHov
-            ? CATEGORY_HOVER[country.category]
-            : CATEGORY_COLOR[country.category];
+        {/* Loading placeholder */}
+        {loading && (
+          <text x="450" y="225" textAnchor="middle" fill="#aaa" fontSize="13">
+            Loading map…
+          </text>
+        )}
 
-          const hasResult = showResults && campaignMap[country.code];
-          const resultFill = hasResult
-            ? country.category === "high"
-              ? "#2d5c08"
-              : "#82a322"
-            : fill;
+        {/* World-atlas country paths */}
+        {worldFeatures.map((f) => {
+          const category = f.config?.category ?? "neutral";
+          const isHov = f.alpha2 !== null && hovered === f.alpha2;
+          const baseFill = isHov ? CATEGORY_HOVER[category] : CATEGORY_COLOR[category];
+          const resultFill =
+            showResults && f.alpha2 && campaignMap[f.alpha2]
+              ? category === "high" ? "#2d5c08" : "#82a322"
+              : baseFill;
+          const interactive = f.config !== null;
 
           return (
             <path
-              key={country.code}
-              d={polyPath(country.points)}
+              key={f.numericId}
+              d={f.path}
               fill={resultFill}
+              fillRule="evenodd"
               stroke="#fff"
-              strokeWidth="0.8"
+              strokeWidth={interactive ? "0.5" : "0.25"}
               strokeLinejoin="round"
-              style={{ cursor: "pointer", transition: "fill 0.2s" }}
-              onMouseEnter={() => setHovered(country.code)}
-              onMouseLeave={() => {
-                setHovered(null);
-                setTooltip(null);
-              }}
-              onMouseMove={(e) => handleMouseMove(e, country)}
-              onClick={() => onCountryClick?.(country.name)}
+              style={{ cursor: interactive ? "pointer" : "default", transition: "fill 0.18s" }}
+              onMouseEnter={interactive ? () => setHovered(f.alpha2) : undefined}
+              onMouseLeave={
+                interactive
+                  ? () => { setHovered(null); setTooltip(null); }
+                  : undefined
+              }
+              onMouseMove={
+                interactive
+                  ? (e) => handleMouseMove(e, f.config!, f.alpha2!)
+                  : undefined
+              }
+              onClick={interactive ? () => onCountryClick?.(f.config!.name) : undefined}
             />
           );
         })}
+
+        {/* India Kashmir supplement — claimed territory overlay */}
+        {!loading && KASHMIR_SUPPLEMENT.map((ring, i) => (
+          <path
+            key={`kashmir-${i}`}
+            d={kashmirPath(ring)}
+            fill={indiaFill}
+            stroke="#fff"
+            strokeWidth="0.25"
+            strokeLinejoin="round"
+            style={{ pointerEvents: "none" }}
+          />
+        ))}
 
         {/* Tooltip */}
         {tooltip && (
           <g>
             <rect
-              x={Math.min(tooltip.x + 8, 760)}
+              x={Math.min(tooltip.x + 8, 692)}
               y={Math.max(tooltip.y - 60, 29)}
-              width={190}
+              width={200}
               height={44}
-              rx="6"
-              ry="6"
+              rx="6" ry="6"
               fill="rgba(0,0,0,0.82)"
             />
             <text
-              x={Math.min(tooltip.x + 16, 768)}
+              x={Math.min(tooltip.x + 16, 700)}
               y={Math.max(tooltip.y - 40, 47)}
-              fill="white"
-              fontSize="11"
-              fontWeight="700"
-              fontFamily="serif"
+              fill="white" fontSize="11" fontWeight="700" fontFamily="serif"
             >
-              {tooltip.country.name}
+              {tooltip.config.name}
             </text>
-            {tooltip.country.category !== "inaccessible" ? (
+            {tooltip.config.category !== "inaccessible" ? (
               <text
-                x={Math.min(tooltip.x + 16, 768)}
+                x={Math.min(tooltip.x + 16, 700)}
                 y={Math.max(tooltip.y - 24, 63)}
-                fill="#c8f088"
-                fontSize="9.5"
+                fill="#c8f088" fontSize="9.5"
               >
                 {showResults
                   ? "Souls reached: " + formatNum(tooltip.campaignData?.totalReach ?? 0)
-                  : "Reach per US $1: ~" + formatNum(reachPerDollar(tooltip.country.cpm))}
+                  : "Reach per US $1: ~" + formatNum(reachPerDollar(tooltip.config.cpm))}
               </text>
             ) : (
               <text
-                x={Math.min(tooltip.x + 16, 768)}
+                x={Math.min(tooltip.x + 16, 700)}
                 y={Math.max(tooltip.y - 24, 63)}
-                fill="#ff9999"
-                fontSize="9.5"
+                fill="#ff9999" fontSize="9.5"
               >
                 Not accessible via Meta Ads
               </text>
@@ -650,19 +373,10 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           </g>
         )}
 
-        {/* Results toggle button */}
-        <g
-          style={{ cursor: "pointer" }}
-          onClick={() => setShowResults(!showResults)}
-        >
-          <rect
-            x="780"
-            y="390"
-            width="110"
-            height="26"
-            rx="13"
-            fill={showResults ? "#4a7c10" : "rgba(0,0,0,0.5)"}
-          />
+        {/* Results toggle */}
+        <g style={{ cursor: "pointer" }} onClick={() => setShowResults(!showResults)}>
+          <rect x="780" y="390" width="110" height="26" rx="13"
+            fill={showResults ? "#4a7c10" : "rgba(0,0,0,0.5)"} />
           <text x="835" y="406" fill="white" fontSize="9.5" textAnchor="middle" fontWeight="600">
             {showResults ? "● Results ON" : "○ Results OFF"}
           </text>
