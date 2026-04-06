@@ -1,16 +1,24 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { feature as topoFeature } from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import type { FeatureCollection, Geometry, Position } from "geojson";
+// Direct build-time import from the world-atlas npm package.
+// client/src/world-atlas.d.ts provides the TypeScript module declaration.
+// Vite resolves and bundles the JSON from node_modules at build time.
+import worldAtlasRaw from "world-atlas/countries-50m.json";
 
 // ── World-atlas topology interface ────────────────────────────────────────────
-// world-atlas TopoJSON files (world-atlas npm package, countries-50m.json).
-// This interface describes the shape of the fetched JSON so we can cast safely.
+// Typed boundary cast: worldAtlasRaw is unknown (declared in world-atlas.d.ts);
+// WorldAtlasTopology describes the structure so we get full type safety
+// everywhere the object is used, with a single cast at the module boundary.
 interface WorldAtlasTopology extends Topology<{
   countries: GeometryCollection;
   land: GeometryCollection;
 }> {}
+
+// Cast once at module boundary; all downstream code uses WorldAtlasTopology.
+const WORLD_ATLAS = worldAtlasRaw as WorldAtlasTopology;
 
 // ── ISO 3166-1 numeric (world-atlas string feature IDs) → alpha-2 + name ─────
 const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
@@ -388,10 +396,54 @@ const computeFill = (
   return base;
 };
 
+// ── Build world features from world-atlas at module init ──────────────────────
+// WORLD_ATLAS is imported directly from the world-atlas npm package (build-time).
+// Features are computed synchronously once; no runtime fetch or loading state.
+function buildWorldFeatures(): WorldFeature[] {
+  const geo: FeatureCollection<Geometry> = topoFeature(
+    WORLD_ATLAS,
+    WORLD_ATLAS.objects.countries,
+  );
+  const features: WorldFeature[] = [];
+  for (const f of geo.features) {
+    // Defensive guard: skip features without a valid numeric ID
+    if (f.id === undefined || f.id === null) continue;
+    const numericId = String(f.id);
+    if (numericId === "010") continue; // Antarctica
+    // Compute SVG path — skip geometryless features
+    const path = geom2path(f.geometry);
+    if (!path) continue;
+    const isoInfo = ISO_LOOKUP[numericId];
+    // Countries missing from ISO_LOOKUP (e.g. minor world-atlas territories)
+    // fall back to the numeric ID as both display name and configAlpha2 key.
+    const alpha2 = isoInfo?.alpha2 ?? numericId;
+    const displayName = isoInfo?.name ?? numericId;
+    // Map EU member states to the shared "EU" aggregate config key so that
+    // all European countries share colour/hover/tooltip/click semantics.
+    const configAlpha2 = EU_MEMBERS.has(alpha2) ? "EU" : alpha2;
+    const config = COUNTRY_CONFIG[configAlpha2];
+    // Every feature is rendered. Non-configured countries use FALLBACK_CONFIG
+    // and are non-interactive — they provide accurate political geography.
+    const isInteractive = config !== undefined;
+    features.push({
+      numericId,
+      configAlpha2,
+      displayName: config ? config.name : displayName,
+      config: config ?? FALLBACK_CONFIG,
+      path,
+      isInteractive,
+    });
+  }
+  features.sort(
+    (a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category],
+  );
+  return features;
+}
+
+const WORLD_FEATURES: WorldFeature[] = buildWorldFeatures();
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function HealWorldMap({ onCountryClick }: Props) {
-  const [worldFeatures, setWorldFeatures] = useState<WorldFeature[]>([]);
-  const [loading, setLoading] = useState(true);
   const [hovered, setHovered] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [showResults, setShowResults] = useState(false);
@@ -404,59 +456,6 @@ export default function HealWorldMap({ onCountryClick }: Props) {
   const campaignMap: Record<string, CampaignRecord> = Object.fromEntries(
     campaigns.map((c) => [c.countryCode, c]),
   );
-
-  // Load world-atlas 50m TopoJSON from the world-atlas npm package
-  // (file served from client/public/countries-50m.json for runtime fetch)
-  useEffect(() => {
-    fetch("/countries-50m.json")
-      .then((r) => r.json())
-      .then((topo: unknown) => {
-        // Single typed boundary cast; WorldAtlasTopology describes the shape
-        const topology = topo as WorldAtlasTopology;
-        const geo: FeatureCollection<Geometry> = topoFeature(
-          topology,
-          topology.objects.countries,
-        );
-        const features: WorldFeature[] = [];
-        for (const f of geo.features) {
-          // Skip features without a valid numeric ID (defensive guard)
-          if (f.id === undefined || f.id === null) continue;
-          const numericId = String(f.id);
-          if (numericId === "010") continue; // Antarctica
-          const isoInfo = ISO_LOOKUP[numericId];
-          // Compute SVG path first — skip geometryless features
-          const path = geom2path(f.geometry);
-          if (!path) continue;
-          // Countries not in ISO_LOOKUP (e.g. disputed/minor territories from
-          // world-atlas) render as non-interactive fallback neutral.
-          const alpha2 = isoInfo?.alpha2 ?? numericId;
-          const displayName = isoInfo?.name ?? numericId;
-          // Map EU member states to the "EU" aggregate config key
-          const configAlpha2 = EU_MEMBERS.has(alpha2) ? "EU" : alpha2;
-          const config = COUNTRY_CONFIG[configAlpha2];
-          // Every country is rendered. Non-configured countries use FALLBACK_CONFIG
-          // and are non-interactive — they provide accurate political geography.
-          const isInteractive = config !== undefined;
-          features.push({
-            numericId,
-            configAlpha2,
-            displayName: config ? config.name : displayName,
-            config: config ?? FALLBACK_CONFIG,
-            path,
-            isInteractive,
-          });
-        }
-        features.sort(
-          (a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category],
-        );
-        setWorldFeatures(features);
-        setLoading(false);
-      })
-      .catch(() => {
-        // Failed to load map data — exit loading state so the UI does not hang
-        setLoading(false);
-      });
-  }, []);
 
   const handleMouseMove = (
     e: React.MouseEvent<SVGPathElement>,
@@ -502,18 +501,12 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           />
         ))}
 
-        {/* Loading placeholder */}
-        {loading && (
-          <text x="450" y="225" textAnchor="middle" fill="#aaa" fontSize="13">
-            Loading map…
-          </text>
-        )}
-
         {/* All countries from world-atlas 50m — non-configured ones are neutral
             background fill (non-interactive). Configured ones are interactive.
-            Keys use featureIndex suffix to avoid collisions where world-atlas
-            assigns the same numeric ID to multiple geometry objects. */}
-        {worldFeatures.map((f, featureIndex) => {
+            Features are pre-computed at module init (build-time import); no
+            loading state. Keys use featureIndex suffix to avoid any duplicate-ID
+            reconciliation risk. */}
+        {WORLD_FEATURES.map((f, featureIndex) => {
           const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
           if (!f.isInteractive) {
             return (
@@ -550,7 +543,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         {/* India Kashmir supplement — uses the same fill as India's base path and
             the same mouse/click handlers so the claimed-extension area is fully
             hover/click-interactive as India. */}
-        {!loading && KASHMIR_REGIONS.map((ring, i) => (
+        {KASHMIR_REGIONS.map((ring, i) => (
           <path
             key={`kashmir-${i}`}
             d={kashmirPath(ring)}
