@@ -315,12 +315,13 @@ const reachPerDollar = (cpm: number): number => cpm > 0 ? Math.round(1000 / cpm)
 interface WorldFeature {
   numericId: string;
   configAlpha2: string;
+  displayName: string;
   config: CountryConfig;
   path: string;
-  isInteractive: boolean;
+  isConfigured: boolean;
 }
 interface CampaignRecord { countryCode: string; totalReach: number; totalReactions: number; }
-interface TooltipState { x: number; y: number; config: CountryConfig; configAlpha2: string; campaignData?: CampaignRecord; }
+interface TooltipState { x: number; y: number; config: CountryConfig; configAlpha2: string; displayName: string; isConfigured: boolean; campaignData?: CampaignRecord; }
 interface Props { onCountryClick?: (countryName: string) => void; }
 
 const computeFill = (
@@ -345,9 +346,10 @@ function buildWorldFeatures(): WorldFeature[] {
     if (!path) continue;
     const isoInfo = ISO_LOOKUP[numericId];
     const alpha2 = isoInfo?.alpha2 ?? numericId;
+    const displayName = isoInfo?.name ?? numericId;
     const configAlpha2 = EU_MEMBERS.has(alpha2) ? "EU" : alpha2;
     const config = COUNTRY_CONFIG[configAlpha2];
-    out.push({ numericId, configAlpha2, config: config ?? FALLBACK_CONFIG, path, isInteractive: config !== undefined });
+    out.push({ numericId, configAlpha2, displayName: config?.name ?? displayName, config: config ?? FALLBACK_CONFIG, path, isConfigured: config !== undefined });
   }
   out.sort((a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category]);
   return out;
@@ -365,13 +367,16 @@ export default function HealWorldMap({ onCountryClick }: Props) {
   const { data: campaigns = [] } = useQuery<CampaignRecord[]>({ queryKey: ["/api/heal/campaigns"] });
   const campaignMap: Record<string, CampaignRecord> = Object.fromEntries(campaigns.map(c => [c.countryCode, c]));
 
-  const handleMouseMove = (e: React.MouseEvent<SVGPathElement>, config: CountryConfig, configAlpha2: string) => {
+  const handleMouseMove = (
+    e: React.MouseEvent<SVGPathElement>,
+    f: WorldFeature,
+  ) => {
     const svgEl = svgRef.current;
     if (!svgEl) return;
     const rect = svgEl.getBoundingClientRect();
     const x = (e.clientX - rect.left) * (900 / rect.width);
     const y = (e.clientY - rect.top) * (400 / rect.height) + 25;
-    setTooltip({ x, y, config, configAlpha2, campaignData: campaignMap[configAlpha2] });
+    setTooltip({ x, y, config: f.config, configAlpha2: f.configAlpha2, displayName: f.displayName, isConfigured: f.isConfigured, campaignData: campaignMap[f.configAlpha2] });
   };
 
   const indiaFill = computeFill("IN", COUNTRY_CONFIG["IN"], hovered, showResults, campaignMap);
@@ -389,23 +394,16 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         ))}
 
         {WORLD_FEATURES.map((f, i) => {
-          if (!f.isInteractive) {
-            return (
-              <path key={`${f.numericId}-${i}`} d={f.path}
-                fill={CATEGORY_COLOR["neutral"]} fillRule="evenodd"
-                stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
-                style={{ pointerEvents: "none" }} />
-            );
-          }
           const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
           return (
             <path key={`${f.numericId}-${i}`} d={f.path}
-              fill={fill} fillRule="evenodd" stroke="#fff" strokeWidth="0.5" strokeLinejoin="round"
-              style={{ cursor: "pointer", transition: "fill 0.18s" }}
+              fill={fill} fillRule="evenodd"
+              stroke="#fff" strokeWidth={f.isConfigured ? "0.5" : "0.4"} strokeLinejoin="round"
+              style={{ cursor: f.isConfigured ? "pointer" : "default", transition: "fill 0.18s" }}
               onMouseEnter={() => setHovered(f.configAlpha2)}
               onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-              onMouseMove={e => handleMouseMove(e, f.config, f.configAlpha2)}
-              onClick={() => onCountryClick?.(f.config.name)} />
+              onMouseMove={e => handleMouseMove(e, f)}
+              onClick={() => { if (f.isConfigured) onCountryClick?.(f.config.name); }} />
           );
         })}
 
@@ -415,7 +413,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
             style={{ cursor: "pointer", transition: "fill 0.18s" }}
             onMouseEnter={() => setHovered("IN")}
             onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-            onMouseMove={e => handleMouseMove(e, COUNTRY_CONFIG["IN"], "IN")}
+            onMouseMove={e => handleMouseMove(e, { numericId:"356", configAlpha2:"IN", displayName:"India", config:COUNTRY_CONFIG["IN"], path:"", isConfigured:true })}
             onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)} />
         ))}
 
@@ -423,15 +421,19 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           <g>
             <rect x={Math.min(tooltip.x+8,692)} y={Math.max(tooltip.y-60,29)} width={200} height={44} rx="6" ry="6" fill="rgba(0,0,0,0.82)" />
             <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-40,47)} fill="white" fontSize="11" fontWeight="700" fontFamily="serif">
-              {tooltip.config.name}
+              {tooltip.displayName}
             </text>
-            {tooltip.config.category !== "inaccessible" ? (
-              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
-                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "Reach per US $1: ~"+formatNum(reachPerDollar(tooltip.config.cpm))}
+            {!tooltip.isConfigured ? (
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#aaa" fontSize="9.5">
+                Not in current campaigns
               </text>
-            ) : (
+            ) : tooltip.config.category === "inaccessible" ? (
               <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#ff9999" fontSize="9.5">
                 Not accessible via Meta Ads
+              </text>
+            ) : (
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
+                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "Reach per US $1: ~"+formatNum(reachPerDollar(tooltip.config.cpm))}
               </text>
             )}
           </g>
