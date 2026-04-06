@@ -189,8 +189,11 @@ const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
   "894":{ alpha2:"ZM", name:"Zambia" },
 };
 
-// European alpha-2 codes that aggregate to the "EU" config entry.
-// Excludes countries with their own COUNTRY_CONFIG entries (RU, UA, TR).
+// European alpha-2 codes that map to the shared "EU" COUNTRY_CONFIG entry.
+// This is intentional: all EU-member shapes highlight together on hover and
+// route to the single "Europe" donation campaign on click — same UX as the
+// original single-blob EU polygon, now rendered with accurate country borders.
+// Countries with their own config entries (RU, UA, TR) are excluded.
 const EU_MEMBERS = new Set([
   "AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT",
   "LV","LT","LU","NL","PL","PT","RO","SK","SI","ES","SE","GB","CH","NO","IS",
