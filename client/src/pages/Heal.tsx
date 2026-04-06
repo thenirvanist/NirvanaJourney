@@ -266,7 +266,7 @@ export default function Heal() {
   };
 
   const statItems: { icon: React.ElementType; label: string; value: number | string | undefined }[] = [
-    { icon: Eye, label: "Total Views", value: stats?.totalReach },
+    { icon: Eye, label: "Total Souls Reached", value: stats?.totalReach },
     { icon: ThumbsUp, label: "Likes", value: stats?.totalReactions },
     { icon: Share2, label: "Shares", value: stats?.totalShares },
     { icon: MessageCircle, label: "Comments", value: stats?.totalComments },
@@ -284,7 +284,7 @@ export default function Heal() {
 
         <div className="relative z-20 text-center pt-10 pb-4 px-6">
           <p className="text-[#a3cc2a] uppercase tracking-[0.25em] text-xs mb-3 font-light">
-            The Global Peace Grid
+            The Global Peace Project
           </p>
           <h1 className="text-4xl md:text-6xl font-serif text-white leading-tight max-w-3xl mx-auto">
             Help Us Heal<br />The World
@@ -295,8 +295,10 @@ export default function Heal() {
           </p>
         </div>
 
-        <div className="relative flex-1 px-2 sm:px-6 pb-4" style={{ minHeight: "420px" }}>
-          <HealWorldMap onCountryClick={handleMapClick} />
+        <div className="relative flex-1 px-2 sm:px-6 pb-4 flex items-center justify-center" style={{ minHeight: "420px" }}>
+          <div className="w-[90%]">
+            <HealWorldMap onCountryClick={handleMapClick} />
+          </div>
         </div>
       </section>
 
@@ -336,18 +338,22 @@ export default function Heal() {
       <section className="bg-white py-20 px-6">
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-start">
           <div>
-            <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-4">Why We Heal</p>
+            <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-4">Why Heal</p>
             <h2 className="text-3xl md:text-4xl font-serif text-gray-900 mb-6 leading-tight">
-              Our world at present needs more than ever — a moment of stillness.
+              Our world needs words of compassion and solace more than ever before.
             </h2>
             <p className="text-gray-600 leading-relaxed mb-4">
               Conflict, economic pressure, and social fracture have left millions without access to
               the wisdom traditions that have guided humanity for millennia. The Nirvanist believes
               that a single verse, delivered at the right moment, can change a life.
             </p>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-gray-600 leading-relaxed mb-4">
               Through the precision of digital advertising and the universality of spiritual teaching,
               we bring these moments to regions that need them most.
+            </p>
+            <p className="text-gray-600 leading-relaxed">
+              By ensuring words of hope and courage reach those in the greatest need, we cease to be
+              spectators and become active participants in the global tide of peace and love.
             </p>
           </div>
 
