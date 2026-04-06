@@ -451,6 +451,10 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         );
         setWorldFeatures(features);
         setLoading(false);
+      })
+      .catch(() => {
+        // Failed to load map data — exit loading state so the UI does not hang
+        setLoading(false);
       });
   }, []);
 
@@ -506,13 +510,15 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         )}
 
         {/* All countries from world-atlas 50m — non-configured ones are neutral
-            background fill (non-interactive). Configured ones are interactive. */}
-        {worldFeatures.map((f) => {
+            background fill (non-interactive). Configured ones are interactive.
+            Keys use featureIndex suffix to avoid collisions where world-atlas
+            assigns the same numeric ID to multiple geometry objects. */}
+        {worldFeatures.map((f, featureIndex) => {
           const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
           if (!f.isInteractive) {
             return (
               <path
-                key={f.numericId}
+                key={`${f.numericId}-${featureIndex}`}
                 d={f.path}
                 fill={CATEGORY_COLOR["neutral"]}
                 fillRule="evenodd"
@@ -525,7 +531,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           }
           return (
             <path
-              key={f.numericId}
+              key={`${f.numericId}-${featureIndex}`}
               d={f.path}
               fill={fill}
               fillRule="evenodd"
