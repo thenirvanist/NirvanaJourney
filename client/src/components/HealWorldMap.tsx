@@ -3,24 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import { feature as topoFeature } from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import type { FeatureCollection, Geometry, Position } from "geojson";
-// Direct build-time import from the world-atlas npm package.
-// client/src/world-atlas.d.ts provides the TypeScript module declaration.
-// Vite resolves and bundles the JSON from node_modules at build time.
 import worldAtlasRaw from "world-atlas/countries-50m.json";
 
-// ── World-atlas topology interface ────────────────────────────────────────────
-// Typed boundary cast: worldAtlasRaw is unknown (declared in world-atlas.d.ts);
-// WorldAtlasTopology describes the structure so we get full type safety
-// everywhere the object is used, with a single cast at the module boundary.
+// Typed boundary cast for the world-atlas JSON module (see world-atlas.d.ts).
 interface WorldAtlasTopology extends Topology<{
   countries: GeometryCollection;
   land: GeometryCollection;
 }> {}
-
-// Cast once at module boundary; all downstream code uses WorldAtlasTopology.
 const WORLD_ATLAS = worldAtlasRaw as WorldAtlasTopology;
 
-// ── ISO 3166-1 numeric (world-atlas string feature IDs) → alpha-2 + name ─────
+// ── ISO 3166-1 numeric → alpha-2 lookup ──────────────────────────────────────
 const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
   "004":{ alpha2:"AF", name:"Afghanistan" },
   "008":{ alpha2:"AL", name:"Albania" },
@@ -197,29 +189,20 @@ const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
   "894":{ alpha2:"ZM", name:"Zambia" },
 };
 
-// ── European countries that map to the "EU" aggregate config ─────────────────
-// These render with accurate individual borders from world-atlas but behave as
-// the original EU bloc for tooltip/click/campaign semantics. Excludes countries
-// already explicitly configured (RU, UA, TR) which remain as their own entries.
+// European alpha-2 codes that aggregate to the "EU" config entry.
+// Excludes countries with their own COUNTRY_CONFIG entries (RU, UA, TR).
 const EU_MEMBERS = new Set([
   "AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT",
   "LV","LT","LU","NL","PL","PT","RO","SK","SI","ES","SE","GB","CH","NO","IS",
   "MD","BA","RS","ME","MK","AL",
 ]);
 
-// ── Country configuration: 64 entries (63 + EU aggregate) ────────────────────
+// ── Country config ────────────────────────────────────────────────────────────
 type Category = "high" | "mid" | "neutral" | "inaccessible";
-
-interface CountryConfig {
-  name: string;
-  category: Category;
-  cpm: number;
-}
+interface CountryConfig { name: string; category: Category; cpm: number; }
 
 const COUNTRY_CONFIG: Record<string, CountryConfig> = {
-  // EU aggregate — individual European borders visible but behave as one bloc
   "EU":{ name:"Europe",                  category:"neutral",      cpm:6.5  },
-  // HIGH NEED — active conflict zones
   "SD":{ name:"Sudan",                   category:"high",         cpm:0.28 },
   "UA":{ name:"Ukraine",                 category:"high",         cpm:1.2  },
   "PS":{ name:"Palestine",               category:"high",         cpm:0.85 },
@@ -233,7 +216,6 @@ const COUNTRY_CONFIG: Record<string, CountryConfig> = {
   "CD":{ name:"DR Congo",               category:"high",         cpm:0.19 },
   "ET":{ name:"Ethiopia",               category:"high",         cpm:0.25 },
   "CF":{ name:"Cent. African Republic", category:"high",         cpm:0.18 },
-  // MID NEED — economic / indirect impact
   "IQ":{ name:"Iraq",                   category:"mid",          cpm:0.72 },
   "PK":{ name:"Pakistan",               category:"mid",          cpm:0.3  },
   "BD":{ name:"Bangladesh",             category:"mid",          cpm:0.29 },
@@ -248,10 +230,8 @@ const COUNTRY_CONFIG: Record<string, CountryConfig> = {
   "IR":{ name:"Iran",                   category:"mid",          cpm:0.58 },
   "MR":{ name:"Mauritania",             category:"mid",          cpm:0.22 },
   "GN":{ name:"Guinea",                 category:"mid",          cpm:0.2  },
-  // INACCESSIBLE
   "KP":{ name:"North Korea",            category:"inaccessible", cpm:0    },
   "CU":{ name:"Cuba",                   category:"inaccessible", cpm:0    },
-  // NEUTRAL / ACCESSIBLE
   "RU":{ name:"Russia",                 category:"neutral",      cpm:1.5  },
   "CA":{ name:"Canada",                 category:"neutral",      cpm:8.2  },
   "US":{ name:"United States",          category:"neutral",      cpm:14.8 },
@@ -286,33 +266,29 @@ const COUNTRY_CONFIG: Record<string, CountryConfig> = {
 };
 
 const CATEGORY_COLOR: Record<Category, string> = {
-  high: "#4a7c10",
-  mid: "#a3cc2a",
-  neutral: "#D1D1D1",
-  inaccessible: "#7A7A7A",
+  high: "#4a7c10", mid: "#a3cc2a", neutral: "#D1D1D1", inaccessible: "#7A7A7A",
 };
-
 const CATEGORY_HOVER: Record<Category, string> = {
-  high: "#5e9e14",
-  mid: "#b8e030",
-  neutral: "#b8b8b8",
-  inaccessible: "#909090",
+  high: "#5e9e14", mid: "#b8e030", neutral: "#b8b8b8", inaccessible: "#909090",
 };
-
 const RENDER_ORDER: Record<Category, number> = {
   neutral: 0, inaccessible: 1, mid: 2, high: 3,
 };
+const FALLBACK_CONFIG: CountryConfig = { name: "", category: "neutral", cpm: 0 };
 
-// ── India Kashmir supplement ──────────────────────────────────────────────────
-// Approximate [lon, lat] rectangles for disputed sub-regions India claims but
-// does not fully administer. Rendered on top of base map in India's fill color.
+// ── India claimed sub-regions (overlaid on base India geometry) ───────────────
+// Approximated polygon shapes for Gilgit-Baltistan, Azad Kashmir, and Aksai Chin
+// following the rough contour of India's claimed LOC/LAC boundaries.
 const KASHMIR_REGIONS: [number, number][][] = [
-  [[72.0,37.5],[77.8,37.5],[77.8,34.5],[72.0,34.5]],  // Gilgit-Baltistan
-  [[73.2,36.0],[74.7,36.0],[74.7,33.3],[73.2,33.3]],  // Azad Kashmir
-  [[78.5,36.2],[80.3,36.2],[80.3,34.4],[78.5,34.4]],  // Aksai Chin
+  // Gilgit-Baltistan — trapezoid following Karakoram/Hindu Kush foothills
+  [[72.4,36.8],[74.0,37.1],[76.2,37.0],[77.5,36.5],[77.8,35.3],[76.5,34.8],[74.5,35.1],[72.8,35.6]],
+  // Azad Kashmir — elongated wedge along LOC
+  [[73.2,36.1],[74.0,36.2],[74.7,35.6],[74.8,34.5],[74.2,33.4],[73.6,33.2],[73.1,34.0],[73.0,35.2]],
+  // Aksai Chin — irregular polygon along LAC
+  [[78.6,35.9],[79.2,36.1],[80.2,35.8],[80.5,35.0],[80.1,34.5],[79.0,34.3],[78.4,34.6],[78.2,35.3]],
 ];
 
-// ── Equirectangular projection: [lon, lat] → SVG "x,y" ──────────────────────
+// ── Projection utilities ──────────────────────────────────────────────────────
 const coord2xy = (lon: number, lat: number): string =>
   `${((lon + 180) * 2.5).toFixed(2)},${((90 - lat) * 2.5).toFixed(2)}`;
 
@@ -321,12 +297,8 @@ const ring2d = (ring: Position[]): string =>
 
 const geom2path = (geom: Geometry | null): string => {
   if (!geom) return "";
-  if (geom.type === "Polygon") {
-    return geom.coordinates.map(ring2d).join(" ");
-  }
-  if (geom.type === "MultiPolygon") {
-    return geom.coordinates.flatMap((poly) => poly.map(ring2d)).join(" ");
-  }
+  if (geom.type === "Polygon") return geom.coordinates.map(ring2d).join(" ");
+  if (geom.type === "MultiPolygon") return geom.coordinates.flatMap(p => p.map(ring2d)).join(" ");
   return "";
 };
 
@@ -335,112 +307,53 @@ const kashmirPath = (ring: [number, number][]): string =>
 
 const formatNum = (n: number): string =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M`
-  : n >= 1_000   ? `${(n / 1_000).toFixed(0)}K`
-  : String(n);
+  : n >= 1_000 ? `${(n / 1_000).toFixed(0)}K` : String(n);
 
-const reachPerDollar = (cpm: number): number => (cpm > 0 ? Math.round(1000 / cpm) : 0);
-
-// ── Fallback config for countries not in COUNTRY_CONFIG ──────────────────────
-// All world-atlas features are rendered. Countries outside the 64-entry config
-// get this neutral placeholder — they appear on the map but are non-interactive
-// (no tooltip, no click-to-donate cursor, no donation flow).
-const FALLBACK_CONFIG: CountryConfig = { name: "", category: "neutral", cpm: 0 };
+const reachPerDollar = (cpm: number): number => cpm > 0 ? Math.round(1000 / cpm) : 0;
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-// configAlpha2: the COUNTRY_CONFIG key used for this feature (may be "EU" for
-// European countries that map to the EU aggregate; raw alpha2 otherwise).
-// isInteractive: true only for COUNTRY_CONFIG entries (incl. EU aggregate);
-//   fallback/unconfigured countries render in neutral but are non-interactive.
 interface WorldFeature {
   numericId: string;
   configAlpha2: string;
-  displayName: string;
   config: CountryConfig;
   path: string;
   isInteractive: boolean;
 }
+interface CampaignRecord { countryCode: string; totalReach: number; totalReactions: number; }
+interface TooltipState { x: number; y: number; config: CountryConfig; configAlpha2: string; campaignData?: CampaignRecord; }
+interface Props { onCountryClick?: (countryName: string) => void; }
 
-interface CampaignRecord {
-  countryCode: string;
-  totalReach: number;
-  totalReactions: number;
-}
-
-interface TooltipState {
-  x: number;
-  y: number;
-  config: CountryConfig;
-  configAlpha2: string;
-  campaignData?: CampaignRecord;
-}
-
-interface Props {
-  onCountryClick?: (countryName: string) => void;
-}
-
-// ── Shared fill computation ───────────────────────────────────────────────────
-// Used by both country paths and the India Kashmir supplement so they always
-// match regardless of hover or Results mode state.
 const computeFill = (
-  configAlpha2: string,
-  config: CountryConfig,
-  hovered: string | null,
-  showResults: boolean,
-  campaignMap: Record<string, CampaignRecord>,
+  configAlpha2: string, config: CountryConfig,
+  hovered: string | null, showResults: boolean, campaignMap: Record<string, CampaignRecord>,
 ): string => {
   const isHov = hovered === configAlpha2;
   const base = isHov ? CATEGORY_HOVER[config.category] : CATEGORY_COLOR[config.category];
-  if (showResults && campaignMap[configAlpha2]) {
-    return config.category === "high" ? "#2d5c08" : "#82a322";
-  }
+  if (showResults && campaignMap[configAlpha2]) return config.category === "high" ? "#2d5c08" : "#82a322";
   return base;
 };
 
-// ── Build world features from world-atlas at module init ──────────────────────
-// WORLD_ATLAS is imported directly from the world-atlas npm package (build-time).
-// Features are computed synchronously once; no runtime fetch or loading state.
+// ── Build world features from world-atlas (runs once at module init) ──────────
 function buildWorldFeatures(): WorldFeature[] {
-  const geo: FeatureCollection<Geometry> = topoFeature(
-    WORLD_ATLAS,
-    WORLD_ATLAS.objects.countries,
-  );
-  const features: WorldFeature[] = [];
+  const geo: FeatureCollection<Geometry> = topoFeature(WORLD_ATLAS, WORLD_ATLAS.objects.countries);
+  const out: WorldFeature[] = [];
   for (const f of geo.features) {
-    // Defensive guard: skip features without a valid numeric ID
     if (f.id === undefined || f.id === null) continue;
     const numericId = String(f.id);
-    if (numericId === "010") continue; // Antarctica
-    // Compute SVG path — skip geometryless features
+    if (numericId === "010") continue;
     const path = geom2path(f.geometry);
     if (!path) continue;
     const isoInfo = ISO_LOOKUP[numericId];
-    // Countries missing from ISO_LOOKUP (e.g. minor world-atlas territories)
-    // fall back to the numeric ID as both display name and configAlpha2 key.
     const alpha2 = isoInfo?.alpha2 ?? numericId;
-    const displayName = isoInfo?.name ?? numericId;
-    // Map EU member states to the shared "EU" aggregate config key so that
-    // all European countries share colour/hover/tooltip/click semantics.
     const configAlpha2 = EU_MEMBERS.has(alpha2) ? "EU" : alpha2;
     const config = COUNTRY_CONFIG[configAlpha2];
-    // Every feature is rendered. Non-configured countries use FALLBACK_CONFIG
-    // and are non-interactive — they provide accurate political geography.
-    const isInteractive = config !== undefined;
-    features.push({
-      numericId,
-      configAlpha2,
-      displayName: config ? config.name : displayName,
-      config: config ?? FALLBACK_CONFIG,
-      path,
-      isInteractive,
-    });
+    out.push({ numericId, configAlpha2, config: config ?? FALLBACK_CONFIG, path, isInteractive: config !== undefined });
   }
-  features.sort(
-    (a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category],
-  );
-  return features;
+  out.sort((a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category]);
+  return out;
 }
 
-const WORLD_FEATURES: WorldFeature[] = buildWorldFeatures();
+const WORLD_FEATURES = buildWorldFeatures();
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function HealWorldMap({ onCountryClick }: Props) {
@@ -449,19 +362,10 @@ export default function HealWorldMap({ onCountryClick }: Props) {
   const [showResults, setShowResults] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const { data: campaigns = [] } = useQuery<CampaignRecord[]>({
-    queryKey: ["/api/heal/campaigns"],
-  });
+  const { data: campaigns = [] } = useQuery<CampaignRecord[]>({ queryKey: ["/api/heal/campaigns"] });
+  const campaignMap: Record<string, CampaignRecord> = Object.fromEntries(campaigns.map(c => [c.countryCode, c]));
 
-  const campaignMap: Record<string, CampaignRecord> = Object.fromEntries(
-    campaigns.map((c) => [c.countryCode, c]),
-  );
-
-  const handleMouseMove = (
-    e: React.MouseEvent<SVGPathElement>,
-    config: CountryConfig,
-    configAlpha2: string,
-  ) => {
+  const handleMouseMove = (e: React.MouseEvent<SVGPathElement>, config: CountryConfig, configAlpha2: string) => {
     const svgEl = svgRef.current;
     if (!svgEl) return;
     const rect = svgEl.getBoundingClientRect();
@@ -470,154 +374,85 @@ export default function HealWorldMap({ onCountryClick }: Props) {
     setTooltip({ x, y, config, configAlpha2, campaignData: campaignMap[configAlpha2] });
   };
 
-  // India's fill — shared with the Kashmir supplement so they always match
   const indiaFill = computeFill("IN", COUNTRY_CONFIG["IN"], hovered, showResults, campaignMap);
 
   return (
     <div className="relative w-full select-none">
-      <svg
-        ref={svgRef}
-        viewBox="0 25 900 400"
-        className="w-full h-auto"
-      >
-        {/* Ocean */}
+      <svg ref={svgRef} viewBox="0 25 900 400" className="w-full h-auto">
         <rect x="0" y="0" width="900" height="450" fill="#F9F9F9" />
 
-        {/* Graticule lines */}
-        {[-60, -30, 0, 30, 60].map((lat) => (
-          <line
-            key={`lat-${lat}`}
-            x1="0" y1={((90 - lat) * 2.5).toFixed(1)}
-            x2="900" y2={((90 - lat) * 2.5).toFixed(1)}
-            stroke="#E0DADA" strokeWidth="0.5"
-          />
+        {[-60,-30,0,30,60].map(lat => (
+          <line key={`lat-${lat}`} x1="0" y1={((90-lat)*2.5).toFixed(1)} x2="900" y2={((90-lat)*2.5).toFixed(1)} stroke="#E0DADA" strokeWidth="0.5" />
         ))}
-        {[-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150].map((lon) => (
-          <line
-            key={`lon-${lon}`}
-            x1={((lon + 180) * 2.5).toFixed(1)} y1="0"
-            x2={((lon + 180) * 2.5).toFixed(1)} y2="450"
-            stroke="#E0DADA" strokeWidth="0.5"
-          />
+        {[-150,-120,-90,-60,-30,0,30,60,90,120,150].map(lon => (
+          <line key={`lon-${lon}`} x1={((lon+180)*2.5).toFixed(1)} y1="0" x2={((lon+180)*2.5).toFixed(1)} y2="450" stroke="#E0DADA" strokeWidth="0.5" />
         ))}
 
-        {/* All countries from world-atlas 50m — non-configured ones are neutral
-            background fill (non-interactive). Configured ones are interactive.
-            Features are pre-computed at module init (build-time import); no
-            loading state. Keys use featureIndex suffix to avoid any duplicate-ID
-            reconciliation risk. */}
-        {WORLD_FEATURES.map((f, featureIndex) => {
-          const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
+        {WORLD_FEATURES.map((f, i) => {
           if (!f.isInteractive) {
             return (
-              <path
-                key={`${f.numericId}-${featureIndex}`}
-                d={f.path}
-                fill={CATEGORY_COLOR["neutral"]}
-                fillRule="evenodd"
-                stroke="#fff"
-                strokeWidth="0.4"
-                strokeLinejoin="round"
-                style={{ pointerEvents: "none" }}
-              />
+              <path key={`${f.numericId}-${i}`} d={f.path}
+                fill={CATEGORY_COLOR["neutral"]} fillRule="evenodd"
+                stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
+                style={{ pointerEvents: "none" }} />
             );
           }
+          const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
           return (
-            <path
-              key={`${f.numericId}-${featureIndex}`}
-              d={f.path}
-              fill={fill}
-              fillRule="evenodd"
-              stroke="#fff"
-              strokeWidth="0.5"
-              strokeLinejoin="round"
+            <path key={`${f.numericId}-${i}`} d={f.path}
+              fill={fill} fillRule="evenodd" stroke="#fff" strokeWidth="0.5" strokeLinejoin="round"
               style={{ cursor: "pointer", transition: "fill 0.18s" }}
               onMouseEnter={() => setHovered(f.configAlpha2)}
               onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-              onMouseMove={(e) => handleMouseMove(e, f.config, f.configAlpha2)}
-              onClick={() => onCountryClick?.(f.config.name)}
-            />
+              onMouseMove={e => handleMouseMove(e, f.config, f.configAlpha2)}
+              onClick={() => onCountryClick?.(f.config.name)} />
           );
         })}
 
-        {/* India Kashmir supplement — uses the same fill as India's base path and
-            the same mouse/click handlers so the claimed-extension area is fully
-            hover/click-interactive as India. */}
         {KASHMIR_REGIONS.map((ring, i) => (
-          <path
-            key={`kashmir-${i}`}
-            d={kashmirPath(ring)}
-            fill={indiaFill}
-            stroke="#fff"
-            strokeWidth="0.3"
-            strokeLinejoin="round"
+          <path key={`kashmir-${i}`} d={kashmirPath(ring)} fill={indiaFill}
+            stroke="#fff" strokeWidth="0.3" strokeLinejoin="round"
             style={{ cursor: "pointer", transition: "fill 0.18s" }}
             onMouseEnter={() => setHovered("IN")}
             onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-            onMouseMove={(e) => handleMouseMove(e, COUNTRY_CONFIG["IN"], "IN")}
-            onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)}
-          />
+            onMouseMove={e => handleMouseMove(e, COUNTRY_CONFIG["IN"], "IN")}
+            onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)} />
         ))}
 
-        {/* Tooltip */}
         {tooltip && (
           <g>
-            <rect
-              x={Math.min(tooltip.x + 8, 692)}
-              y={Math.max(tooltip.y - 60, 29)}
-              width={200}
-              height={44}
-              rx="6" ry="6"
-              fill="rgba(0,0,0,0.82)"
-            />
-            <text
-              x={Math.min(tooltip.x + 16, 700)}
-              y={Math.max(tooltip.y - 40, 47)}
-              fill="white" fontSize="11" fontWeight="700" fontFamily="serif"
-            >
+            <rect x={Math.min(tooltip.x+8,692)} y={Math.max(tooltip.y-60,29)} width={200} height={44} rx="6" ry="6" fill="rgba(0,0,0,0.82)" />
+            <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-40,47)} fill="white" fontSize="11" fontWeight="700" fontFamily="serif">
               {tooltip.config.name}
             </text>
             {tooltip.config.category !== "inaccessible" ? (
-              <text
-                x={Math.min(tooltip.x + 16, 700)}
-                y={Math.max(tooltip.y - 24, 63)}
-                fill="#c8f088" fontSize="9.5"
-              >
-                {showResults
-                  ? "Souls reached: " + formatNum(tooltip.campaignData?.totalReach ?? 0)
-                  : "Reach per US $1: ~" + formatNum(reachPerDollar(tooltip.config.cpm))}
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
+                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "Reach per US $1: ~"+formatNum(reachPerDollar(tooltip.config.cpm))}
               </text>
             ) : (
-              <text
-                x={Math.min(tooltip.x + 16, 700)}
-                y={Math.max(tooltip.y - 24, 63)}
-                fill="#ff9999" fontSize="9.5"
-              >
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#ff9999" fontSize="9.5">
                 Not accessible via Meta Ads
               </text>
             )}
           </g>
         )}
 
-        {/* Results toggle button */}
-        <g style={{ cursor: "pointer" }} onClick={() => setShowResults(!showResults)}>
-          <rect x="780" y="390" width="110" height="26" rx="13"
-            fill={showResults ? "#4a7c10" : "rgba(0,0,0,0.5)"} />
+        <g style={{ cursor:"pointer" }} onClick={() => setShowResults(!showResults)}>
+          <rect x="780" y="390" width="110" height="26" rx="13" fill={showResults ? "#4a7c10" : "rgba(0,0,0,0.5)"} />
           <text x="835" y="406" fill="white" fontSize="9.5" textAnchor="middle" fontWeight="600">
             {showResults ? "● Results ON" : "○ Results OFF"}
           </text>
         </g>
 
-        {/* Legend */}
-        <g transform="translate(8, 355)">
+        <g transform="translate(8,355)">
           <rect x="0" y="0" width="190" height="64" rx="6" fill="rgba(255,255,255,0.85)" />
           {([
-            { color: "#4a7c10", label: "Active conflict zones" },
-            { color: "#a3cc2a", label: "Economic / indirect impact" },
-            { color: "#D1D1D1", label: "Neutral / accessible" },
-            { color: "#7A7A7A", label: "Non-accessible region" },
+            { color:"#4a7c10", label:"Active conflict zones" },
+            { color:"#a3cc2a", label:"Economic / indirect impact" },
+            { color:"#D1D1D1", label:"Neutral / accessible" },
+            { color:"#7A7A7A", label:"Non-accessible region" },
           ] as const).map(({ color, label }, i) => (
-            <g key={label} transform={`translate(8,${12 + i * 14})`}>
+            <g key={label} transform={`translate(8,${12+i*14})`}>
               <rect x="0" y="-7" width="10" height="10" fill={color} rx="2" />
               <text x="16" y="2" fill="#333" fontSize="8.5">{label}</text>
             </g>
