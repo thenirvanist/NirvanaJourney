@@ -295,10 +295,8 @@ export default function Heal() {
           </p>
         </div>
 
-        <div className="relative flex-1 px-2 sm:px-6 pb-4 flex items-center justify-center" style={{ minHeight: "420px" }}>
-          <div className="w-[90%]">
-            <HealWorldMap onCountryClick={handleMapClick} />
-          </div>
+        <div className="relative flex-1 px-2 sm:px-6 pb-4" style={{ minHeight: "420px" }}>
+          <HealWorldMap onCountryClick={handleMapClick} />
         </div>
       </section>
 
