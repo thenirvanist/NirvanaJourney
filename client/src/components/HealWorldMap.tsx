@@ -189,12 +189,11 @@ const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
   "894":{ alpha2:"ZM", name:"Zambia" },
 };
 
-// European alpha-2 codes that map to the shared "EU" COUNTRY_CONFIG entry.
-// This is intentional: all EU-member shapes highlight together on hover and
-// route to the single "Europe" donation campaign on click — same UX as the
-// original single-blob EU polygon, now rendered with accurate country borders.
-// Countries with their own config entries (RU, UA, TR) are excluded.
-const EU_MEMBERS = new Set([
+// Countries grouped into the single "Europe" donation campaign (COUNTRY_CONFIG "EU").
+// Intentionally broader than strict EU membership: includes UK, Switzerland, Norway,
+// Iceland, and Western Balkans for UX parity with the original Europe polygon.
+// Countries with their own COUNTRY_CONFIG entries (RU, UA, TR) are excluded.
+const EUROPE_CAMPAIGN_GROUP = new Set([
   "AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT",
   "LV","LT","LU","NL","PL","PT","RO","SK","SI","ES","SE","GB","CH","NO","IS",
   "MD","BA","RS","ME","MK","AL",
@@ -350,7 +349,7 @@ function buildWorldFeatures(): WorldFeature[] {
     const isoInfo = ISO_LOOKUP[numericId];
     const alpha2 = isoInfo?.alpha2 ?? numericId;
     const displayName = isoInfo?.name ?? numericId;
-    const configAlpha2 = EU_MEMBERS.has(alpha2) ? "EU" : alpha2;
+    const configAlpha2 = EUROPE_CAMPAIGN_GROUP.has(alpha2) ? "EU" : alpha2;
     const config = COUNTRY_CONFIG[configAlpha2];
     out.push({ numericId, configAlpha2, displayName: config?.name ?? displayName, config: config ?? FALLBACK_CONFIG, path, isConfigured: config !== undefined });
   }
