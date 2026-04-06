@@ -541,9 +541,9 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           );
         })}
 
-        {/* India Kashmir supplement — always uses the same fill as India's base path
-            (computeFill with "IN" key), so they stay visually in sync across all
-            states: default, hover, Results ON with campaign data. */}
+        {/* India Kashmir supplement — uses the same fill as India's base path and
+            the same mouse/click handlers so the claimed-extension area is fully
+            hover/click-interactive as India. */}
         {!loading && KASHMIR_REGIONS.map((ring, i) => (
           <path
             key={`kashmir-${i}`}
@@ -552,7 +552,11 @@ export default function HealWorldMap({ onCountryClick }: Props) {
             stroke="#fff"
             strokeWidth="0.3"
             strokeLinejoin="round"
-            style={{ pointerEvents: "none" }}
+            style={{ cursor: "pointer", transition: "fill 0.18s" }}
+            onMouseEnter={() => setHovered("IN")}
+            onMouseLeave={() => { setHovered(null); setTooltip(null); }}
+            onMouseMove={(e) => handleMouseMove(e, COUNTRY_CONFIG["IN"], "IN")}
+            onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)}
           />
         ))}
 
