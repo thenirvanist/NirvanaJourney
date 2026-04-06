@@ -631,8 +631,8 @@ export default function HealWorldMap({ onCountryClick }: Props) {
                 fill="#c8f088"
                 fontSize="9.5"
               >
-                {showResults && tooltip.campaignData
-                  ? "Souls reached: " + formatNum(tooltip.campaignData.totalReach)
+                {showResults
+                  ? "Souls reached: " + formatNum(tooltip.campaignData?.totalReach ?? 0)
                   : "Reach per US $1: ~" + formatNum(reachPerDollar(tooltip.country.cpm))}
               </text>
             ) : (
