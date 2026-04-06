@@ -351,7 +351,9 @@ function buildWorldFeatures(): WorldFeature[] {
     const displayName = isoInfo?.name ?? numericId;
     const configAlpha2 = EUROPE_CAMPAIGN_GROUP.has(alpha2) ? "EU" : alpha2;
     const config = COUNTRY_CONFIG[configAlpha2];
-    out.push({ numericId, configAlpha2, displayName: config?.name ?? displayName, config: config ?? FALLBACK_CONFIG, path, isConfigured: config !== undefined });
+    // displayName is always the geographic country name (e.g. "France"), not the
+    // campaign config name ("Europe"), so the tooltip stays geographically accurate.
+    out.push({ numericId, configAlpha2, displayName, config: config ?? FALLBACK_CONFIG, path, isConfigured: config !== undefined });
   }
   out.sort((a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category]);
   return out;
