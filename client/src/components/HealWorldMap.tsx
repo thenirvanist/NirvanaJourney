@@ -332,14 +332,24 @@ const formatNum = (n: number): string =>
 
 const reachPerDollar = (cpm: number): number => (cpm > 0 ? Math.round(1000 / cpm) : 0);
 
+// ── Fallback config for countries not in COUNTRY_CONFIG ──────────────────────
+// All world-atlas features are rendered. Countries outside the 64-entry config
+// get this neutral placeholder — they appear on the map but are non-interactive
+// (no tooltip, no click-to-donate cursor, no donation flow).
+const FALLBACK_CONFIG: CountryConfig = { name: "", category: "neutral", cpm: 0 };
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 // configAlpha2: the COUNTRY_CONFIG key used for this feature (may be "EU" for
-// European countries that map to the EU aggregate).
+// European countries that map to the EU aggregate; raw alpha2 otherwise).
+// isInteractive: true only for COUNTRY_CONFIG entries (incl. EU aggregate);
+//   fallback/unconfigured countries render in neutral but are non-interactive.
 interface WorldFeature {
   numericId: string;
   configAlpha2: string;
+  displayName: string;
   config: CountryConfig;
   path: string;
+  isInteractive: boolean;
 }
 
 interface CampaignRecord {
@@ -414,15 +424,27 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           const numericId = String(f.id);
           if (numericId === "010") continue; // Antarctica
           const isoInfo = ISO_LOOKUP[numericId];
-          if (!isoInfo) continue; // unrecognised territory — skip
-          const { alpha2 } = isoInfo;
+          // Compute SVG path first — skip geometryless features
+          const path = geom2path(f.geometry);
+          if (!path) continue;
+          // Countries not in ISO_LOOKUP (e.g. disputed/minor territories from
+          // world-atlas) render as non-interactive fallback neutral.
+          const alpha2 = isoInfo?.alpha2 ?? numericId;
+          const displayName = isoInfo?.name ?? numericId;
           // Map EU member states to the "EU" aggregate config key
           const configAlpha2 = EU_MEMBERS.has(alpha2) ? "EU" : alpha2;
           const config = COUNTRY_CONFIG[configAlpha2];
-          if (!config) continue; // not in the 64-country config — render neutral, non-interactive
-          const path = geom2path(f.geometry);
-          if (!path) continue;
-          features.push({ numericId, configAlpha2, config, path });
+          // Every country is rendered. Non-configured countries use FALLBACK_CONFIG
+          // and are non-interactive — they provide accurate political geography.
+          const isInteractive = config !== undefined;
+          features.push({
+            numericId,
+            configAlpha2,
+            displayName: config ? config.name : displayName,
+            config: config ?? FALLBACK_CONFIG,
+            path,
+            isInteractive,
+          });
         }
         features.sort(
           (a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category],
@@ -483,15 +505,24 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           </text>
         )}
 
-        {/* Non-interactive neutral countries — no tooltip, no cursor change.
-            These are world-atlas countries not in COUNTRY_CONFIG (e.g. Pacific islands).
-            We DON'T render them separately here; countries not in config are simply
-            skipped in the features loop above, so they get no SVG path at all.
-            The ocean background shows through — an intentional design choice. */}
-
-        {/* Configured country paths — interactive */}
+        {/* All countries from world-atlas 50m — non-configured ones are neutral
+            background fill (non-interactive). Configured ones are interactive. */}
         {worldFeatures.map((f) => {
           const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
+          if (!f.isInteractive) {
+            return (
+              <path
+                key={f.numericId}
+                d={f.path}
+                fill={CATEGORY_COLOR["neutral"]}
+                fillRule="evenodd"
+                stroke="#fff"
+                strokeWidth="0.4"
+                strokeLinejoin="round"
+                style={{ pointerEvents: "none" }}
+              />
+            );
+          }
           return (
             <path
               key={f.numericId}
