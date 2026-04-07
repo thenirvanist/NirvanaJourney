@@ -233,3 +233,64 @@ export function useBlogPostsByAuthor(authorName: string) {
     staleTime: 5 * 60 * 1000,
   });
 }
+
+export interface HealTestimonialRow {
+  id: number;
+  testimonial: string;
+  clientName: string;
+  country: string;
+}
+
+export function useHealTestimonials() {
+  return useQuery<HealTestimonialRow[]>({
+    queryKey: ["supabase", "heal_testimonials"],
+    queryFn: async () => {
+      if (!supabase) throw new Error("Supabase not configured");
+      const { data, error } = await supabase
+        .from("Testimonial_Sacred Journeys")
+        .select("*")
+        .limit(15);
+      if (error) throw error;
+      return (data || []).map((row: Record<string, unknown>) => ({
+        id: row["id"] as number,
+        testimonial: row["Testimonial"] as string,
+        clientName: row["Client name"] as string,
+        country: row["Country"] as string,
+      }));
+    },
+    staleTime: 0,
+    refetchInterval: 30000,
+  });
+}
+
+export interface HealDonorRow {
+  id: number;
+  rank: number;
+  donorName: string;
+  totalContributed: number;
+  soulsReached: number;
+}
+
+export function useHealDonors() {
+  return useQuery<HealDonorRow[]>({
+    queryKey: ["supabase", "heal_donors"],
+    queryFn: async () => {
+      if (!supabase) throw new Error("Supabase not configured");
+      const { data, error } = await supabase
+        .from("Donor_Heal The World")
+        .select("*")
+        .order("Rank", { ascending: true })
+        .limit(10);
+      if (error) throw error;
+      return (data || []).map((row: Record<string, unknown>) => ({
+        id: row["id"] as number,
+        rank: row["Rank"] as number,
+        donorName: row["Donor Name"] as string,
+        totalContributed: Number(row["Total Contributed"]),
+        soulsReached: Number(row["Souls reached"]),
+      }));
+    },
+    staleTime: 0,
+    refetchInterval: 30000,
+  });
+}

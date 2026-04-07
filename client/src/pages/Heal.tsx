@@ -5,6 +5,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HealWorldMap from "@/components/HealWorldMap";
 import type { HealDonation } from "@shared/schema";
+import { useHealTestimonials, useHealDonors } from "@/hooks/useSupabaseQuery";
 
 type PublicHealDonation = Omit<HealDonation, "email" | "budgetUsd" | "contentUrl">;
 
@@ -121,8 +122,8 @@ const INITIAL_FORM: FormData = {
   contentUrl: "",
   contentTitle: "",
   countries: [],
-  duration: "7 Days",
-  budgetUsd: 25,
+  duration: "1 Month",
+  budgetUsd: 15,
   customBudget: "",
   customDuration: "",
   donorName: "",
@@ -186,16 +187,8 @@ export default function Heal() {
     },
   });
 
-  const { data: leaderboard = [] } = useQuery<HealLeaderboardRow[]>({
-    queryKey: ["/api/heal/leaderboard", hallSearch],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (hallSearch) params.set("search", hallSearch);
-      const res = await fetch(`/api/heal/leaderboard?${params}`);
-      if (!res.ok) throw new Error("Failed to fetch leaderboard");
-      return res.json() as Promise<HealLeaderboardRow[]>;
-    },
-  });
+  const { data: supabaseTestimonials = [] } = useHealTestimonials();
+  const { data: supabaseDonors = [] } = useHealDonors();
 
   // Donate mutation
   const donateMutation = useMutation({
@@ -224,11 +217,21 @@ export default function Heal() {
     },
   });
 
+  // Derived display data — Supabase data takes priority; falls back to static
+  const displayTestimonials = supabaseTestimonials.length > 0
+    ? supabaseTestimonials.map((t) => ({ name: t.clientName, loc: t.country, text: t.testimonial }))
+    : TESTIMONIALS;
+
+  const filteredDonors = supabaseDonors.filter((d) =>
+    !hallSearch || d.donorName.toLowerCase().includes(hallSearch.toLowerCase())
+  );
+
   // Testimonial auto-slide
   useEffect(() => {
-    const id = setInterval(() => setTestimonialIdx((i) => (i + 1 > TESTIMONIALS.length - 4 ? 0 : i + 1)), 3000);
+    const max = Math.max(displayTestimonials.length - 3, 1);
+    const id = setInterval(() => setTestimonialIdx((i) => (i + 1 >= max ? 0 : i + 1)), 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [displayTestimonials.length]);
 
   const handleMapClick = (countryName: string) => {
     if (!form.countries.includes(countryName)) {
@@ -306,9 +309,9 @@ export default function Heal() {
           <h1 className="text-4xl md:text-6xl font-serif text-white leading-tight max-w-3xl mx-auto">
             Help Us Heal<br />The World
           </h1>
-          <p className="text-white/60 mt-4 text-sm max-w-xl mx-auto">
-            Sponsor spiritual content into conflict zones through Meta Ads.
-            Click a country to begin.
+          <p className="text-white mt-5 text-base md:text-lg max-w-2xl mx-auto font-medium leading-relaxed" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}>
+            Promote spiritual content through Meta Ads in conflict zones or region of your choice.{" "}
+            <span className="text-[#a3cc2a] font-semibold">Click a country to begin.</span>
           </p>
         </div>
 
@@ -336,8 +339,8 @@ export default function Heal() {
       <section className="bg-[#F7F2E8] py-12 overflow-hidden">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {TESTIMONIALS.slice(testimonialIdx, testimonialIdx + 4).map((t) => (
-              <div key={t.name} className="bg-white rounded-xl p-5 shadow-sm border border-[#e8e0d0]">
+            {displayTestimonials.slice(testimonialIdx, testimonialIdx + 4).map((t, idx) => (
+              <div key={`${t.name}-${idx}`} className="bg-white rounded-xl p-5 shadow-sm border border-[#e8e0d0]">
                 <p className="text-gray-600 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
                 <div>
                   <div className="font-medium text-gray-900 text-sm">{t.name}</div>
@@ -395,7 +398,7 @@ export default function Heal() {
       <section className="bg-[#1a2e0a] py-14 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-2xl md:text-3xl font-serif text-white leading-relaxed italic">
-            "If you light a lamp for someone, it will also brighten your own path."
+            "If you light a lamp for someone, it will also brighten your path."
           </p>
           <p className="text-[#a3cc2a] mt-4 text-sm tracking-widest uppercase">
             — Nichiren Daishonin
@@ -408,7 +411,7 @@ export default function Heal() {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10">
             <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-2">Start Your Campaign</p>
-            <h2 className="text-3xl font-serif text-gray-900">Sponsor a Moment of Peace</h2>
+            <h2 className="text-3xl font-serif text-gray-900">Gift A Moment Of Solace</h2>
           </div>
 
           {/* Progress indicator */}
@@ -459,8 +462,8 @@ export default function Heal() {
                       </div>
                       <div className="text-gray-500 text-sm">
                         {ct === "quotes"
-                          ? "Curated one-line wisdom from our library"
-                          : "An article or teaching from a specific URL"}
+                          ? "Curated quotes from our 'Insights' library"
+                          : "An article or teaching from our 'Insights' library"}
                       </div>
                     </button>
                   ))}
@@ -564,6 +567,9 @@ export default function Heal() {
                     onChange={(e) => setForm((f) => ({ ...f, customDuration: e.target.value }))}
                   />
                 )}
+                <p className="text-gray-400 text-xs italic">
+                  For maximum effectiveness we recommend a minimum of $5 a day.
+                </p>
               </div>
             )}
 
@@ -571,8 +577,8 @@ export default function Heal() {
             {step === 3 && (
               <div className="space-y-4">
                 <h3 className="font-serif text-xl text-gray-900">What is your budget?</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {([10, 25, 50, "Custom"] as const).map((b) => (
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                  {([15, 35, 150, 450, "Custom"] as const).map((b) => (
                     <button
                       key={String(b)}
                       onClick={() => setForm((f) => ({ ...f, budgetUsd: b }))}
@@ -837,15 +843,15 @@ export default function Heal() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {leaderboard.length === 0 ? (
+                {filteredDonors.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-5 py-8 text-center text-gray-400">
                       Be the first to enter the Hall of Grace.
                     </td>
                   </tr>
                 ) : (
-                  leaderboard.map((d) => (
-                    <tr key={d.rank} className="hover:bg-[#fafdf5] transition-colors">
+                  filteredDonors.map((d) => (
+                    <tr key={d.id} className="hover:bg-[#fafdf5] transition-colors">
                       <td className="px-5 py-3">
                         {d.rank <= 3 ? (
                           <span className={`font-bold text-lg ${d.rank === 1 ? "text-yellow-500" : d.rank === 2 ? "text-gray-400" : "text-amber-600"}`}>
@@ -856,14 +862,25 @@ export default function Heal() {
                         )}
                       </td>
                       <td className="px-5 py-3 font-medium text-gray-900">{d.donorName}</td>
-                      <td className="px-5 py-3 text-[#4a7c10] font-semibold">${fmt(d.totalAmount)}</td>
-                      <td className="px-5 py-3 text-gray-700">{fmt(d.totalReach)}</td>
+                      <td className="px-5 py-3 text-[#4a7c10] font-semibold">${fmt(d.totalContributed)}</td>
+                      <td className="px-5 py-3 text-gray-700">{fmt(d.soulsReached)}</td>
                     </tr>
                   ))
                 )}
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      {/* ── FOOTNOTE ── */}
+      <section className="bg-white border-t border-gray-100 py-8 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-gray-500 text-xs leading-relaxed">
+            <span className="font-semibold text-gray-600">Note:</span>{" "}
+            Every contribution is split 80/20. 80% fuels the direct delivery of messages to high-need regions.
+            20% sustains The Nirvanist's digital infrastructure, content creation, and global growth.
+          </p>
         </div>
       </section>
 
