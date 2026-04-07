@@ -326,9 +326,10 @@ const getFill = (
   configAlpha2: string,
   hovered: string | null, showResults: boolean, campaignMap: Record<string, CampaignRecord>,
 ): string => {
-  if (showResults && campaignMap[configAlpha2]) return COLOR_RESULTS;
-  if (hovered === configAlpha2) return COLOR_HOVER;
-  return COLOR_DEFAULT;
+  if (showResults) {
+    return campaignMap[configAlpha2] ? COLOR_RESULTS : COLOR_DEFAULT;
+  }
+  return hovered === configAlpha2 ? COLOR_HOVER : COLOR_DEFAULT;
 };
 
 // ── Build world features from world-atlas (runs once at module init) ──────────
