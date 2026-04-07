@@ -113,6 +113,7 @@ const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
   "450":{ alpha2:"MG", name:"Madagascar" },
   "454":{ alpha2:"MW", name:"Malawi" },
   "458":{ alpha2:"MY", name:"Malaysia" },
+  "462":{ alpha2:"MV", name:"Maldives" },
   "466":{ alpha2:"ML", name:"Mali" },
   "478":{ alpha2:"MR", name:"Mauritania" },
   "484":{ alpha2:"MX", name:"Mexico" },
@@ -274,6 +275,14 @@ const COLOR_RESULTS = "#5e7a0a"; // deep green for Results ON highlight
 
 const FALLBACK_CONFIG: CountryConfig = { name: "", category: "neutral", cpm: 0 };
 
+// Countries blocked from donation campaigns — show Nirvanist message on click.
+const BLACKLIST = new Set([
+  "AF","IR","PK","SA","SO","YE","KP","CN","MV","MR","ER","SD","LY",
+]);
+
+const NIRVANIST_BLACKLIST_MSG =
+  "To respect local digital regulations and culture, The Nirvanist does not currently broadcast in this region. We continue to hold space for peace here through our silent intentions.";
+
 // ── India claimed sub-regions (overlaid on base India geometry) ───────────────
 // Approximated polygon shapes for Gilgit-Baltistan, Azad Kashmir, and Aksai Chin
 // following the rough contour of India's claimed LOC/LAC boundaries.
@@ -290,8 +299,15 @@ const KASHMIR_REGIONS: [number, number][][] = [
 const coord2xy = (lon: number, lat: number): string =>
   `${((lon + 180) * 2.5).toFixed(2)},${((90 - lat) * 2.5).toFixed(2)}`;
 
-const ring2d = (ring: Position[]): string =>
-  ring.map((c, i) => (i === 0 ? "M" : "L") + coord2xy(c[0], c[1])).join(" ") + " Z";
+const ring2d = (ring: Position[]): string => {
+  if (ring.length === 0) return "";
+  let d = "M" + coord2xy(ring[0][0], ring[0][1]);
+  for (let i = 1; i < ring.length; i++) {
+    const lonDiff = Math.abs(ring[i][0] - ring[i - 1][0]);
+    d += (lonDiff > 180 ? " M" : " L") + coord2xy(ring[i][0], ring[i][1]);
+  }
+  return d + " Z";
+};
 
 const geom2path = (geom: Geometry | null): string => {
   if (!geom) return "";
@@ -313,19 +329,22 @@ const reachPerDollar = (cpm: number): number => cpm > 0 ? Math.round(1000 / cpm)
 interface WorldFeature {
   numericId: string;
   configAlpha2: string;
+  alpha2: string;           // geographic alpha2 (different from configAlpha2 for EU group)
   displayName: string;
   config: CountryConfig;
   path: string;
-  isConfigured: boolean;
+  isConfigured: boolean;    // has a COUNTRY_CONFIG entry (used for CPM tooltip)
+  isBlacklisted: boolean;   // in BLACKLIST — shows Nirvanist message on click
 }
 interface CampaignRecord { countryCode: string; totalReach: number; totalReactions: number; }
-interface TooltipState { x: number; y: number; config: CountryConfig; configAlpha2: string; displayName: string; isConfigured: boolean; campaignData?: CampaignRecord; }
+interface TooltipState { x: number; y: number; config: CountryConfig; configAlpha2: string; displayName: string; isConfigured: boolean; isBlacklisted: boolean; campaignData?: CampaignRecord; }
 interface Props { onCountryClick?: (countryName: string) => void; }
 
 const getFill = (
-  configAlpha2: string,
+  alpha2: string, configAlpha2: string,
   hovered: string | null, showResults: boolean, campaignMap: Record<string, CampaignRecord>,
 ): string => {
+  if (BLACKLIST.has(alpha2)) return COLOR_DEFAULT;
   if (showResults) {
     return campaignMap[configAlpha2] ? COLOR_RESULTS : COLOR_DEFAULT;
   }
@@ -339,7 +358,7 @@ function buildWorldFeatures(): WorldFeature[] {
   for (const f of geo.features) {
     if (f.id === undefined || f.id === null) continue;
     const numericId = String(f.id);
-    if (numericId === "010") continue;
+    if (numericId === "010") continue; // skip Antarctica
     const path = geom2path(f.geometry);
     if (!path) continue;
     const isoInfo = ISO_LOOKUP[numericId];
@@ -347,9 +366,15 @@ function buildWorldFeatures(): WorldFeature[] {
     const displayName = isoInfo?.name ?? numericId;
     const configAlpha2 = EUROPE_CAMPAIGN_GROUP.has(alpha2) ? "EU" : alpha2;
     const config = COUNTRY_CONFIG[configAlpha2];
+    const isBlacklisted = BLACKLIST.has(alpha2);
     // displayName is always the geographic country name (e.g. "France"), not the
     // campaign config name ("Europe"), so the tooltip stays geographically accurate.
-    out.push({ numericId, configAlpha2, displayName, config: config ?? FALLBACK_CONFIG, path, isConfigured: config !== undefined });
+    out.push({
+      numericId, configAlpha2, alpha2, displayName,
+      config: config ?? FALLBACK_CONFIG, path,
+      isConfigured: config !== undefined,
+      isBlacklisted,
+    });
   }
   return out;
 }
@@ -361,23 +386,30 @@ export default function HealWorldMap({ onCountryClick }: Props) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [showResults, setShowResults] = useState(false);
+  const [blacklistModal, setBlacklistModal] = useState<string | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const { data: campaigns = [] } = useQuery<CampaignRecord[]>({ queryKey: ["/api/heal/campaigns"] });
   const campaignMap: Record<string, CampaignRecord> = Object.fromEntries(campaigns.map(c => [c.countryCode, c]));
 
-  const kashmirFill = getFill("IN", hovered, showResults, campaignMap);
+  const kashmirFill = getFill("IN", "IN", hovered, showResults, campaignMap);
 
-  const handleMouseMove = (
-    e: React.MouseEvent<SVGPathElement>,
-    f: WorldFeature,
-  ) => {
+  const handleMouseMove = (e: React.MouseEvent<SVGPathElement>, f: WorldFeature) => {
     const svgEl = svgRef.current;
     if (!svgEl) return;
     const rect = svgEl.getBoundingClientRect();
     const x = (e.clientX - rect.left) * (900 / rect.width);
     const y = (e.clientY - rect.top) * (400 / rect.height) + 25;
-    setTooltip({ x, y, config: f.config, configAlpha2: f.configAlpha2, displayName: f.displayName, isConfigured: f.isConfigured, campaignData: campaignMap[f.configAlpha2] });
+    setTooltip({ x, y, config: f.config, configAlpha2: f.configAlpha2, displayName: f.displayName, isConfigured: f.isConfigured, isBlacklisted: f.isBlacklisted, campaignData: campaignMap[f.configAlpha2] });
+  };
+
+  const handleCountryClick = (f: WorldFeature) => {
+    if (f.isBlacklisted) {
+      setBlacklistModal(f.displayName);
+    } else {
+      const name = f.isConfigured ? f.config.name : f.displayName;
+      onCountryClick?.(name);
+    }
   };
 
   return (
@@ -394,14 +426,14 @@ export default function HealWorldMap({ onCountryClick }: Props) {
 
         {WORLD_FEATURES.map((f, i) => (
           <path key={`${f.numericId}-${i}`} d={f.path}
-            fill={getFill(f.configAlpha2, hovered, showResults, campaignMap)}
+            fill={getFill(f.alpha2, f.configAlpha2, hovered, showResults, campaignMap)}
             fillRule="evenodd"
             stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
-            style={{ cursor: f.isConfigured ? "pointer" : "default", transition: "fill 0.18s" }}
-            onMouseEnter={() => setHovered(f.configAlpha2)}
+            style={{ cursor: f.isBlacklisted ? "default" : "pointer", transition: "fill 0.18s" }}
+            onMouseEnter={() => { if (!f.isBlacklisted) setHovered(f.configAlpha2); }}
             onMouseLeave={() => { setHovered(null); setTooltip(null); }}
             onMouseMove={e => handleMouseMove(e, f)}
-            onClick={() => { if (f.isConfigured) onCountryClick?.(f.config.name); }} />
+            onClick={() => handleCountryClick(f)} />
         ))}
 
         {KASHMIR_REGIONS.map((ring, i) => (
@@ -410,27 +442,31 @@ export default function HealWorldMap({ onCountryClick }: Props) {
             style={{ cursor: "pointer", transition: "fill 0.18s" }}
             onMouseEnter={() => setHovered("IN")}
             onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-            onMouseMove={e => handleMouseMove(e, { numericId:"356", configAlpha2:"IN", displayName:"India", config:COUNTRY_CONFIG["IN"], path:"", isConfigured:true })}
+            onMouseMove={e => handleMouseMove(e, { numericId:"356", configAlpha2:"IN", alpha2:"IN", displayName:"India", config:COUNTRY_CONFIG["IN"], path:"", isConfigured:true, isBlacklisted:false })}
             onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)} />
         ))}
 
         {tooltip && (
           <g>
-            <rect x={Math.min(tooltip.x+8,692)} y={Math.max(tooltip.y-60,29)} width={200} height={44} rx="6" ry="6" fill="rgba(0,0,0,0.82)" />
+            <rect x={Math.min(tooltip.x+8,692)} y={Math.max(tooltip.y-60,29)} width={200} height={tooltip.isBlacklisted ? 56 : 44} rx="6" ry="6" fill="rgba(0,0,0,0.82)" />
             <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-40,47)} fill="white" fontSize="11" fontWeight="700" fontFamily="serif">
               {tooltip.displayName}
             </text>
-            {!tooltip.isConfigured ? (
-              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#aaa" fontSize="9.5">
-                Not in current campaigns
+            {tooltip.isBlacklisted ? (
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#f4a261" fontSize="8.5">
+                Click to learn about this region
               </text>
-            ) : tooltip.config.category === "inaccessible" ? (
-              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#ff9999" fontSize="9.5">
-                Not accessible via Meta Ads
+            ) : !tooltip.isConfigured ? (
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
+                Click to support this region
+              </text>
+            ) : tooltip.config.cpm > 0 ? (
+              <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
+                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "Reach per US $1: ~"+formatNum(reachPerDollar(tooltip.config.cpm))}
               </text>
             ) : (
               <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
-                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "Reach per US $1: ~"+formatNum(reachPerDollar(tooltip.config.cpm))}
+                Click to support this region
               </text>
             )}
           </g>
@@ -444,6 +480,21 @@ export default function HealWorldMap({ onCountryClick }: Props) {
         </g>
 
       </svg>
+
+      {/* Blacklist modal overlay */}
+      {blacklistModal && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg z-10"
+          onClick={() => setBlacklistModal(null)}>
+          <div className="bg-white rounded-xl shadow-2xl p-6 mx-4 max-w-sm relative"
+            onClick={e => e.stopPropagation()}>
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl leading-none"
+              onClick={() => setBlacklistModal(null)}>×</button>
+            <h3 className="text-base font-semibold text-gray-900 mb-3">{blacklistModal}</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">{NIRVANIST_BLACKLIST_MSG}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

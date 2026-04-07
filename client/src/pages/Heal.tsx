@@ -40,18 +40,35 @@ interface HealLeaderboardRow {
 }
 
 // ─── Country list ─────────────────────────────────────────────────────────────
+// Blacklisted countries are excluded — they are NOT available for campaigns.
+// (Afghanistan, Iran, Pakistan, Saudi Arabia, Somalia, Yemen, North Korea, China,
+//  Maldives, Mauritania, Eritrea, Sudan, Libya)
 const COUNTRY_LIST = [
-  "Afghanistan","Algeria","Angola","Argentina","Australia","Bangladesh",
-  "Bolivia","Brazil","Burkina Faso","Cameroon","Canada","Central African Republic",
-  "Chad","Chile","China","Colombia","Cuba","DR Congo","Egypt","Ethiopia",
-  "France","Germany","Ghana","Greece","Guinea","Haiti","India","Indonesia",
-  "Iran","Iraq","Japan","Jordan","Kazakhstan","Kenya","Lebanon","Libya",
-  "Madagascar","Mali","Mauritania","Mexico","Mongolia","Morocco","Mozambique",
-  "Myanmar","Nepal","Niger","Nigeria","North Korea","Pakistan","Palestine",
-  "Peru","Philippines","Poland","Russia","Saudi Arabia","Senegal","Somalia",
-  "South Africa","South Korea","Spain","Sri Lanka","Sudan","Syria","Tanzania",
-  "Thailand","Turkey","Uganda","Ukraine","United Kingdom","United States",
-  "Uzbekistan","Venezuela","Vietnam","Yemen","Zimbabwe",
+  "Albania","Algeria","Angola","Argentina","Armenia","Australia","Azerbaijan",
+  "Bahamas","Bangladesh","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia",
+  "Bosnia & Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso",
+  "Burundi","Cambodia","Cameroon","Canada","Central African Republic","Chad",
+  "Chile","Colombia","Republic of Congo","Costa Rica","Croatia","Cuba","Cyprus",
+  "Czech Republic","Denmark","Djibouti","Dominican Republic","DR Congo","Ecuador",
+  "Egypt","El Salvador","Equatorial Guinea","Estonia","Ethiopia","Fiji","Finland",
+  "France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Greenland",
+  "Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hungary",
+  "Iceland","India","Indonesia","Iraq","Ireland","Israel","Italy","Ivory Coast",
+  "Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyzstan","Laos",
+  "Latvia","Lebanon","Lesotho","Liberia","Lithuania","Luxembourg","Madagascar",
+  "Malawi","Malaysia","Mali","Mexico","Moldova","Mongolia","Montenegro","Morocco",
+  "Mozambique","Myanmar","Namibia","Nepal","Netherlands","New Zealand","Nicaragua",
+  "Niger","Nigeria","North Macedonia","Norway","Oman","Palestine","Panama",
+  "Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal",
+  "Puerto Rico","Qatar","Romania","Russia","Rwanda","Senegal","Serbia",
+  "Sierra Leone","Slovakia","Slovenia","Solomon Islands","South Africa",
+  "South Korea","South Sudan","Spain","Sri Lanka","Suriname","Sweden",
+  "Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste",
+  "Togo","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine",
+  "United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan",
+  "Vanuatu","Venezuela","Vietnam","Zambia","Zimbabwe",
+  // Regional campaigns
+  "Europe",
 ];
 
 // ─── Testimonials ─────────────────────────────────────────────────────────────
