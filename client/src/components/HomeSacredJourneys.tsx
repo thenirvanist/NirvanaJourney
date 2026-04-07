@@ -1,17 +1,28 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Clock } from "lucide-react";
-import { useJourneys } from "@/hooks/useSupabaseQuery";
 import gandhiImg from "@assets/Monk_Meditating_1775056505285.webp";
 import gangesImg from "@assets/Rishikesh_1775056505289.webp";
 import himalayaImg from "@assets/Himalaya_1775056505289.webp";
 import meditationImg from "@assets/Meditation_1775056572859.webp";
 
-const CARD_IMAGE_OVERRIDES = [
-  gandhiImg,
-  gangesImg,
-  himalayaImg,
+const CARD_DATA = [
+  {
+    title: "GANDHI'S SPIRITUAL JOURNEY",
+    subtitle: "Walk the path of the Mahatma",
+    image: gandhiImg,
+    imageAlt: "Monk in red robe seated before the Himalayan panorama",
+  },
+  {
+    title: "HOLY GANGES SPIRITUAL JOURNEY",
+    subtitle: "Surrender to the sacred river",
+    image: gangesImg,
+    imageAlt: "Yogi performing aarti at sunset on the sacred Ganges",
+  },
+  {
+    title: "THE HIMALAYAN SPIRITUAL JOURNEY",
+    subtitle: "Rise into the abode of the gods",
+    image: himalayaImg,
+    imageAlt: "Himalayan peaks with rhododendron forests in bloom",
+  },
 ];
 
 const LETTERBOX_IMAGES = [
@@ -24,8 +35,6 @@ const LETTERBOX_IMAGES = [
 export default function HomeSacredJourneys() {
   const [activeImage, setActiveImage] = useState(0);
   const [prevImage, setPrevImage] = useState<number | null>(null);
-
-  const { data: journeys } = useJourneys();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,14 +49,6 @@ export default function HomeSacredJourneys() {
     const timer = setTimeout(() => setPrevImage(null), 1200);
     return () => clearTimeout(timer);
   }, [prevImage]);
-
-  const TITLE_OVERRIDES = [
-    "Gandhi's Spiritual Journey",
-    "Holy Ganges Spiritual Journey",
-    "The Himalayan Spiritual Journey",
-  ];
-
-  const displayedJourneys = journeys?.slice(0, 3) || [];
 
   return (
     <section className="bg-[#F7F2E8]">
@@ -83,7 +84,7 @@ export default function HomeSacredJourneys() {
           </div>
         ))}
 
-        {/* Dark gradient overlay for text legibility */}
+        {/* Dark gradient overlay */}
         <div
           className="absolute inset-0 z-10"
           style={{
@@ -92,10 +93,10 @@ export default function HomeSacredJourneys() {
           }}
         />
 
-        {/* Text overlay — stays fixed as images change */}
+        {/* Quote overlay */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center">
           <p
-            className="text-white font-semibold tracking-wide mb-6"
+            className="text-white font-semibold tracking-wide"
             style={{
               fontSize: "clamp(1.1rem, 3vw, 1.75rem)",
               textShadow: "0 2px 12px rgba(0,0,0,0.5)",
@@ -104,15 +105,6 @@ export default function HomeSacredJourneys() {
           >
             The Journey Within Begins with a Step Outward.
           </p>
-          <Link href="/sacred-journeys" onClick={() => window.scrollTo(0, 0)}>
-            <Button
-              className="px-7 py-3 text-sm font-semibold rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-gray-900 transition-all duration-300"
-              style={{ letterSpacing: "0.04em" }}
-            >
-              Explore Sacred Journeys
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
         </div>
 
         {/* Image indicator dots */}
@@ -133,48 +125,36 @@ export default function HomeSacredJourneys() {
         </div>
       </div>
 
-      {/* Journey cards — aligned straight, no parallax */}
-      {displayedJourneys.length > 0 && (
-        <div className="py-16 px-6 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {displayedJourneys.map((journey, i) => (
-              <div key={journey.id} className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
-                {/* Card image */}
-                <div className="relative overflow-hidden h-52 flex-shrink-0">
-                  <img
-                    src={CARD_IMAGE_OVERRIDES[i] ?? journey.image}
-                    alt={TITLE_OVERRIDES[i]}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-
-                {/* Card body */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 leading-snug group-hover:text-[hsl(75,64%,49%)] transition-colors duration-300">
-                    {TITLE_OVERRIDES[i]}
-                  </h3>
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed flex-grow">
-                    {journey.description}
-                  </p>
-
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
-                      {journey.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-[hsl(75,64%,49%)]" />
-                      {journey.duration}
-                    </span>
-                  </div>
-                </div>
+      {/* Full-bleed image overlay cards */}
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {CARD_DATA.map((card) => (
+            <div
+              key={card.title}
+              className="relative overflow-hidden group rounded-sm"
+              style={{ height: "460px" }}
+            >
+              <img
+                src={card.image}
+                alt={card.imageAlt}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-black/45 group-hover:bg-black/60 transition-colors duration-500" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+                <div className="w-10 h-px bg-white/60 mb-4" />
+                <h2 className="text-white text-xl font-bold tracking-[0.15em] mb-3 leading-tight">
+                  {card.title}
+                </h2>
+                <div className="w-6 h-px bg-white/60 mb-3" />
+                <p className="text-white/85 text-sm md:text-base italic font-light">
+                  {card.subtitle}
+                </p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </section>
   );
 }

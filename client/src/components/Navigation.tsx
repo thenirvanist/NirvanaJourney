@@ -53,13 +53,6 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            {/* Sacred Journeys */}
-            <Link href="/sacred-journeys">
-              <Button variant="ghost" className={navBtnClass(isActive("/sacred-journeys"))}>
-                {t("navigation.journeys")}
-              </Button>
-            </Link>
-
             {/* Meetups / Satsangs */}
             <Link href="/meetups">
               <Button variant="ghost" className={navBtnClass(isActive("/meetups"))}>
@@ -92,13 +85,6 @@ export default function Navigation() {
             <Link href="/sages">
               <Button variant="ghost" className={navBtnClass(isActive("/sages"))}>
                 {t("navigation.sages")}
-              </Button>
-            </Link>
-
-            {/* Heal */}
-            <Link href="/heal">
-              <Button variant="ghost" className={navBtnClass(isActive("/heal"))}>
-                Heal
               </Button>
             </Link>
 
@@ -175,13 +161,6 @@ export default function Navigation() {
         {isOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-white/20">
             <div className="flex flex-col space-y-2 mt-4">
-              {/* Sacred Journeys */}
-              <Link href="/sacred-journeys" onClick={() => setIsOpen(false)}>
-                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/sacred-journeys"))}`}>
-                  {t("navigation.journeys")}
-                </Button>
-              </Link>
-
               {/* Meetups */}
               <Link href="/meetups" onClick={() => setIsOpen(false)}>
                 <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/meetups"))}`}>
@@ -223,13 +202,6 @@ export default function Navigation() {
               <Link href="/sages" onClick={() => setIsOpen(false)}>
                 <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/sages"))}`}>
                   {t("navigation.sages")}
-                </Button>
-              </Link>
-
-              {/* Heal */}
-              <Link href="/heal" onClick={() => setIsOpen(false)}>
-                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/heal"))}`}>
-                  Heal
                 </Button>
               </Link>
 
