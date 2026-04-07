@@ -1,0 +1,25 @@
+	1) Can this subtitle at top be updated and made more prominent so users don’t miss it (without increasing height of the section):
+		○ Sponsor spiritual content into conflict zones through Meta Ads. Click a country to begin -> Promote spiritual content through Meta Ads in conflict zones or region of you choice. Click a country to begin.
+		
+	2) Add a foot note at bottom of the heal section.
+Note: Every contribution is split 80/20. 80% fuels the direct delivery of messages to high-need regions. 20% sustains The Nirvanist’s digital infrastructure, content creation, and global growth.
+
+	1) Quote Update from "If you light a lamp for someone, it will also brighten your own path." to -> "If you light a lamp for someone, it will also brighten your path."
+
+	1) Sponsor form Section:
+		a.  Update Sponsor a Moment of Peace to -> Gift A Moment Of Solace
+		b. Update subtitle for spiritual quotes box to -> Curated quotes from our 'Insights' library
+		c. Update subtitle for spiritual quotes box to -> An article or teaching from our 'Insights' library
+		d. In step 3 of the card 'How long should the campaign run?' can you add a note at the bottom (For maximum effectiveness we recommend a minimum of $5 a day). The default should be 1 month tab
+		e. In step 3 of the card 'What is your budget? Can you update tabs to $15, $35, $150, $450, Custom
+		
+	2) We need to create tables in Supabase and then connect to them for testimonials and Donnor list. You may give me the exact SQL query hear and I will run it in Supabase. For both tables, when changes are made (e.g values are changes, columns added etc), it must immediately reflect on the table on the website.
+		a. Testimonials: Testimonial cards on the 'heal' page must draw and publish the top 15 testimonials from here. Table name Testimonial_Sacred Journeys
+			i. Column 1: Testimonial
+			ii. Column 2: Client name
+			iii. Column 3: Country
+		b. Donor hall of grace: Table on website must draw and publish the top 10 Donor. Table Name Donor_Heal The World
+			i. Column 1: Rank
+			ii. Column 2: Donor Name
+			iii. Column 3:  Total Contributed
+Column 4: Souls reached
