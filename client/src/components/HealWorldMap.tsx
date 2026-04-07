@@ -267,15 +267,11 @@ const COUNTRY_CONFIG: Record<string, CountryConfig> = {
   "MG":{ name:"Madagascar",             category:"neutral",      cpm:0.22 },
 };
 
-const CATEGORY_COLOR: Record<Category, string> = {
-  high: "#4a7c10", mid: "#a3cc2a", neutral: "#D1D1D1", inaccessible: "#7A7A7A",
-};
-const CATEGORY_HOVER: Record<Category, string> = {
-  high: "#5e9e14", mid: "#b8e030", neutral: "#b8b8b8", inaccessible: "#909090",
-};
-const RENDER_ORDER: Record<Category, number> = {
-  neutral: 0, inaccessible: 1, mid: 2, high: 3,
-};
+// Flat colour scheme: all countries grey, site primary green on hover.
+const COLOR_DEFAULT = "#D1D1D1";
+const COLOR_HOVER   = "#a3cc2a"; // hsl(75, 64%, 49%) — site --brand-primary
+const COLOR_RESULTS = "#5e7a0a"; // deep green for Results ON highlight
+
 const FALLBACK_CONFIG: CountryConfig = { name: "", category: "neutral", cpm: 0 };
 
 // ── India claimed sub-regions (overlaid on base India geometry) ───────────────
@@ -326,14 +322,13 @@ interface CampaignRecord { countryCode: string; totalReach: number; totalReactio
 interface TooltipState { x: number; y: number; config: CountryConfig; configAlpha2: string; displayName: string; isConfigured: boolean; campaignData?: CampaignRecord; }
 interface Props { onCountryClick?: (countryName: string) => void; }
 
-const computeFill = (
-  configAlpha2: string, config: CountryConfig,
+const getFill = (
+  configAlpha2: string,
   hovered: string | null, showResults: boolean, campaignMap: Record<string, CampaignRecord>,
 ): string => {
-  const isHov = hovered === configAlpha2;
-  const base = isHov ? CATEGORY_HOVER[config.category] : CATEGORY_COLOR[config.category];
-  if (showResults && campaignMap[configAlpha2]) return config.category === "high" ? "#2d5c08" : "#82a322";
-  return base;
+  if (showResults && campaignMap[configAlpha2]) return COLOR_RESULTS;
+  if (hovered === configAlpha2) return COLOR_HOVER;
+  return COLOR_DEFAULT;
 };
 
 // ── Build world features from world-atlas (runs once at module init) ──────────
@@ -355,7 +350,6 @@ function buildWorldFeatures(): WorldFeature[] {
     // campaign config name ("Europe"), so the tooltip stays geographically accurate.
     out.push({ numericId, configAlpha2, displayName, config: config ?? FALLBACK_CONFIG, path, isConfigured: config !== undefined });
   }
-  out.sort((a, b) => RENDER_ORDER[a.config.category] - RENDER_ORDER[b.config.category]);
   return out;
 }
 
@@ -371,6 +365,8 @@ export default function HealWorldMap({ onCountryClick }: Props) {
   const { data: campaigns = [] } = useQuery<CampaignRecord[]>({ queryKey: ["/api/heal/campaigns"] });
   const campaignMap: Record<string, CampaignRecord> = Object.fromEntries(campaigns.map(c => [c.countryCode, c]));
 
+  const kashmirFill = getFill("IN", hovered, showResults, campaignMap);
+
   const handleMouseMove = (
     e: React.MouseEvent<SVGPathElement>,
     f: WorldFeature,
@@ -382,8 +378,6 @@ export default function HealWorldMap({ onCountryClick }: Props) {
     const y = (e.clientY - rect.top) * (400 / rect.height) + 25;
     setTooltip({ x, y, config: f.config, configAlpha2: f.configAlpha2, displayName: f.displayName, isConfigured: f.isConfigured, campaignData: campaignMap[f.configAlpha2] });
   };
-
-  const indiaFill = computeFill("IN", COUNTRY_CONFIG["IN"], hovered, showResults, campaignMap);
 
   return (
     <div className="relative w-full select-none">
@@ -397,23 +391,21 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           <line key={`lon-${lon}`} x1={((lon+180)*2.5).toFixed(1)} y1="0" x2={((lon+180)*2.5).toFixed(1)} y2="450" stroke="#E0DADA" strokeWidth="0.5" />
         ))}
 
-        {WORLD_FEATURES.map((f, i) => {
-          const fill = computeFill(f.configAlpha2, f.config, hovered, showResults, campaignMap);
-          return (
-            <path key={`${f.numericId}-${i}`} d={f.path}
-              fill={fill} fillRule="evenodd"
-              stroke="#fff" strokeWidth={f.isConfigured ? "0.5" : "0.4"} strokeLinejoin="round"
-              style={{ cursor: f.isConfigured ? "pointer" : "default", transition: "fill 0.18s" }}
-              onMouseEnter={() => setHovered(f.configAlpha2)}
-              onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-              onMouseMove={e => handleMouseMove(e, f)}
-              onClick={() => { if (f.isConfigured) onCountryClick?.(f.config.name); }} />
-          );
-        })}
+        {WORLD_FEATURES.map((f, i) => (
+          <path key={`${f.numericId}-${i}`} d={f.path}
+            fill={getFill(f.configAlpha2, hovered, showResults, campaignMap)}
+            fillRule="evenodd"
+            stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
+            style={{ cursor: f.isConfigured ? "pointer" : "default", transition: "fill 0.18s" }}
+            onMouseEnter={() => setHovered(f.configAlpha2)}
+            onMouseLeave={() => { setHovered(null); setTooltip(null); }}
+            onMouseMove={e => handleMouseMove(e, f)}
+            onClick={() => { if (f.isConfigured) onCountryClick?.(f.config.name); }} />
+        ))}
 
         {KASHMIR_REGIONS.map((ring, i) => (
-          <path key={`kashmir-${i}`} d={kashmirPath(ring)} fill={indiaFill}
-            stroke="#fff" strokeWidth="0.3" strokeLinejoin="round"
+          <path key={`kashmir-${i}`} d={kashmirPath(ring)} fill={kashmirFill}
+            stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
             style={{ cursor: "pointer", transition: "fill 0.18s" }}
             onMouseEnter={() => setHovered("IN")}
             onMouseLeave={() => { setHovered(null); setTooltip(null); }}
@@ -450,20 +442,6 @@ export default function HealWorldMap({ onCountryClick }: Props) {
           </text>
         </g>
 
-        <g transform="translate(8,355)">
-          <rect x="0" y="0" width="190" height="64" rx="6" fill="rgba(255,255,255,0.85)" />
-          {([
-            { color:"#4a7c10", label:"Active conflict zones" },
-            { color:"#a3cc2a", label:"Economic / indirect impact" },
-            { color:"#D1D1D1", label:"Neutral / accessible" },
-            { color:"#7A7A7A", label:"Non-accessible region" },
-          ] as const).map(({ color, label }, i) => (
-            <g key={label} transform={`translate(8,${12+i*14})`}>
-              <rect x="0" y="-7" width="10" height="10" fill={color} rx="2" />
-              <text x="16" y="2" fill="#333" fontSize="8.5">{label}</text>
-            </g>
-          ))}
-        </g>
       </svg>
     </div>
   );
