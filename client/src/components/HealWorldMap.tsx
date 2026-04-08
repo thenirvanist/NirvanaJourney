@@ -284,13 +284,18 @@ const NIRVANIST_BLACKLIST_MSG =
   "To respect local digital regulations and culture, The Nirvanist does not currently broadcast in this region. We continue to hold space for peace here through our silent intentions.";
 
 // ── India claimed sub-regions (overlaid on base India geometry) ───────────────
-// Approximated polygon shapes for Gilgit-Baltistan, Azad Kashmir, and Aksai Chin
-// following the rough contour of India's claimed LOC/LAC boundaries.
+// Two sub-paths rendered as a single <path> element so there are no internal
+// white stroke dividers between the western Kashmir region and Aksai Chin.
+// Gilgit-Baltistan and Azad Kashmir are merged into one continuous polygon.
 const KASHMIR_REGIONS: [number, number][][] = [
-  // Gilgit-Baltistan — trapezoid following Karakoram/Hindu Kush foothills
-  [[72.4,36.8],[74.0,37.1],[76.2,37.0],[77.5,36.5],[77.8,35.3],[76.5,34.8],[74.5,35.1],[72.8,35.6]],
-  // Azad Kashmir — elongated wedge along LOC
-  [[73.2,36.1],[74.0,36.2],[74.7,35.6],[74.8,34.5],[74.2,33.4],[73.6,33.2],[73.1,34.0],[73.0,35.2]],
+  // Gilgit-Baltistan + Azad Kashmir — single unified polygon tracing the
+  // outer boundary of both adjacent regions (no internal border).
+  [
+    [73.0,33.2],[73.6,33.2],[74.2,33.4],[74.8,34.5],
+    [74.7,35.6],[76.5,34.8],[77.8,35.3],[77.5,36.5],
+    [76.2,37.0],[74.0,37.1],[72.4,36.8],[72.8,35.6],
+    [73.0,35.2],[73.1,34.0],
+  ],
   // Aksai Chin — irregular polygon along LAC
   [[78.6,35.9],[79.2,36.1],[80.2,35.8],[80.5,35.0],[80.1,34.5],[79.0,34.3],[78.4,34.6],[78.2,35.3]],
 ];
@@ -436,15 +441,17 @@ export default function HealWorldMap({ onCountryClick }: Props) {
             onClick={() => handleCountryClick(f)} />
         ))}
 
-        {KASHMIR_REGIONS.map((ring, i) => (
-          <path key={`kashmir-${i}`} d={kashmirPath(ring)} fill={kashmirFill}
-            stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
-            style={{ cursor: "pointer", transition: "fill 0.18s" }}
-            onMouseEnter={() => setHovered("IN")}
-            onMouseLeave={() => { setHovered(null); setTooltip(null); }}
-            onMouseMove={e => handleMouseMove(e, { numericId:"356", configAlpha2:"IN", alpha2:"IN", displayName:"India", config:COUNTRY_CONFIG["IN"], path:"", isConfigured:true, isBlacklisted:false })}
-            onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)} />
-        ))}
+        {/* Kashmir overlay — single element so no internal white stroke dividers */}
+        <path
+          d={KASHMIR_REGIONS.map(kashmirPath).join(" ")}
+          fill={kashmirFill}
+          stroke="#fff" strokeWidth="0.4" strokeLinejoin="round"
+          style={{ cursor: "pointer", transition: "fill 0.18s" }}
+          onMouseEnter={() => setHovered("IN")}
+          onMouseLeave={() => { setHovered(null); setTooltip(null); }}
+          onMouseMove={e => handleMouseMove(e, { numericId:"356", configAlpha2:"IN", alpha2:"IN", displayName:"India", config:COUNTRY_CONFIG["IN"], path:"", isConfigured:true, isBlacklisted:false })}
+          onClick={() => onCountryClick?.(COUNTRY_CONFIG["IN"].name)}
+        />
 
         {tooltip && (
           <g>
