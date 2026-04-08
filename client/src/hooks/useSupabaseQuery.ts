@@ -265,6 +265,41 @@ export function useHealTestimonials() {
   });
 }
 
+export interface TransparencyLedgerRow {
+  id: number;
+  monthYear: string;
+  peopleReached: number;
+  engagement: number;
+  countries: number;
+  donors: number;
+  totalBudget: number;
+}
+
+export function useTransparencyLedger() {
+  return useQuery<TransparencyLedgerRow[]>({
+    queryKey: ["supabase", "transparency_ledger"],
+    queryFn: async () => {
+      if (!supabase) throw new Error("Supabase not configured");
+      const { data, error } = await supabase
+        .from("transparency_ledger")
+        .select("*")
+        .order("id", { ascending: false });
+      if (error) throw error;
+      return (data || []).map((row: Record<string, unknown>) => ({
+        id: row["id"] as number,
+        monthYear: row["month_year"] as string,
+        peopleReached: Number(row["people_reached"] ?? 0),
+        engagement: Number(row["engagement"] ?? 0),
+        countries: Number(row["countries"] ?? 0),
+        donors: Number(row["donors"] ?? 0),
+        totalBudget: Number(row["total_budget"] ?? 0),
+      }));
+    },
+    staleTime: 0,
+    refetchInterval: 60000,
+  });
+}
+
 export interface HealDonorRow {
   id: number;
   rank: number;
