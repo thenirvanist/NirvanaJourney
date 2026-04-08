@@ -81,6 +81,13 @@ export default function Navigation() {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* Heal */}
+            <Link href="/heal">
+              <Button variant="ghost" className={navBtnClass(isActive("/heal"))}>
+                Heal
+              </Button>
+            </Link>
+
             {/* Sages */}
             <Link href="/sages">
               <Button variant="ghost" className={navBtnClass(isActive("/sages"))}>
@@ -197,6 +204,13 @@ export default function Navigation() {
                   </div>
                 )}
               </div>
+
+              {/* Heal */}
+              <Link href="/heal" onClick={() => setIsOpen(false)}>
+                <Button variant="ghost" className={`w-full justify-start ${navBtnClass(isActive("/heal"))}`}>
+                  Heal
+                </Button>
+              </Link>
 
               {/* Sages */}
               <Link href="/sages" onClick={() => setIsOpen(false)}>

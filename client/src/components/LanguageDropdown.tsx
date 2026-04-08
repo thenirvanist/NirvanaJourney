@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Globe } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -38,15 +38,11 @@ export function LanguageDropdown() {
         <Button
           variant="ghost"
           size="sm"
-          className="text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-3 py-2 rounded-lg transition-all duration-300 flex items-center gap-2"
+          className="text-white hover:bg-[hsl(70,71%,62%)] hover:text-black px-3 py-2 rounded-lg transition-all duration-300 flex items-center gap-1.5"
           data-testid="button-language-dropdown"
         >
-          <Globe className="w-4 h-4" />
-          <span className="hidden sm:inline-flex items-center gap-1">
-            <span className="text-lg">{currentLang.flag}</span>
-            <span className="font-medium">{currentLang.name}</span>
-          </span>
-          <span className="sm:hidden text-lg">{currentLang.flag}</span>
+          <span className="text-lg leading-none">{currentLang.flag}</span>
+          <span className="font-medium text-sm">{currentLang.code.toUpperCase()}</span>
           {isTranslating ? (
             <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin" />
           ) : (
