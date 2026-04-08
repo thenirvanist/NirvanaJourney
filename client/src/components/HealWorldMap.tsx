@@ -196,7 +196,7 @@ type Category = "high" | "mid" | "neutral" | "inaccessible";
 interface CountryConfig { name: string; category: Category; cpm: number; }
 
 const COUNTRY_CONFIG: Record<string, CountryConfig> = {
-  // ── Western Europe ────────────────────────────────────────────────────────
+  // ── Western Europe (major markets with explicit CPMs; rest at baseline) ────
   "GB":{ name:"United Kingdom",          category:"neutral",      cpm:7.5  },
   "DE":{ name:"Germany",                 category:"neutral",      cpm:7.0  },
   "FR":{ name:"France",                  category:"neutral",      cpm:6.8  },
@@ -204,38 +204,38 @@ const COUNTRY_CONFIG: Record<string, CountryConfig> = {
   "CH":{ name:"Switzerland",             category:"neutral",      cpm:8.0  },
   "NO":{ name:"Norway",                  category:"neutral",      cpm:6.8  },
   "SE":{ name:"Sweden",                  category:"neutral",      cpm:6.5  },
-  "DK":{ name:"Denmark",                 category:"neutral",      cpm:6.8  },
-  "FI":{ name:"Finland",                 category:"neutral",      cpm:5.5  },
-  "IE":{ name:"Ireland",                 category:"neutral",      cpm:7.0  },
-  "AT":{ name:"Austria",                 category:"neutral",      cpm:6.2  },
+  "DK":{ name:"Denmark",                 category:"neutral",      cpm:6.5  },
+  "FI":{ name:"Finland",                 category:"neutral",      cpm:6.5  },
+  "IE":{ name:"Ireland",                 category:"neutral",      cpm:6.5  },
+  "AT":{ name:"Austria",                 category:"neutral",      cpm:6.5  },
   "BE":{ name:"Belgium",                 category:"neutral",      cpm:6.5  },
-  "LU":{ name:"Luxembourg",              category:"neutral",      cpm:7.5  },
-  "IS":{ name:"Iceland",                 category:"neutral",      cpm:5.5  },
+  "LU":{ name:"Luxembourg",              category:"neutral",      cpm:6.5  },
+  "IS":{ name:"Iceland",                 category:"neutral",      cpm:6.5  },
   // ── Southern Europe ───────────────────────────────────────────────────────
-  "IT":{ name:"Italy",                   category:"neutral",      cpm:5.2  },
-  "ES":{ name:"Spain",                   category:"neutral",      cpm:4.8  },
-  "PT":{ name:"Portugal",                category:"neutral",      cpm:3.8  },
-  "GR":{ name:"Greece",                  category:"neutral",      cpm:3.2  },
-  "CY":{ name:"Cyprus",                  category:"neutral",      cpm:3.5  },
+  "IT":{ name:"Italy",                   category:"neutral",      cpm:6.5  },
+  "ES":{ name:"Spain",                   category:"neutral",      cpm:6.5  },
+  "PT":{ name:"Portugal",                category:"neutral",      cpm:6.5  },
+  "GR":{ name:"Greece",                  category:"neutral",      cpm:6.5  },
+  "CY":{ name:"Cyprus",                  category:"neutral",      cpm:6.5  },
   // ── Central & Eastern Europe ──────────────────────────────────────────────
-  "PL":{ name:"Poland",                  category:"neutral",      cpm:2.5  },
-  "CZ":{ name:"Czech Republic",          category:"neutral",      cpm:3.0  },
-  "SK":{ name:"Slovakia",                category:"neutral",      cpm:2.8  },
-  "HU":{ name:"Hungary",                 category:"neutral",      cpm:2.2  },
-  "RO":{ name:"Romania",                 category:"neutral",      cpm:1.8  },
-  "BG":{ name:"Bulgaria",                category:"neutral",      cpm:1.6  },
-  "HR":{ name:"Croatia",                 category:"neutral",      cpm:2.4  },
-  "SI":{ name:"Slovenia",                category:"neutral",      cpm:3.0  },
-  "EE":{ name:"Estonia",                 category:"neutral",      cpm:2.5  },
-  "LV":{ name:"Latvia",                  category:"neutral",      cpm:2.0  },
-  "LT":{ name:"Lithuania",               category:"neutral",      cpm:2.0  },
-  // ── Balkans & Caucasus fringe ─────────────────────────────────────────────
-  "MD":{ name:"Moldova",                 category:"neutral",      cpm:1.0  },
-  "BA":{ name:"Bosnia & Herzegovina",    category:"neutral",      cpm:1.5  },
-  "RS":{ name:"Serbia",                  category:"neutral",      cpm:1.8  },
-  "ME":{ name:"Montenegro",              category:"neutral",      cpm:2.0  },
-  "MK":{ name:"North Macedonia",         category:"neutral",      cpm:1.6  },
-  "AL":{ name:"Albania",                 category:"neutral",      cpm:1.2  },
+  "PL":{ name:"Poland",                  category:"neutral",      cpm:6.5  },
+  "CZ":{ name:"Czech Republic",          category:"neutral",      cpm:6.5  },
+  "SK":{ name:"Slovakia",                category:"neutral",      cpm:6.5  },
+  "HU":{ name:"Hungary",                 category:"neutral",      cpm:6.5  },
+  "RO":{ name:"Romania",                 category:"neutral",      cpm:6.5  },
+  "BG":{ name:"Bulgaria",                category:"neutral",      cpm:6.5  },
+  "HR":{ name:"Croatia",                 category:"neutral",      cpm:6.5  },
+  "SI":{ name:"Slovenia",                category:"neutral",      cpm:6.5  },
+  "EE":{ name:"Estonia",                 category:"neutral",      cpm:6.5  },
+  "LV":{ name:"Latvia",                  category:"neutral",      cpm:6.5  },
+  "LT":{ name:"Lithuania",               category:"neutral",      cpm:6.5  },
+  // ── Balkans & fringe ──────────────────────────────────────────────────────
+  "MD":{ name:"Moldova",                 category:"neutral",      cpm:6.5  },
+  "BA":{ name:"Bosnia & Herzegovina",    category:"neutral",      cpm:6.5  },
+  "RS":{ name:"Serbia",                  category:"neutral",      cpm:6.5  },
+  "ME":{ name:"Montenegro",              category:"neutral",      cpm:6.5  },
+  "MK":{ name:"North Macedonia",         category:"neutral",      cpm:6.5  },
+  "AL":{ name:"Albania",                 category:"neutral",      cpm:6.5  },
   // ── Conflict / high-need ──────────────────────────────────────────────────
   "SD":{ name:"Sudan",                   category:"high",         cpm:0.28 },
   "UA":{ name:"Ukraine",                 category:"high",         cpm:1.2  },
@@ -498,11 +498,11 @@ export default function HealWorldMap({ onCountryClick }: Props) {
               </text>
             ) : tooltip.config.cpm > 0 ? (
               <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
-                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "Reach per US $1: ~"+formatNum(reachPerDollar(tooltip.config.cpm))}
+                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "CPM: $"+tooltip.config.cpm.toFixed(2)}
               </text>
             ) : (
               <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
-                Click to support this region
+                Available for campaigns
               </text>
             )}
           </g>
