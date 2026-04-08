@@ -123,9 +123,6 @@ export default function Navigation() {
                 <div className="text-white">{t("navigation.loading")}</div>
               ) : isAuthenticated && user ? (
                 <div className="flex items-center space-x-3">
-                  <div className="text-white text-sm">
-                    {t("navigation.welcome")}, {user.firstName}
-                  </div>
                   <Link href="/dashboard">
                     <Button variant="ghost" className={navBtnClass(isActive("/dashboard"))}>
                       <Heart className="w-4 h-4 mr-1 fill-red-500 text-red-500" />

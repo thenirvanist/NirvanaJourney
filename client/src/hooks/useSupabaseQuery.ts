@@ -288,7 +288,7 @@ export function useTransparencyLedger() {
       return (data || []).map((row: Record<string, unknown>) => ({
         id: row["id"] as number,
         monthYear: row["month_year"] as string,
-        peopleReached: Number(row["monthly_outreach"] ?? 0),
+        peopleReached: Number(row["people_reached"] ?? 0),
         engagement: Number(row["engagement"] ?? 0),
         countries: (() => { const v = String(row["countries"] ?? "").trim(); return v && v !== "0" ? v : "—"; })(),
         donors: (() => { const v = String(row["donors"] ?? "").trim(); return v && v !== "0" ? v : "—"; })(),
