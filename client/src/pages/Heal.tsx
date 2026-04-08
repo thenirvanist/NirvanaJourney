@@ -153,6 +153,7 @@ export default function Heal() {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
 
   const [hallSearch, setHallSearch] = useState("");
+  const [bankModalOpen, setBankModalOpen] = useState(false);
 
   // Queries
   const { data: healMetrics } = useHealSuccessMetrics();
@@ -754,10 +755,22 @@ export default function Heal() {
                   </div>
                 </div>
 
-                <div className="border border-dashed border-gray-300 rounded-xl p-6 text-center">
-                  <CreditCard className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 text-sm mb-1">Secure payment via Stripe / PayPal</p>
-                  <p className="text-gray-300 text-xs">Payment integration coming soon — submitting will reserve your campaign.</p>
+                <div className="border border-dashed border-gray-200 rounded-xl p-6">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-300 text-sm font-medium cursor-not-allowed select-none">Stripe</span>
+                      <span className="text-gray-200 text-sm select-none">·</span>
+                      <span className="text-gray-300 text-sm font-medium cursor-not-allowed select-none">PayPal</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setBankModalOpen(true)}
+                      className="text-sm text-[#4a7c10] hover:text-[#3d6a0d] underline underline-offset-2 transition-colors"
+                    >
+                      Direct bank transfer
+                    </button>
+                  </div>
+                  <p className="text-gray-400 text-xs mt-3">Payment integration coming soon.</p>
                 </div>
 
                 <button
@@ -930,6 +943,52 @@ export default function Heal() {
 
 
       <Footer />
+
+      {/* Bank transfer modal */}
+      {bankModalOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+          onClick={() => setBankModalOpen(false)}
+        >
+          <div
+            className="bg-[#F7F2E8] rounded-2xl p-8 max-w-md w-full mx-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setBankModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h3 className="font-serif text-xl text-[#4a7c10] mb-4">Temporary Banking Bridge</h3>
+
+            <p className="text-gray-700 text-sm leading-relaxed mb-3">
+              We are currently in the 3-month process of incorporating The Nirvanist in Singapore. To ensure we don't stop our mission during this transition, we are accepting direct transfers to our founder's dedicated project account.
+            </p>
+
+            <p className="text-gray-700 text-sm leading-relaxed">
+              Please contact us at{" "}
+              <a href="mailto:pratikmalia@thenirvanist.com" className="text-[#4a7c10] underline underline-offset-2">
+                pratikmalia@thenirvanist.com
+              </a>{" "}
+              or via WhatsApp at{" "}
+              <a href="https://wa.me/6597554992" target="_blank" rel="noopener noreferrer" className="text-[#4a7c10] underline underline-offset-2">
+                +65 97554992
+              </a>{" "}
+              for the transfer details. Once received, your donation will be manually added to the Transparency Ledger below with full accountability and receipts by Meta (Formerly Facebook).
+            </p>
+
+            <button
+              onClick={() => setBankModalOpen(false)}
+              className="mt-6 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
