@@ -806,10 +806,9 @@ export default function Heal() {
             <p className="text-gray-500 mt-2 text-sm">Every campaign, every result — nothing hidden.</p>
           </div>
 
-          {/* Single table + colgroup; tbody is the only scrolling element (display:block).
-               Explicit widths on every th/td match the colgroup percentages to guarantee alignment. */}
+          {/* Scrollable ledger — colgroup drives all column widths; thead/tfoot are sticky within the shared scroll wrapper */}
           <div className="rounded-xl border border-gray-100 overflow-hidden">
-            <div className="overflow-x-auto">
+            <div style={{ maxHeight: "500px", overflowX: "auto", overflowY: "auto", scrollbarGutter: "stable" }}>
               <table className="w-full text-sm" style={{ tableLayout: "fixed", minWidth: "600px" }}>
                 <colgroup>
                   <col style={{ width: "15%" }} />
@@ -819,47 +818,44 @@ export default function Heal() {
                   <col style={{ width: "15%" }} />
                   <col style={{ width: "15%" }} />
                 </colgroup>
-                <thead className="bg-[#f8f5f0] sticky top-0 z-10" style={{ display: "table", width: "100%" }}>
+                <thead className="bg-[#f8f5f0] sticky top-0 z-10">
                   <tr>
-                    <th style={{ width: "15%" }} className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Month</th>
-                    <th style={{ width: "20%" }} className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Total People Reached</th>
-                    <th style={{ width: "13%" }} className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Engagement</th>
-                    <th style={{ width: "22%" }} className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Countries</th>
-                    <th style={{ width: "15%" }} className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Donors</th>
-                    <th style={{ width: "15%" }} className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Total Budget</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Month</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Total People Reached</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Engagement</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Countries</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Donors</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Total Budget</th>
                   </tr>
                 </thead>
-                <tbody
-                  className="divide-y divide-gray-50"
-                  style={{ display: "block", maxHeight: "500px", overflowY: "auto", scrollbarGutter: "stable" }}
-                >
+                <tbody className="divide-y divide-gray-50">
                   {ledgerRows.length === 0 ? (
-                    <tr style={{ display: "table", width: "100%", tableLayout: "fixed" }}>
+                    <tr>
                       <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
                         No data available yet.
                       </td>
                     </tr>
                   ) : (
                     ledgerRows.map((r) => (
-                      <tr key={r.id} className="hover:bg-gray-50 transition-colors" style={{ display: "table", width: "100%", tableLayout: "fixed" }}>
-                        <td style={{ width: "15%" }} className="px-4 py-3 text-center text-gray-700 font-medium">{r.monthYear || "—"}</td>
-                        <td style={{ width: "20%" }} className="px-4 py-3 text-center text-[#4a7c10] font-medium">{r.peopleReached ? fmt(r.peopleReached) : "—"}</td>
-                        <td style={{ width: "13%" }} className="px-4 py-3 text-center text-gray-600">{r.engagement ? fmt(r.engagement) : "—"}</td>
-                        <td style={{ width: "22%", overflowWrap: "break-word", wordBreak: "break-word" }} className="px-4 py-3 text-center text-gray-600">{r.countries}</td>
-                        <td style={{ width: "15%", overflowWrap: "break-word", wordBreak: "break-word" }} className="px-4 py-3 text-center text-gray-600">{r.donors}</td>
-                        <td style={{ width: "15%" }} className="px-4 py-3 text-center text-gray-600">{r.totalBudget ? "$"+r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"}</td>
+                      <tr key={r.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-3 text-center text-gray-700 font-medium">{r.monthYear || "—"}</td>
+                        <td className="px-4 py-3 text-center text-[#4a7c10] font-medium">{r.peopleReached ? fmt(r.peopleReached) : "—"}</td>
+                        <td className="px-4 py-3 text-center text-gray-600">{r.engagement ? fmt(r.engagement) : "—"}</td>
+                        <td className="px-4 py-3 text-center text-gray-600" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>{r.countries}</td>
+                        <td className="px-4 py-3 text-center text-gray-600" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>{r.donors}</td>
+                        <td className="px-4 py-3 text-center text-gray-600">{r.totalBudget ? "$"+r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"}</td>
                       </tr>
                     ))
                   )}
                 </tbody>
-                <tfoot className="border-t-2 border-[#a3cc2a] bg-[#f0f8e8]" style={{ display: "table", width: "100%" }}>
+                <tfoot className="sticky bottom-0 border-t-2 border-[#a3cc2a] bg-[#f0f8e8]">
                   <tr>
-                    <td style={{ width: "15%" }} className="px-4 py-3 text-center font-bold text-gray-900 text-xs uppercase tracking-wider">Total</td>
-                    <td style={{ width: "20%" }} className="px-4 py-3 text-center font-bold text-[#4a7c10]">{fmt(ledgerRows.reduce((s, r) => s + r.peopleReached, 0))}</td>
-                    <td style={{ width: "13%" }} className="px-4 py-3 text-center font-bold text-gray-700">{fmt(ledgerRows.reduce((s, r) => s + r.engagement, 0))}</td>
-                    <td style={{ width: "22%" }} className="px-4 py-3 text-center text-gray-400">—</td>
-                    <td style={{ width: "15%" }} className="px-4 py-3 text-center text-gray-400">—</td>
-                    <td style={{ width: "15%" }} className="px-4 py-3 text-center font-bold text-gray-700">${ledgerRows.reduce((s, r) => s + r.totalBudget, 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-3 text-center font-bold text-gray-900 text-xs uppercase tracking-wider">Total</td>
+                    <td className="px-4 py-3 text-center font-bold text-[#4a7c10]">{fmt(ledgerRows.reduce((s, r) => s + r.peopleReached, 0))}</td>
+                    <td className="px-4 py-3 text-center font-bold text-gray-700">{fmt(ledgerRows.reduce((s, r) => s + r.engagement, 0))}</td>
+                    <td className="px-4 py-3 text-center text-gray-400">—</td>
+                    <td className="px-4 py-3 text-center text-gray-400">—</td>
+                    <td className="px-4 py-3 text-center font-bold text-gray-700">${ledgerRows.reduce((s, r) => s + r.totalBudget, 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   </tr>
                 </tfoot>
               </table>
