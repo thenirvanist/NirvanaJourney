@@ -125,14 +125,13 @@ const handler = schedule("0 0 * * *", async () => {
     if (Object.keys(updatePayload).length === 0) {
       console.log("sync-meta [task2]: no updates needed — all Meta values <= existing values");
     } else {
-      const { error: updateError } = await supabase
+      const { error: upsertError } = await supabase
         .from("heal_success_metrics")
-        .update(updatePayload)
-        .eq("id", 1);
+        .upsert({ id: 1, ...updatePayload }, { onConflict: "id", ignoreDuplicates: false });
 
-      if (updateError) throw new Error(updateError.message);
+      if (upsertError) throw new Error(upsertError.message);
 
-      console.log("sync-meta [task2]: success — updated fields:", JSON.stringify(updatePayload));
+      console.log("sync-meta [task2]: success — upserted fields:", JSON.stringify(updatePayload));
     }
 
     task2Success = true;
