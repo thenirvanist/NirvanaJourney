@@ -16,7 +16,6 @@ import {
   ChevronRight,
   Search,
   CheckCircle2,
-  CreditCard,
   X,
 } from "lucide-react";
 
