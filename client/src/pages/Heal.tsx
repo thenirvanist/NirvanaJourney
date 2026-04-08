@@ -111,6 +111,9 @@ interface FormData {
   budgetUsd: number | "Custom";
   customBudget: string;
   customDuration: string;
+  coverFee: boolean;
+  tipPercent: number | "Custom" | "None";
+  customTip: string;
   donorName: string;
   email: string;
   dedication: string;
@@ -126,6 +129,9 @@ const INITIAL_FORM: FormData = {
   budgetUsd: 15,
   customBudget: "",
   customDuration: "",
+  coverFee: false,
+  tipPercent: 10,
+  customTip: "",
   donorName: "",
   email: "",
   dedication: "",
@@ -138,6 +144,7 @@ const STEPS = [
   "Duration",
   "Budget",
   "Attribution",
+  "Platform Tip",
   "Payment",
 ];
 
@@ -219,8 +226,8 @@ export default function Heal() {
 
   // Derived display data — Supabase data takes priority; falls back to static
   const displayTestimonials = supabaseTestimonials.length > 0
-    ? supabaseTestimonials.map((t) => ({ name: t.clientName, loc: t.country, text: t.testimonial }))
-    : TESTIMONIALS;
+    ? supabaseTestimonials.map((t) => ({ name: t.clientName, loc: t.country, text: t.testimonial, quote: t.quote }))
+    : TESTIMONIALS.map((t) => ({ ...t, quote: undefined }));
 
   const filteredDonors = supabaseDonors.filter((d) =>
     !hallSearch || d.donorName.toLowerCase().includes(hallSearch.toLowerCase())
@@ -263,8 +270,14 @@ export default function Heal() {
   };
 
   const resolvedBudget = (): number => {
-    if (form.budgetUsd === "Custom") return Number(form.customBudget) || 0;
-    return Number(form.budgetUsd);
+    const base = form.budgetUsd === "Custom" ? Number(form.customBudget) || 0 : Number(form.budgetUsd);
+    const withFee = form.coverFee ? base * 1.04 : base;
+    if (form.tipPercent === "None") return Math.round(withFee * 100) / 100;
+    if (form.tipPercent === "Custom") {
+      const tipAmt = Number(form.customTip) || 0;
+      return Math.round((withFee + tipAmt) * 100) / 100;
+    }
+    return Math.round(withFee * (1 + form.tipPercent / 100) * 100) / 100;
   };
 
   const resolvedDuration = (): string =>
@@ -285,11 +298,11 @@ export default function Heal() {
     });
   };
 
-  const statItems: { icon: React.ElementType; label: string; value: number | string | undefined }[] = [
-    { icon: Eye, label: "Total Souls Reached", value: stats?.totalReach },
-    { icon: ThumbsUp, label: "Likes", value: stats?.totalReactions },
-    { icon: Share2, label: "Shares", value: stats?.totalShares },
-    { icon: MessageCircle, label: "Comments", value: stats?.totalComments },
+  const statItems: { icon: React.ElementType; label: string; subtitle: string; value: number | string | undefined }[] = [
+    { icon: Eye, label: "Total Souls Reached", subtitle: "Total individuals who saw the message in their feed", value: stats?.totalReach },
+    { icon: ThumbsUp, label: "Likes", subtitle: "Number of likes from viewers who resonated", value: stats?.totalReactions },
+    { icon: Share2, label: "Shares", subtitle: "Number of times promoted content was reshared by viewers", value: stats?.totalShares },
+    { icon: MessageCircle, label: "Comments", subtitle: "Total number of positive comments and reflections", value: stats?.totalComments },
   ];
 
   return (
@@ -323,13 +336,14 @@ export default function Heal() {
       {/* ── STATS BAR ── */}
       <section className="bg-[#4a7c10] text-white py-8">
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {statItems.map(({ icon: Icon, label, value }) => (
+          {statItems.map(({ icon: Icon, label, subtitle, value }) => (
             <div key={label} className="text-center">
               <Icon className="w-6 h-6 mx-auto mb-2 text-[#c8f088]" />
               <div className="text-3xl md:text-4xl font-serif font-light">
                 {value != null ? fmt(value) : "—"}
               </div>
               <div className="text-xs uppercase tracking-widest mt-1 text-[#c8f088]">{label}</div>
+              <div className="text-[10px] mt-1 text-white/60 italic leading-tight max-w-[160px] mx-auto">{subtitle}</div>
             </div>
           ))}
         </div>
@@ -345,6 +359,7 @@ export default function Heal() {
                 <div>
                   <div className="font-medium text-gray-900 text-sm">{t.name}</div>
                   <div className="text-xs text-gray-400">{t.loc}</div>
+                  {t.quote && <p className="text-xs text-gray-400 italic mt-1">{t.quote}</p>}
                 </div>
               </div>
             ))}
@@ -412,6 +427,9 @@ export default function Heal() {
           <div className="text-center mb-10">
             <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-2">Start Your Campaign</p>
             <h2 className="text-3xl font-serif text-gray-900">Gift A Moment Of Solace</h2>
+            <p className="text-gray-500 text-sm mt-3 max-w-md mx-auto">
+              100% of the funds we receive go directly to hearts of those who need.
+            </p>
           </div>
 
           {/* Progress indicator */}
@@ -471,16 +489,6 @@ export default function Heal() {
                 {form.contentType === "article" && (
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Article Title</label>
-                      <input
-                        type="text"
-                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a3cc2a]"
-                        placeholder="Title of the article or teaching"
-                        value={form.contentTitle}
-                        onChange={(e) => setForm((f) => ({ ...f, contentTitle: e.target.value }))}
-                      />
-                    </div>
-                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Article URL</label>
                       <input
                         type="url"
@@ -490,6 +498,27 @@ export default function Heal() {
                         onChange={(e) => setForm((f) => ({ ...f, contentUrl: e.target.value }))}
                       />
                     </div>
+                    <div className="flex items-center gap-3 text-gray-400 text-xs">
+                      <div className="flex-1 h-px bg-gray-200" />
+                      <span>OR</span>
+                      <div className="flex-1 h-px bg-gray-200" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Article Title</label>
+                      <input
+                        type="text"
+                        className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a3cc2a]"
+                        placeholder="Title of the article or teaching"
+                        value={form.contentTitle}
+                        onChange={(e) => setForm((f) => ({ ...f, contentTitle: e.target.value }))}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-400 text-center">
+                      Please select an article from our{" "}
+                      <a href="/insights" className="text-[#4a7c10] underline underline-offset-2 hover:text-[#3d6a0d]">
+                        Insights page
+                      </a>
+                    </p>
                   </div>
                 )}
               </div>
@@ -604,6 +633,17 @@ export default function Heal() {
                     />
                   </div>
                 )}
+                <label className="flex items-start gap-3 cursor-pointer bg-[#f7faf0] border border-[#c8e88a] rounded-xl px-4 py-3">
+                  <input
+                    type="checkbox"
+                    checked={form.coverFee}
+                    onChange={(e) => setForm((f) => ({ ...f, coverFee: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 accent-[#4a7c10] flex-shrink-0"
+                  />
+                  <span className="text-sm text-gray-700">
+                    Cover the 4% bank processing fee so my impact is 100%.
+                  </span>
+                </label>
                 <p className="text-gray-400 text-xs">
                   Based on regional CPMs, $25 can reach approximately{" "}
                   <strong className="text-[#4a7c10]">50,000–80,000 people</strong> in high-need areas.
@@ -660,8 +700,53 @@ export default function Heal() {
               </div>
             )}
 
-            {/* Step 6: Payment */}
+            {/* Step 6: Platform Tip */}
             {step === 5 && (
+              <div className="space-y-5">
+                <div>
+                  <h3 className="font-serif text-xl text-gray-900">Add a small tip</h3>
+                  <p className="text-gray-500 text-sm mt-1">
+                    Co-invest with The Nirvanist in growing the platform. The amount goes towards technical maintenance and adding content.
+                  </p>
+                </div>
+                <div className="grid grid-cols-5 gap-2">
+                  {([5, 10, 15, "Custom", "None"] as const).map((t) => (
+                    <button
+                      key={String(t)}
+                      onClick={() => setForm((f) => ({ ...f, tipPercent: t }))}
+                      className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
+                        form.tipPercent === t
+                          ? "border-[#4a7c10] bg-[#f0f8e8] text-[#4a7c10]"
+                          : "border-gray-200 hover:border-gray-300 text-gray-700"
+                      }`}
+                    >
+                      {typeof t === "number" ? `${t}%` : t}
+                    </button>
+                  ))}
+                </div>
+                {form.tipPercent === "Custom" && (
+                  <div className="relative">
+                    <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
+                    <input
+                      type="number"
+                      min="0"
+                      className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#a3cc2a]"
+                      placeholder="Enter tip amount"
+                      value={form.customTip}
+                      onChange={(e) => setForm((f) => ({ ...f, customTip: e.target.value }))}
+                    />
+                  </div>
+                )}
+                {form.tipPercent !== "None" && (
+                  <p className="text-xs text-[#4a7c10]">
+                    Your total will be <strong>${resolvedBudget().toFixed(2)}</strong>
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Step 7: Payment */}
+            {step === 6 && (
               <div className="space-y-6">
                 <h3 className="font-serif text-xl text-gray-900">Complete Your Contribution</h3>
                 <div className="bg-[#f0f8e8] rounded-xl p-4 space-y-2 text-sm">
@@ -683,10 +768,26 @@ export default function Heal() {
                     <span className="text-gray-600">Duration</span>
                     <span className="font-medium">{resolvedDuration()}</span>
                   </div>
+                  {form.coverFee && (
+                    <div className="flex justify-between text-gray-500">
+                      <span>Processing fee (4%)</span>
+                      <span>included</span>
+                    </div>
+                  )}
+                  {form.tipPercent !== "None" && (
+                    <div className="flex justify-between text-gray-500">
+                      <span>Platform tip</span>
+                      <span>
+                        {form.tipPercent === "Custom"
+                          ? `$${Number(form.customTip || 0).toFixed(2)}`
+                          : `${form.tipPercent}%`}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between border-t pt-2 mt-2">
                     <span className="text-gray-900 font-semibold">Total</span>
                     <span className="font-bold text-[#4a7c10]">
-                      ${resolvedBudget() || "—"}
+                      ${resolvedBudget().toFixed(2) || "—"}
                     </span>
                   </div>
                 </div>
@@ -862,7 +963,7 @@ export default function Heal() {
                         )}
                       </td>
                       <td className="px-5 py-3 font-medium text-gray-900">{d.donorName}</td>
-                      <td className="px-5 py-3 text-[#4a7c10] font-semibold">${fmt(d.totalContributed)}</td>
+                      <td className="px-5 py-3 text-[#4a7c10] font-semibold">${Number(d.totalContributed).toFixed(2)}</td>
                       <td className="px-5 py-3 text-gray-700">{fmt(d.soulsReached)}</td>
                     </tr>
                   ))
@@ -873,16 +974,6 @@ export default function Heal() {
         </div>
       </section>
 
-      {/* ── FOOTNOTE ── */}
-      <section className="bg-white border-t border-gray-100 py-8 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gray-500 text-xs leading-relaxed">
-            <span className="font-semibold text-gray-600">Note:</span>{" "}
-            Every contribution is split 80/20. 80% fuels the direct delivery of messages to high-need regions.
-            20% sustains The Nirvanist's digital infrastructure, content creation, and global growth.
-          </p>
-        </div>
-      </section>
 
       <Footer />
     </div>

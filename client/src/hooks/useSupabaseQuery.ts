@@ -239,6 +239,7 @@ export interface HealTestimonialRow {
   testimonial: string;
   clientName: string;
   country: string;
+  quote?: string;
 }
 
 export function useHealTestimonials() {
@@ -256,6 +257,7 @@ export function useHealTestimonials() {
         testimonial: row["Testimonial"] as string,
         clientName: row["Client name"] as string,
         country: row["Country"] as string,
+        quote: row["Quote"] as string | undefined,
       }));
     },
     staleTime: 0,
