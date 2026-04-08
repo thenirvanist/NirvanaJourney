@@ -68,8 +68,6 @@ const COUNTRY_LIST = [
   "Togo","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine",
   "United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan",
   "Vanuatu","Venezuela","Vietnam","Zambia","Zimbabwe",
-  // Regional campaigns
-  "Europe",
 ];
 
 // ─── Testimonials ─────────────────────────────────────────────────────────────

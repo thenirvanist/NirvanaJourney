@@ -190,22 +190,53 @@ const ISO_LOOKUP: Record<string, { alpha2: string; name: string }> = {
   "894":{ alpha2:"ZM", name:"Zambia" },
 };
 
-// Countries grouped into the single "Europe" donation campaign (COUNTRY_CONFIG "EU").
-// Intentionally broader than strict EU membership: includes UK, Switzerland, Norway,
-// Iceland, and Western Balkans for UX parity with the original Europe polygon.
-// Countries with their own COUNTRY_CONFIG entries (RU, UA, TR) are excluded.
-const EUROPE_CAMPAIGN_GROUP = new Set([
-  "AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IE","IT",
-  "LV","LT","LU","NL","PL","PT","RO","SK","SI","ES","SE","GB","CH","NO","IS",
-  "MD","BA","RS","ME","MK","AL",
-]);
 
 // ── Country config ────────────────────────────────────────────────────────────
 type Category = "high" | "mid" | "neutral" | "inaccessible";
 interface CountryConfig { name: string; category: Category; cpm: number; }
 
 const COUNTRY_CONFIG: Record<string, CountryConfig> = {
-  "EU":{ name:"Europe",                  category:"neutral",      cpm:6.5  },
+  // ── Western Europe ────────────────────────────────────────────────────────
+  "GB":{ name:"United Kingdom",          category:"neutral",      cpm:7.5  },
+  "DE":{ name:"Germany",                 category:"neutral",      cpm:7.0  },
+  "FR":{ name:"France",                  category:"neutral",      cpm:6.8  },
+  "NL":{ name:"Netherlands",             category:"neutral",      cpm:7.2  },
+  "CH":{ name:"Switzerland",             category:"neutral",      cpm:8.0  },
+  "NO":{ name:"Norway",                  category:"neutral",      cpm:6.8  },
+  "SE":{ name:"Sweden",                  category:"neutral",      cpm:6.5  },
+  "DK":{ name:"Denmark",                 category:"neutral",      cpm:6.8  },
+  "FI":{ name:"Finland",                 category:"neutral",      cpm:5.5  },
+  "IE":{ name:"Ireland",                 category:"neutral",      cpm:7.0  },
+  "AT":{ name:"Austria",                 category:"neutral",      cpm:6.2  },
+  "BE":{ name:"Belgium",                 category:"neutral",      cpm:6.5  },
+  "LU":{ name:"Luxembourg",              category:"neutral",      cpm:7.5  },
+  "IS":{ name:"Iceland",                 category:"neutral",      cpm:5.5  },
+  // ── Southern Europe ───────────────────────────────────────────────────────
+  "IT":{ name:"Italy",                   category:"neutral",      cpm:5.2  },
+  "ES":{ name:"Spain",                   category:"neutral",      cpm:4.8  },
+  "PT":{ name:"Portugal",                category:"neutral",      cpm:3.8  },
+  "GR":{ name:"Greece",                  category:"neutral",      cpm:3.2  },
+  "CY":{ name:"Cyprus",                  category:"neutral",      cpm:3.5  },
+  // ── Central & Eastern Europe ──────────────────────────────────────────────
+  "PL":{ name:"Poland",                  category:"neutral",      cpm:2.5  },
+  "CZ":{ name:"Czech Republic",          category:"neutral",      cpm:3.0  },
+  "SK":{ name:"Slovakia",                category:"neutral",      cpm:2.8  },
+  "HU":{ name:"Hungary",                 category:"neutral",      cpm:2.2  },
+  "RO":{ name:"Romania",                 category:"neutral",      cpm:1.8  },
+  "BG":{ name:"Bulgaria",                category:"neutral",      cpm:1.6  },
+  "HR":{ name:"Croatia",                 category:"neutral",      cpm:2.4  },
+  "SI":{ name:"Slovenia",                category:"neutral",      cpm:3.0  },
+  "EE":{ name:"Estonia",                 category:"neutral",      cpm:2.5  },
+  "LV":{ name:"Latvia",                  category:"neutral",      cpm:2.0  },
+  "LT":{ name:"Lithuania",               category:"neutral",      cpm:2.0  },
+  // ── Balkans & Caucasus fringe ─────────────────────────────────────────────
+  "MD":{ name:"Moldova",                 category:"neutral",      cpm:1.0  },
+  "BA":{ name:"Bosnia & Herzegovina",    category:"neutral",      cpm:1.5  },
+  "RS":{ name:"Serbia",                  category:"neutral",      cpm:1.8  },
+  "ME":{ name:"Montenegro",              category:"neutral",      cpm:2.0  },
+  "MK":{ name:"North Macedonia",         category:"neutral",      cpm:1.6  },
+  "AL":{ name:"Albania",                 category:"neutral",      cpm:1.2  },
+  // ── Conflict / high-need ──────────────────────────────────────────────────
   "SD":{ name:"Sudan",                   category:"high",         cpm:0.28 },
   "UA":{ name:"Ukraine",                 category:"high",         cpm:1.2  },
   "PS":{ name:"Palestine",               category:"high",         cpm:0.85 },
@@ -369,11 +400,9 @@ function buildWorldFeatures(): WorldFeature[] {
     const isoInfo = ISO_LOOKUP[numericId];
     const alpha2 = isoInfo?.alpha2 ?? numericId;
     const displayName = isoInfo?.name ?? numericId;
-    const configAlpha2 = EUROPE_CAMPAIGN_GROUP.has(alpha2) ? "EU" : alpha2;
+    const configAlpha2 = alpha2;
     const config = COUNTRY_CONFIG[configAlpha2];
     const isBlacklisted = BLACKLIST.has(alpha2);
-    // displayName is always the geographic country name (e.g. "France"), not the
-    // campaign config name ("Europe"), so the tooltip stays geographically accurate.
     out.push({
       numericId, configAlpha2, alpha2, displayName,
       config: config ?? FALLBACK_CONFIG, path,
