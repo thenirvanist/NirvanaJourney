@@ -841,8 +841,8 @@ export default function Heal() {
                         <td className="px-4 py-3 text-center text-gray-700 font-medium">{r.monthYear || "—"}</td>
                         <td className="px-4 py-3 text-center text-[#4a7c10] font-medium">{r.peopleReached ? fmt(r.peopleReached) : "—"}</td>
                         <td className="px-4 py-3 text-center text-gray-600">{r.engagement ? fmt(r.engagement) : "—"}</td>
-                        <td className="px-4 py-3 text-center text-gray-600" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>{r.countries}</td>
-                        <td className="px-4 py-3 text-center text-gray-600" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>{r.donors}</td>
+                        <td className="px-4 py-3 text-center text-gray-600 break-words">{r.countries}</td>
+                        <td className="px-4 py-3 text-center text-gray-600 break-words">{r.donors}</td>
                         <td className="px-4 py-3 text-center text-gray-600">{r.totalBudget ? "$"+r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"}</td>
                       </tr>
                     ))
