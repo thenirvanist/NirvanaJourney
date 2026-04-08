@@ -270,8 +270,8 @@ export interface TransparencyLedgerRow {
   monthYear: string;
   peopleReached: number;
   engagement: number;
-  countries: number;
-  donors: number;
+  countries: string;
+  donors: string;
   totalBudget: number;
 }
 
@@ -290,8 +290,8 @@ export function useTransparencyLedger() {
         monthYear: row["month_year"] as string,
         peopleReached: Number(row["people_reached"] ?? 0),
         engagement: Number(row["engagement"] ?? 0),
-        countries: Number(row["countries"] ?? 0),
-        donors: Number(row["donors"] ?? 0),
+        countries: row["countries"] != null && row["countries"] !== "" && row["countries"] !== 0 ? String(row["countries"]) : "—",
+        donors: row["donors"] != null && row["donors"] !== "" && row["donors"] !== 0 ? String(row["donors"]) : "—",
         totalBudget: Number(row["total_budget"] ?? 0),
       }));
     },

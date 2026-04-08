@@ -498,7 +498,7 @@ export default function HealWorldMap({ onCountryClick }: Props) {
               </text>
             ) : tooltip.config.cpm > 0 ? (
               <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">
-                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "CPM: $"+tooltip.config.cpm.toFixed(2)}
+                {showResults ? "Souls reached: "+formatNum(tooltip.campaignData?.totalReach??0) : "~"+reachPerDollar(tooltip.config.cpm)+" people reached per $1"}
               </text>
             ) : (
               <text x={Math.min(tooltip.x+16,700)} y={Math.max(tooltip.y-24,63)} fill="#c8f088" fontSize="9.5">

@@ -168,7 +168,6 @@ export default function Heal() {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
 
   const [hallSearch, setHallSearch] = useState("");
-  const [ledgerYear, setLedgerYear] = useState(() => String(new Date().getFullYear()));
 
   // Queries
   const { data: stats } = useQuery<HealStats>({
@@ -281,7 +280,7 @@ export default function Heal() {
   };
 
   const statItems: { icon: React.ElementType; label: string; subtitle: string; value: number | string | undefined }[] = [
-    { icon: Eye, label: "People Reached", subtitle: "Total individuals who saw the message in their feed", value: stats?.totalReach },
+    { icon: Eye, label: "New People Reached", subtitle: "Total new individuals who saw the message in their feed", value: stats?.totalReach },
     { icon: ThumbsUp, label: "Likes", subtitle: "Number of likes from viewers who resonated", value: stats?.totalReactions },
     { icon: Share2, label: "Shares", subtitle: "Number of times promoted content was reshared by viewers", value: stats?.totalShares },
     { icon: MessageCircle, label: "Comments", subtitle: "Total number of positive comments and reflections", value: stats?.totalComments },
@@ -341,7 +340,7 @@ export default function Heal() {
                 <div>
                   <div className="font-medium text-gray-900 text-sm">{t.name}</div>
                   <div className="text-xs text-gray-400">{t.loc}</div>
-                  {t.quote && <p className="text-xs text-gray-400 italic mt-1">{t.quote}</p>}
+                  {t.quote && <p className="text-xs text-gray-900 italic mt-1">{t.quote}</p>}
                 </div>
               </div>
             ))}
@@ -820,25 +819,10 @@ export default function Heal() {
       {/* ── TRANSPARENCY LEDGER ── */}
       <section className="bg-white py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-2">Full Accountability</p>
-              <h2 className="text-3xl font-serif text-gray-900">Transparency Ledger</h2>
-              <p className="text-gray-500 mt-2 text-sm">Every campaign, every result — nothing hidden.</p>
-            </div>
-            <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2 text-sm self-start sm:self-auto">
-              <label htmlFor="ledgerYearFilter" className="text-gray-500 text-xs whitespace-nowrap">Filter by Year</label>
-              <select
-                id="ledgerYearFilter"
-                value={ledgerYear}
-                onChange={(e) => setLedgerYear(e.target.value)}
-                className="focus:outline-none text-gray-700 bg-transparent cursor-pointer"
-              >
-                {["2024", "2025", "2026"].map((y) => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-            </div>
+          <div className="mb-8">
+            <p className="text-xs uppercase tracking-widest text-[#4a7c10] mb-2">Full Accountability</p>
+            <h2 className="text-3xl font-serif text-gray-900">Transparency Ledger</h2>
+            <p className="text-gray-500 mt-2 text-sm">Every campaign, every result — nothing hidden.</p>
           </div>
 
           {/* Scrollable table wrapper */}
@@ -848,64 +832,55 @@ export default function Heal() {
                 <table className="w-full text-sm">
                   <thead className="bg-[#f8f5f0] sticky top-0 z-10">
                     <tr>
-                      {["Month", "People Reached", "Engagement", "Countries", "Donors", "Total Budget"].map((h) => (
-                        <th key={h} className="text-left px-4 py-3 font-semibold text-gray-700 text-xs uppercase tracking-wider">
+                      {["Month", "Total People Reached", "Engagement", "Countries", "Donors", "Total Budget"].map((h) => (
+                        <th key={h} className="text-center px-4 py-3 font-semibold text-gray-700 text-xs uppercase tracking-wider">
                           {h}
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
-                    {(() => {
-                      const filtered = ledgerRows.filter((r) => r.monthYear?.includes(ledgerYear));
-                      if (filtered.length === 0) {
-                        return (
-                          <tr>
-                            <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                              No data available for {ledgerYear}.
-                            </td>
-                          </tr>
-                        );
-                      }
-                      return filtered.map((r) => (
+                    {ledgerRows.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                          No data available yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      ledgerRows.map((r) => (
                         <tr key={r.id} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-4 py-3 text-gray-700 font-medium">{r.monthYear}</td>
-                          <td className="px-4 py-3 text-[#4a7c10] font-medium">{fmt(r.peopleReached)}</td>
-                          <td className="px-4 py-3 text-gray-600">{fmt(r.engagement)}</td>
-                          <td className="px-4 py-3 text-gray-600">{r.countries}</td>
-                          <td className="px-4 py-3 text-gray-600">{r.donors}</td>
-                          <td className="px-4 py-3 text-gray-600">${r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                          <td className="px-4 py-3 text-center text-gray-700 font-medium">{r.monthYear || "—"}</td>
+                          <td className="px-4 py-3 text-center text-[#4a7c10] font-medium">{r.peopleReached ? fmt(r.peopleReached) : "—"}</td>
+                          <td className="px-4 py-3 text-center text-gray-600">{r.engagement ? fmt(r.engagement) : "—"}</td>
+                          <td className="px-4 py-3 text-center text-gray-600">{r.countries}</td>
+                          <td className="px-4 py-3 text-center text-gray-600">{r.donors}</td>
+                          <td className="px-4 py-3 text-center text-gray-600">{r.totalBudget ? "$"+r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"}</td>
                         </tr>
-                      ));
-                    })()}
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
             </div>
-            {/* Sticky total row — always visible outside the scroll container */}
-            {(() => {
-              const filtered = ledgerRows.filter((r) => r.monthYear?.includes(ledgerYear));
-              const totalPeople = filtered.reduce((s, r) => s + r.peopleReached, 0);
-              const totalEngagement = filtered.reduce((s, r) => s + r.engagement, 0);
-              const totalBudget = filtered.reduce((s, r) => s + r.totalBudget, 0);
-              return (
-                <div className="border-t-2 border-[#a3cc2a] bg-[#f0f8e8]">
-                  <table className="w-full text-sm">
-                    <tbody>
-                      <tr>
-                        <td className="px-4 py-3 font-bold text-gray-900 text-xs uppercase tracking-wider">Total</td>
-                        <td className="px-4 py-3 font-bold text-[#4a7c10]">{fmt(totalPeople)}</td>
-                        <td className="px-4 py-3 font-bold text-gray-700">{fmt(totalEngagement)}</td>
-                        <td className="px-4 py-3 text-gray-400">—</td>
-                        <td className="px-4 py-3 text-gray-400">—</td>
-                        <td className="px-4 py-3 font-bold text-gray-700">${totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              );
-            })()}
+            {/* Total row — always visible outside the scroll container */}
+            <div className="border-t-2 border-[#a3cc2a] bg-[#f0f8e8]">
+              <table className="w-full text-sm">
+                <tbody>
+                  <tr>
+                    <td className="px-4 py-3 text-center font-bold text-gray-900 text-xs uppercase tracking-wider">Total</td>
+                    <td className="px-4 py-3 text-center font-bold text-[#4a7c10]">{fmt(ledgerRows.reduce((s, r) => s + r.peopleReached, 0))}</td>
+                    <td className="px-4 py-3 text-center font-bold text-gray-700">{fmt(ledgerRows.reduce((s, r) => s + r.engagement, 0))}</td>
+                    <td className="px-4 py-3 text-center text-gray-400">—</td>
+                    <td className="px-4 py-3 text-center text-gray-400">—</td>
+                    <td className="px-4 py-3 text-center font-bold text-gray-700">${ledgerRows.reduce((s, r) => s + r.totalBudget, 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+          <p className="text-xs text-gray-400 italic mt-3 leading-relaxed">
+            <em>Total People Reached is the number of people supported each month. Our Success Bar at the top shows the total de-duplicated unique/new individuals reached since 2024.</em>
+          </p>
         </div>
       </section>
 
@@ -932,7 +907,7 @@ export default function Heal() {
             <table className="w-full text-sm bg-white">
               <thead className="bg-[#f0f8e8]">
                 <tr>
-                  {["Rank", "Donor", "Total Contributed (USD)", "Souls Reached"].map((h) => (
+                  {["Rank", "Donor", "Total Contributed (USD)", "Total People Reached"].map((h) => (
                     <th key={h} className="text-left px-5 py-3 font-semibold text-[#4a7c10] text-xs uppercase tracking-wider">
                       {h}
                     </th>
