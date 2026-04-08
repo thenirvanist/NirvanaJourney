@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import HealWorldMap from "@/components/HealWorldMap";
-import { useHealTestimonials, useHealDonors, useTransparencyLedger } from "@/hooks/useSupabaseQuery";
+import { useHealTestimonials, useHealDonors, useTransparencyLedger, useHealSuccessMetrics } from "@/hooks/useSupabaseQuery";
 
 import {
   Heart,
@@ -20,21 +20,6 @@ import {
   X,
 } from "lucide-react";
 
-// ─── Typed API response shapes ────────────────────────────────────────────────
-
-interface HealStats {
-  totalReach: number | string;
-  totalReactions: number | string;
-  totalShares: number | string;
-  totalComments: number | string;
-}
-
-interface HealLeaderboardRow {
-  rank: number;
-  donorName: string;
-  totalAmount: number | string;
-  totalReach: number | string;
-}
 
 // ─── Country list ─────────────────────────────────────────────────────────────
 // Blacklisted countries are excluded — they are NOT available for campaigns.
@@ -170,10 +155,7 @@ export default function Heal() {
   const [hallSearch, setHallSearch] = useState("");
 
   // Queries
-  const { data: stats } = useQuery<HealStats>({
-    queryKey: ["/api/heal/stats"],
-  });
-
+  const { data: healMetrics } = useHealSuccessMetrics();
   const { data: supabaseTestimonials = [] } = useHealTestimonials();
   const { data: supabaseDonors = [] } = useHealDonors();
   const { data: ledgerRows = [] } = useTransparencyLedger();
@@ -196,7 +178,6 @@ export default function Heal() {
       toast({ title: "Thank you! Your campaign has been submitted.", description: "We'll begin your campaign within 24 hours." });
       qc.invalidateQueries({ queryKey: ["/api/heal/donations"] });
       qc.invalidateQueries({ queryKey: ["/api/heal/leaderboard"] });
-      qc.invalidateQueries({ queryKey: ["/api/heal/stats"] });
       setForm(INITIAL_FORM);
       setStep(0);
     },
@@ -280,10 +261,10 @@ export default function Heal() {
   };
 
   const statItems: { icon: React.ElementType; label: string; subtitle: string; value: number | string | undefined }[] = [
-    { icon: Eye, label: "New People Reached", subtitle: "Total new individuals who saw the message in their feed", value: stats?.totalReach },
-    { icon: ThumbsUp, label: "Likes", subtitle: "Number of likes from viewers who resonated", value: stats?.totalReactions },
-    { icon: Share2, label: "Shares", subtitle: "Number of times promoted content was reshared by viewers", value: stats?.totalShares },
-    { icon: MessageCircle, label: "Comments", subtitle: "Total number of positive comments and reflections", value: stats?.totalComments },
+    { icon: Eye, label: "New People Reached", subtitle: "Total new individuals who saw the message in their feed", value: healMetrics?.totalUniqueReach },
+    { icon: ThumbsUp, label: "Likes", subtitle: "Number of likes from viewers who resonated", value: healMetrics?.totalLikes },
+    { icon: Share2, label: "Shares", subtitle: "Number of times promoted content was reshared by viewers", value: healMetrics?.totalShares },
+    { icon: MessageCircle, label: "Comments", subtitle: "Total number of positive comments and reflections", value: healMetrics?.totalComments },
   ];
 
   return (

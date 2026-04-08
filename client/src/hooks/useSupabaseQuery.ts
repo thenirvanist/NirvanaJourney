@@ -288,7 +288,7 @@ export function useTransparencyLedger() {
       return (data || []).map((row: Record<string, unknown>) => ({
         id: row["id"] as number,
         monthYear: row["month_year"] as string,
-        peopleReached: Number(row["people_reached"] ?? 0),
+        peopleReached: Number(row["monthly_outreach"] ?? 0),
         engagement: Number(row["engagement"] ?? 0),
         countries: (() => { const v = String(row["countries"] ?? "").trim(); return v && v !== "0" ? v : "—"; })(),
         donors: (() => { const v = String(row["donors"] ?? "").trim(); return v && v !== "0" ? v : "—"; })(),
@@ -329,5 +329,36 @@ export function useHealDonors() {
     },
     staleTime: 0,
     refetchInterval: 30000,
+  });
+}
+
+export interface HealSuccessMetrics {
+  totalUniqueReach: number;
+  totalLikes: number;
+  totalShares: number;
+  totalComments: number;
+}
+
+export function useHealSuccessMetrics() {
+  return useQuery<HealSuccessMetrics>({
+    queryKey: ["supabase", "heal_success_metrics"],
+    queryFn: async () => {
+      if (!supabase) throw new Error("Supabase not configured");
+      const { data, error } = await supabase
+        .from("heal_success_metrics")
+        .select("total_unique_reach, total_likes, total_shares, total_comments")
+        .eq("id", 1)
+        .maybeSingle();
+      if (error) throw error;
+      const row = (data ?? {}) as Record<string, unknown>;
+      return {
+        totalUniqueReach: Number(row["total_unique_reach"] ?? 0),
+        totalLikes: Number(row["total_likes"] ?? 0),
+        totalShares: Number(row["total_shares"] ?? 0),
+        totalComments: Number(row["total_comments"] ?? 0),
+      };
+    },
+    staleTime: 0,
+    refetchInterval: 60000,
   });
 }
