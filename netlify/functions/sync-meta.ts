@@ -67,56 +67,25 @@ const handler = schedule("0 0 * * *", async () => {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-    const { data: existing, error: selectError } = await supabase
-      .from("transparency_ledger")
-      .select("id")
-      .eq("month_year", monthYear)
-      .maybeSingle();
-
-    if (selectError) {
-      console.error("sync-meta: Supabase select error:", selectError.message);
-      return { statusCode: 500, body: `Supabase error: ${selectError.message}` };
-    }
-
-    const updatePayload: Record<string, unknown> = {
+    const upsertPayload: Record<string, unknown> = {
+      month_year: monthYear,
       people_reached: peopleReached,
       engagement,
     };
     if (spend !== null) {
-      updatePayload.total_budget = spend;
+      upsertPayload.total_budget = spend;
     }
 
-    if (existing) {
-      const { error: updateError } = await supabase
-        .from("transparency_ledger")
-        .update(updatePayload)
-        .eq("month_year", monthYear);
+    const { error: upsertError } = await supabase
+      .from("transparency_ledger")
+      .upsert(upsertPayload, { onConflict: "month_year", ignoreDuplicates: false });
 
-      if (updateError) {
-        console.error("sync-meta: Supabase update error:", updateError.message);
-        return { statusCode: 500, body: `Supabase error: ${updateError.message}` };
-      }
-      console.log(`sync-meta: updated row for ${monthYear} — reach=${peopleReached}, engagement=${engagement}, spend=${spend ?? "unchanged"}`);
-    } else {
-      const insertPayload: Record<string, unknown> = {
-        month_year: monthYear,
-        people_reached: peopleReached,
-        engagement,
-        countries: 0,
-        donors: 0,
-        total_budget: spend ?? 0,
-      };
-
-      const { error: insertError } = await supabase
-        .from("transparency_ledger")
-        .insert(insertPayload);
-
-      if (insertError) {
-        console.error("sync-meta: Supabase insert error:", insertError.message);
-        return { statusCode: 500, body: `Supabase error: ${insertError.message}` };
-      }
-      console.log(`sync-meta: inserted new row for ${monthYear} — reach=${peopleReached}, engagement=${engagement}, spend=${spend ?? 0}`);
+    if (upsertError) {
+      console.error("sync-meta: Supabase upsert error:", upsertError.message);
+      return { statusCode: 500, body: `Supabase error: ${upsertError.message}` };
     }
+
+    console.log(`sync-meta: upserted ${monthYear} — reach=${peopleReached}, engagement=${engagement}, spend=${spend ?? "unchanged"}`);
 
     return { statusCode: 200, body: `Synced ${monthYear} successfully` };
   } catch (err) {
