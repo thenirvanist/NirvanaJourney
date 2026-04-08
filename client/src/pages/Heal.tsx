@@ -500,7 +500,7 @@ export default function Heal() {
                     </div>
                     <div className="flex items-center gap-3 text-gray-400 text-xs">
                       <div className="flex-1 h-px bg-gray-200" />
-                      <span>OR</span>
+                      <span>— OR —</span>
                       <div className="flex-1 h-px bg-gray-200" />
                     </div>
                     <div>
@@ -706,7 +706,7 @@ export default function Heal() {
                 <div>
                   <h3 className="font-serif text-xl text-gray-900">Add a small tip</h3>
                   <p className="text-gray-500 text-sm mt-1">
-                    Co-invest with The Nirvanist in growing the platform. The amount goes towards technical maintenance and adding content.
+                    Add a small tip to co-invest with The Nirvanist in growing the platform. The amount goes towards technical maintenance and adding content.
                   </p>
                 </div>
                 <div className="grid grid-cols-5 gap-2">
@@ -720,7 +720,7 @@ export default function Heal() {
                           : "border-gray-200 hover:border-gray-300 text-gray-700"
                       }`}
                     >
-                      {typeof t === "number" ? `${t}%` : t}
+                      {typeof t === "number" ? `${t}%` : t === "None" ? "No Tip" : t}
                     </button>
                   ))}
                 </div>
