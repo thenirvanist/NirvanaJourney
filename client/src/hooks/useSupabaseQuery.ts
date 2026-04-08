@@ -290,8 +290,8 @@ export function useTransparencyLedger() {
         monthYear: row["month_year"] as string,
         peopleReached: Number(row["people_reached"] ?? 0),
         engagement: Number(row["engagement"] ?? 0),
-        countries: row["countries"] != null && row["countries"] !== "" && row["countries"] !== 0 ? String(row["countries"]) : "—",
-        donors: row["donors"] != null && row["donors"] !== "" && row["donors"] !== 0 ? String(row["donors"]) : "—",
+        countries: (() => { const v = String(row["countries"] ?? "").trim(); return v && v !== "0" ? v : "—"; })(),
+        donors: (() => { const v = String(row["donors"] ?? "").trim(); return v && v !== "0" ? v : "—"; })(),
         totalBudget: Number(row["total_budget"] ?? 0),
       }));
     },
