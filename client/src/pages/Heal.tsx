@@ -806,47 +806,55 @@ export default function Heal() {
             <p className="text-gray-500 mt-2 text-sm">Every campaign, every result — nothing hidden.</p>
           </div>
 
-          {/* Scrollable table wrapper */}
+          {/* Unified table — single <table> with colgroup so header, body, and total all share the same column widths */}
           <div className="rounded-xl border border-gray-100 overflow-hidden">
-            <div className="overflow-x-auto">
-              <div className="max-h-[500px] overflow-y-auto relative">
-                <table className="w-full text-sm">
-                  <thead className="bg-[#f8f5f0] sticky top-0 z-10">
-                    <tr>
-                      {["Month", "Total People Reached", "Engagement", "Countries", "Donors", "Total Budget"].map((h) => (
-                        <th key={h} className="text-center px-4 py-3 font-semibold text-gray-700 text-xs uppercase tracking-wider">
-                          {h}
-                        </th>
-                      ))}
+            <div className="overflow-x-auto" style={{ scrollbarGutter: "stable" }}>
+              <table className="w-full text-sm" style={{ tableLayout: "fixed" }}>
+                <colgroup>
+                  <col style={{ width: "15%" }} />
+                  <col style={{ width: "20%" }} />
+                  <col style={{ width: "13%" }} />
+                  <col style={{ width: "22%" }} />
+                  <col style={{ width: "15%" }} />
+                  <col style={{ width: "15%" }} />
+                </colgroup>
+                <thead className="bg-[#f8f5f0]" style={{ display: "table", width: "100%" }}>
+                  <tr>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Month</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Total People Reached</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Engagement</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Countries</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Donors</th>
+                    <th className="px-4 py-3 text-center font-semibold text-gray-700 text-xs uppercase tracking-wider">Total Budget</th>
+                  </tr>
+                </thead>
+                <tbody
+                  className="divide-y divide-gray-50"
+                  style={{ display: "block", maxHeight: "500px", overflowY: "auto", scrollbarGutter: "stable" }}
+                >
+                  {ledgerRows.length === 0 ? (
+                    <tr style={{ display: "table", width: "100%", tableLayout: "fixed" }}>
+                      <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
+                        No data available yet.
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {ledgerRows.length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                          No data available yet.
-                        </td>
+                  ) : (
+                    ledgerRows.map((r) => (
+                      <tr key={r.id} className="hover:bg-gray-50 transition-colors" style={{ display: "table", width: "100%", tableLayout: "fixed" }}>
+                        <td className="px-4 py-3 text-center text-gray-700 font-medium">{r.monthYear || "—"}</td>
+                        <td className="px-4 py-3 text-center text-[#4a7c10] font-medium">{r.peopleReached ? fmt(r.peopleReached) : "—"}</td>
+                        <td className="px-4 py-3 text-center text-gray-600">{r.engagement ? fmt(r.engagement) : "—"}</td>
+                        <td className="px-4 py-3 text-center text-gray-600" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>{r.countries}</td>
+                        <td className="px-4 py-3 text-center text-gray-600" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>{r.donors}</td>
+                        <td className="px-4 py-3 text-center text-gray-600">{r.totalBudget ? "$"+r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"}</td>
                       </tr>
-                    ) : (
-                      ledgerRows.map((r) => (
-                        <tr key={r.id} className="hover:bg-gray-50 transition-colors">
-                          <td className="px-4 py-3 text-center text-gray-700 font-medium">{r.monthYear || "—"}</td>
-                          <td className="px-4 py-3 text-center text-[#4a7c10] font-medium">{r.peopleReached ? fmt(r.peopleReached) : "—"}</td>
-                          <td className="px-4 py-3 text-center text-gray-600">{r.engagement ? fmt(r.engagement) : "—"}</td>
-                          <td className="px-4 py-3 text-center text-gray-600">{r.countries}</td>
-                          <td className="px-4 py-3 text-center text-gray-600">{r.donors}</td>
-                          <td className="px-4 py-3 text-center text-gray-600">{r.totalBudget ? "$"+r.totalBudget.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "—"}</td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {/* Total row — always visible outside the scroll container */}
-            <div className="border-t-2 border-[#a3cc2a] bg-[#f0f8e8]">
-              <table className="w-full text-sm">
-                <tbody>
+                    ))
+                  )}
+                </tbody>
+                <tfoot
+                  className="border-t-2 border-[#a3cc2a] bg-[#f0f8e8]"
+                  style={{ display: "table", width: "100%" }}
+                >
                   <tr>
                     <td className="px-4 py-3 text-center font-bold text-gray-900 text-xs uppercase tracking-wider">Total</td>
                     <td className="px-4 py-3 text-center font-bold text-[#4a7c10]">{fmt(ledgerRows.reduce((s, r) => s + r.peopleReached, 0))}</td>
@@ -855,7 +863,7 @@ export default function Heal() {
                     <td className="px-4 py-3 text-center text-gray-400">—</td>
                     <td className="px-4 py-3 text-center font-bold text-gray-700">${ledgerRows.reduce((s, r) => s + r.totalBudget, 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   </tr>
-                </tbody>
+                </tfoot>
               </table>
             </div>
           </div>
