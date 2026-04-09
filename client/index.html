@@ -91,9 +91,24 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '1696531918009854');
-      fbq('track', 'PageView');
     </script>
     <!-- End Meta Pixel Code -->
+
+    <!-- Meta CAPI Bridge -->
+    <script>
+      function sendToMetaCAPI(eventName) {
+        var eventId = 'nirv_' + Date.now();
+        if (window.fbq) {
+          fbq('track', eventName, {}, { eventID: eventId });
+        }
+        fetch('/.netlify/functions/meta-proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ eventName: eventName, eventId: eventId, url: window.location.href })
+        }).catch(function() {});
+      }
+      sendToMetaCAPI('PageView');
+    </script>
   </head>
   <body>
     <div id="root"></div>
