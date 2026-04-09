@@ -1,16 +1,20 @@
-export default async function handler(req, context) {
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
 
-  if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
+export const handler = async function (event) {
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 204, headers: corsHeaders, body: "" };
   }
 
-  if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405, headers: corsHeaders });
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
   }
 
   const PIXEL_ID = process.env.META_PIXEL_ID;
@@ -18,34 +22,37 @@ export default async function handler(req, context) {
 
   if (!PIXEL_ID || !TOKEN) {
     console.error("meta-proxy: META_PIXEL_ID or META_ACCESS_TOKEN_CAPI not set");
-    return new Response(JSON.stringify({ error: "Server misconfiguration" }), {
-      status: 500,
+    return {
+      statusCode: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      body: JSON.stringify({ error: "Server misconfiguration" }),
+    };
   }
 
   let body;
   try {
-    body = await req.json();
+    body = JSON.parse(event.body || "{}");
   } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
-      status: 400,
+    return {
+      statusCode: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      body: JSON.stringify({ error: "Invalid JSON body" }),
+    };
   }
 
   const { eventName, eventId, url } = body;
 
   if (!eventName || !eventId) {
-    return new Response(JSON.stringify({ error: "Missing eventName or eventId" }), {
-      status: 400,
+    return {
+      statusCode: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      body: JSON.stringify({ error: "Missing eventName or eventId" }),
+    };
   }
 
-  const forwarded = req.headers.get("x-forwarded-for") || "";
-  const ip = forwarded.split(",")[0].trim() || req.headers.get("client-ip") || undefined;
-  const ua = req.headers.get("user-agent") || undefined;
+  const forwarded = (event.headers && event.headers["x-forwarded-for"]) || "";
+  const ip = forwarded.split(",")[0].trim() || undefined;
+  const ua = (event.headers && event.headers["user-agent"]) || undefined;
 
   const payload = {
     data: [
@@ -81,21 +88,24 @@ export default async function handler(req, context) {
 
     if (!metaRes.ok) {
       console.error("meta-proxy: Graph API error", JSON.stringify(data));
-      return new Response(JSON.stringify({ error: "Graph API error", detail: data }), {
-        status: 500,
+      return {
+        statusCode: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+        body: JSON.stringify({ error: "Graph API error", detail: data }),
+      };
     }
 
-    return new Response(JSON.stringify({ ok: true, events_received: data.events_received }), {
-      status: 200,
+    return {
+      statusCode: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      body: JSON.stringify({ ok: true, events_received: data.events_received }),
+    };
   } catch (err) {
     console.error("meta-proxy: fetch failed", err);
-    return new Response(JSON.stringify({ error: "Upstream fetch failed" }), {
-      status: 500,
+    return {
+      statusCode: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      body: JSON.stringify({ error: "Upstream fetch failed" }),
+    };
   }
-}
+};
