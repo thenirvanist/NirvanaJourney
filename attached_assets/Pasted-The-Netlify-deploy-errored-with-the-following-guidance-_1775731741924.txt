@@ -1,0 +1,116 @@
+The Netlify deploy errored, with the following guidance provided:
+
+Diagnosis
+- Relevant log lines:
+  - [line 63](#L63) shows the parser error: "Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head".
+  - [line 64](#L64) points to the file and location: client/index.html:96:15.
+  - The offending snippet is shown in the logs at [line 67](#L67)–[line 71](#L71): a <noscript> containing an <img> is inside the <head>.
+
+- Error type and cause:
+  - This is an HTML parse error emitted by Vite (via parse5). The HTML spec / parser disallows certain element content inside a <noscript> that sits in the <head>. Your client/index.html places a <noscript><img ...></noscript> inside the <head>, which parse5 rejects during Vite’s build.
+
+Solution
+1. Edit client/index.html (repo file: https://github.com/thenirvanist/NirvanaJourney/blob/main/client/index.html) and move the <noscript> block out of the <head> into the <body> (for example, just before </body>).
+
+   Example change — move this (currently in <head>):
+```html
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1696531918009854&ev=PageView&noscript=1"
+/></noscript>
+```
+
+   To somewhere inside the <body>, e.g. at the end:
+```html
+<body>
+  ...your app markup...
+
+  <!-- moved noscript into body -->
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1696531918009854&ev=PageView&noscript=1" />
+  </noscript>
+</body>
+```
+
+2. Commit and push the change, then re-run the build (Netlify will rebuild automatically). Locally you can test with:
+```
+npm run build
+```
+
+Why this fixes it
+- parse5 (used by Vite) enforces allowed content for <noscript> in <head>. Placing element content that’s not allowed there causes the parse error; moving the noscript into the body resolves the invalid structure so Vite’s HTML parsing succeeds.
+
+If the build still fails, paste the updated client/index.html and the new error lines from the logs.
+
+The relevant error logs are:
+
+Line 50:   production
+Line 51: [96m[1m​[22m[39m
+Line 52: [96m[1mbuild.command from netlify.toml                               [22m[39m
+Line 53: [96m[1m────────────────────────────────────────────────────────────────[22m[39m
+Line 54: ​
+Line 55: [36m$ npm run build && node scripts/build-functions.js[39m
+Line 56: > rest-express@1.0.0 build
+Line 57: > vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+Line 58: [36mvite v5.4.19 [32mbuilding for production...[36m[39m
+Line 59: [32m✓[39m 0 modules transformed.
+Line 60: Failed during stage 'building site': Build script returned non-zero exit code: 2
+Line 61: [31mx[39m Build failed in 41ms
+Line 62: [31merror during build:
+Line 63: [31m[vite:build-html] Unable to parse HTML; parse5 error code disallowed-content-in-noscript-in-head
+Line 64:  at /opt/build/repo/client/index.html:96:15
+Line 65: 94 |        fbq('track', 'PageView');
+Line 66: 95 |      </script>
+Line 67: 96 |      <noscript><img height="1" width="1" style="display:none"
+Line 68:    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Line 69: 97 |        src="https://www.facebook.com/tr?id=1696531918009854&ev=PageView&noscript=1"
+Line 70:    |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Line 71: 98 |      /></noscript>
+Line 72:    |  ^^^^^^^[31m
+Line 73: file: [36m/opt/build/repo/client/index.html[31m
+Line 74:     at handleParseError (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:35172:9)
+Line 75:     at Parser.onParseError (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-C6uTJdX2.js:35097:7)
+Line 76:     at Parser._err (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:4932:14)
+Line 77:     at tokenInHeadNoScript (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:6266:7)
+Line 78:     at startTagInHeadNoScript (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:6244:13)
+Line 79:     at Parser._startTagOutsideForeignContent (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:5600:17)
+Line 80:     at Parser._processStartTag (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:5578:18)
+Line 81:     at Parser.onStartTag (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:5558:14)
+Line 82:     at Tokenizer.emitCurrentTagToken (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:1346:26)
+Line 83:     at Tokenizer._stateSelfClosingStartTag (file:///opt/build/repo/node_modules/vite/dist/node/chunks/dep-D-7KCb9p.js:2774:22)[
+Line 84: [91m[1m​[22m[39m
+Line 85: [91m[1m"build.command" failed                                        [22m[39m
+Line 86: [91m[1m────────────────────────────────────────────────────────────────[22m[39m
+Line 87: ​
+Line 88:   [31m[1mError message[22m[39m
+Line 89:   Command failed with exit code 1: npm run build && node scripts/build-functions.js
+Line 90: ​
+Line 91:   [31m[1mError location[22m[39m
+Line 92:   In build.command from netlify.toml:
+Line 93:   npm run build && node scripts/build-functions.js
+Line 94: ​
+Line 95:   [31m[1mResolved config[22m[39m
+Line 96:   build:
+Line 97:     command: npm run build && node scripts/build-functions.js
+Line 98:     commandOrigin: config
+Line 99:     environment:
+Line 100:       - AD_ACCOUNT_ID
+Line 101:       - META_ACCESS_TOKEN
+Line 113:       external_node_modules:
+Line 114:         - express
+Line 115:         - drizzle-orm
+Line 116:         - "@neondatabase/serverless"
+Line 117:         - resend
+Line 118:         - "@supabase/supabase-js"
+Line 119:       node_bundler: esbuild
+Line 120:   functionsDirectory: /opt/build/repo/netlify/functions
+Line 121:   redirects:
+Line 122:     - from: /api/*
+      status: 200
+      to: /.netlify/functions/api/:splat
+    - from: /*
+      status: 200
+      to: /index.
+Line 123: Build failed due to a user error: Build script returned non-zero exit code: 2
+Line 124: Failing build: Failed to build site
+Line 125: Finished processing build request in 11.359s
