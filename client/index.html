@@ -96,18 +96,25 @@
 
     <!-- Meta CAPI Bridge -->
     <script>
-      function sendToMetaCAPI(eventName) {
-        var eventId = 'nirv_' + Date.now();
+      // sendToMetaCAPI(eventName, extraData?)
+      // extraData: optional { email, phone, firstName, lastName } for advanced matching
+      // The Pixel init block above already guards against double-init via if(f.fbq)return
+      window.sendToMetaCAPI = function(eventName, extraData) {
+        var eventId = 'nirvanist-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         if (window.fbq) {
           fbq('track', eventName, {}, { eventID: eventId });
         }
+        var payload = Object.assign(
+          { eventName: eventName, eventId: eventId, url: window.location.href },
+          extraData || {}
+        );
         fetch('/.netlify/functions/meta-proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ eventName: eventName, eventId: eventId, url: window.location.href })
+          body: JSON.stringify(payload)
         }).catch(function() {});
-      }
-      sendToMetaCAPI('PageView');
+      };
+      window.sendToMetaCAPI('PageView');
     </script>
   </head>
   <body>
