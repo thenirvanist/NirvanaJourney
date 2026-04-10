@@ -77,7 +77,7 @@ export default function UnderstandingIndianPhilosophies() {
   return (
     <div className="min-h-screen overflow-x-hidden">
       <Seo
-        title="Understanding Indian Philosophies - The Nirvanist"
+        title="Understanding Indian Philosophies"
         description="Explore the rich tapestry of Indian philosophical traditions from the Vedas to the Puranas, and understand the core concepts that unite them."
       />
       <SchemaOrg schema={breadcrumb} />

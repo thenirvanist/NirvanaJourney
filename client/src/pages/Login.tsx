@@ -14,6 +14,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { SocialAuth } from "@/components/SocialAuth";
 import { useTranslation } from "@/hooks/useTranslation";
+import Seo from "@/components/Seo";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -95,6 +96,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <Seo title="Login" noIndex />
       <Navigation />
       
       <div className="pt-24 pb-20">

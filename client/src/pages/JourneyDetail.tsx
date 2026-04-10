@@ -393,7 +393,7 @@ export default function JourneyDetail() {
   return (
     <div className="min-h-screen bg-white">
       <Seo
-        title={`${journey.title} — Sacred Journey · The Nirvanist`}
+        title={`${journey.title} — Sacred Journey`}
         description={journey.description}
         ogImage={heroImage}
       />

@@ -12,6 +12,7 @@ import { supabase } from "@/lib/supabase";
 import { forgotPasswordSchema, type ForgotPasswordData } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 export default function ForgotPassword() {
   const [emailSent, setEmailSent] = useState(false);
@@ -131,6 +132,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <Seo title="Reset Your Password" noIndex />
       <Navigation />
       
       <div className="pt-24 pb-20">

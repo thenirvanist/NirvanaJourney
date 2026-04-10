@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
+import Seo from "@/components/Seo";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -56,6 +57,7 @@ export default function ConfirmNewsletter() {
 
   return (
     <div className="min-h-screen bg-[#F7F2E8] flex items-center justify-center px-4">
+      <Seo title="Newsletter Confirmed" description="You've successfully subscribed to The Nirvanist newsletter. Welcome to our spiritual community." />
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 text-center">
         {status === 'loading' && (
           <>

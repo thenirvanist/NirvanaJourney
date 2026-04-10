@@ -20,7 +20,7 @@ export default function AboutUs() {
   return (
     <div className="min-h-screen">
       <Seo
-        title="About Us - The Nirvanist"
+        title="About Us"
         description="Meet Pratik Malia and Celine Delacharlerie, the founders of The Nirvanist, an Indian-Belgian couple dedicated to sharing Indian philosophical wisdom."
       />
       <SchemaOrg schema={breadcrumb} />

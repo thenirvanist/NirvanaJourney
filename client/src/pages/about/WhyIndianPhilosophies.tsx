@@ -19,7 +19,7 @@ export default function WhyIndianPhilosophies() {
   return (
     <div className="min-h-screen">
       <Seo
-        title="Why Indian Philosophies - The Nirvanist"
+        title="Why Indian Philosophies"
         description="Discover why Indian philosophy offers a wealth of inspiring thoughts and wisdom to help make sense of our existence and live with more peace and happiness."
       />
       <SchemaOrg schema={breadcrumb} />

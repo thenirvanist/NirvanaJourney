@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useTranslation } from "@/hooks/useTranslation";
+import Seo from "@/components/Seo";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -116,6 +117,10 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Contact Us"
+        description="Get in touch with The Nirvanist team. We'd love to hear from you about spiritual journeys, retreats, and community gatherings."
+      />
       <Navigation />
       
       {/* Hero Section */}

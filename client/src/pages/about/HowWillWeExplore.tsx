@@ -49,7 +49,7 @@ export default function HowWillWeExplore() {
   return (
     <div className="min-h-screen">
       <Seo
-        title="How Will We Explore - The Nirvanist"
+        title="How We Explore"
         description="Discover how we'll explore Indian philosophy together through newsletters, virtual satsangs, group sessions, and ashram visits."
       />
       <SchemaOrg schema={breadcrumb} />

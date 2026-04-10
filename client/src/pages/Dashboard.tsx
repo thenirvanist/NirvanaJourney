@@ -10,6 +10,7 @@ import { supabase } from "@/lib/supabase";
 import type { Sage, Ashram, BlogPost, Journey, DailyWisdom } from "@shared/schema";
 import Navigation from "@/components/Navigation";
 import { useTranslation } from "@/hooks/useTranslation";
+import Seo from "@/components/Seo";
 import { useToast } from "@/hooks/use-toast";
 import SatsangProfileModal from "@/components/SatsangProfileModal";
 
@@ -268,6 +269,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-amber-50">
+      <Seo title="My Dashboard" noIndex />
       <Navigation />
       <div className="container mx-auto px-4 py-8 pt-24">
         <div className="max-w-6xl mx-auto">

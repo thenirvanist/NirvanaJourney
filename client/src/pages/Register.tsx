@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { SocialAuth } from "@/components/SocialAuth";
 import { SupabaseSignUp } from "@/components/SupabaseSignUp";
 import { useTranslation } from "@/hooks/useTranslation";
+import Seo from "@/components/Seo";
 
 export default function Register() {
   const { t } = useTranslation();
@@ -63,6 +64,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <Seo title="Register" noIndex />
       <Navigation />
       
       <div className="pt-24 pb-20">

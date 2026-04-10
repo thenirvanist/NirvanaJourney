@@ -9,6 +9,7 @@ import { useAllDailyWisdom } from "@/hooks/useSupabaseQuery";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import html2canvas from "html2canvas";
 import { useTranslation } from "@/hooks/useTranslation";
+import Seo from "@/components/Seo";
 
 export default function DailyQuotes() {
   const { t } = useTranslation();
@@ -128,6 +129,10 @@ export default function DailyQuotes() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Seo
+        title="Daily Wisdom Quotes"
+        description="Receive daily spiritual wisdom quotes from enlightened sages and teachers across traditions. Download and share your favorite quotes."
+      />
       <Navigation />
       
       {/* Hero Section */}
