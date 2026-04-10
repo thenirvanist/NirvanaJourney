@@ -78,7 +78,7 @@ function Router() {
 function App() {
   return (
     <div className="min-h-screen bg-background">
-      <SchemaOrg schema={[websiteSchema, organizationSchema]} />
+      <SchemaOrg schema={[websiteSchema, organizationSchema]} id="schema-org-global" />
       <SkipLink />
       <QueryClientProvider client={queryClient}>
         <LanguageProvider>

@@ -144,19 +144,18 @@ type Schema = WebSiteSchema | OrganizationSchema | ArticleSchema | PersonSchema 
 
 interface SchemaOrgProps {
   schema: Schema | Schema[];
+  id?: string;
 }
 
-const SCHEMA_SCRIPT_ID = "schema-org-jsonld";
-
-export default function SchemaOrg({ schema }: SchemaOrgProps) {
+export default function SchemaOrg({ schema, id = "schema-org-jsonld" }: SchemaOrgProps) {
   useEffect(() => {
-    const existingScript = document.getElementById(SCHEMA_SCRIPT_ID);
+    const existingScript = document.getElementById(id);
     if (existingScript) {
       existingScript.remove();
     }
 
     const script = document.createElement("script");
-    script.id = SCHEMA_SCRIPT_ID;
+    script.id = id;
     script.type = "application/ld+json";
     
     const schemaData = Array.isArray(schema) ? schema : [schema];
@@ -165,12 +164,12 @@ export default function SchemaOrg({ schema }: SchemaOrgProps) {
     document.head.appendChild(script);
 
     return () => {
-      const scriptToRemove = document.getElementById(SCHEMA_SCRIPT_ID);
+      const scriptToRemove = document.getElementById(id);
       if (scriptToRemove) {
         scriptToRemove.remove();
       }
     };
-  }, [schema]);
+  }, [schema, id]);
 
   return null;
 }
