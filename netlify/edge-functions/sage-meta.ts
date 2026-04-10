@@ -1,7 +1,12 @@
 import type { Context } from "@netlify/edge-functions";
 
 function slugify(name: string): string {
-  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function esc(s: string): string {
