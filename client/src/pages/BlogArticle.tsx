@@ -1,4 +1,5 @@
 import { useParams, Link } from "wouter";
+import { slugify } from "@/lib/slugify";
 import { Clock, Calendar, User, ArrowLeft, Share2, Twitter, Facebook, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -217,7 +218,7 @@ export default function BlogArticle() {
                       const matchingSage = findSageByName(post.author);
                       if (matchingSage) {
                         return (
-                          <Link href={`/sages/${matchingSage.id}`}>
+                          <Link href={`/sages/${slugify(matchingSage.name)}`}>
                             <span className="font-medium text-[hsl(75,64%,39%)] hover:text-[hsl(75,64%,29%)] underline cursor-pointer transition-colors">
                               {post.author}
                             </span>

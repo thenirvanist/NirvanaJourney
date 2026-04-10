@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 import type { Journey, Sage, Ashram, Meetup, Testimonial, DailyWisdom, BlogPost } from "@shared/schema";
+import { slugify } from "@/lib/slugify";
 
 /**
  * Direct Supabase query hooks that bypass backend API
@@ -72,6 +73,24 @@ export function useSage(id: number) {
       return data;
     },
     enabled: !!id,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useSageBySlug(slug: string) {
+  return useQuery<Sage[], Error, Sage | undefined>({
+    queryKey: ["supabase", "sages"],
+    queryFn: async () => {
+      if (!supabase) throw new Error("Supabase not configured");
+      const { data, error } = await supabase
+        .from("sages")
+        .select("*")
+        .order("id", { ascending: true });
+      if (error) throw error;
+      return data || [];
+    },
+    select: (sages) => sages.find((s) => slugify(s.name) === slug),
+    enabled: !!slug,
     staleTime: 5 * 60 * 1000,
   });
 }

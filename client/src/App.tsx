@@ -50,7 +50,7 @@ function Router() {
       <Route path="/inner-nutrition" component={InnerNutrition} />
       <Route path="/inner-nutrition/:slug" component={BlogArticle} />
       <Route path="/sages" component={Sages} />
-      <Route path="/sages/:id" component={SageDetail} />
+      <Route path="/sages/:slug" component={SageDetail} />
       <Route path="/ashrams" component={Ashrams} />
       <Route path="/ashrams/:id" component={AshramDetail} />
       <Route path="/contact" component={Contact} />

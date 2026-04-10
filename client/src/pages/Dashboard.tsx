@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
+import { slugify } from "@/lib/slugify";
 import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -386,7 +387,7 @@ export default function Dashboard() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {bookmarkedSages.map((sage) => (
-                      <Link key={sage.id} href={`/sages/${sage.id}`}>
+                      <Link key={sage.id} href={`/sages/${slugify(sage.name)}`}>
                         <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer" data-testid={`card-sage-${sage.id}`}>
                           <div className="relative overflow-hidden">
                             <img

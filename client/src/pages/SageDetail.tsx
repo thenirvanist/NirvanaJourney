@@ -10,15 +10,14 @@ import Seo from "@/components/Seo";
 import SchemaOrg, { createBreadcrumbSchema, createPersonSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useSage, useBlogPostsByAuthor } from "@/hooks/useSupabaseQuery";
+import { useSageBySlug, useBlogPostsByAuthor } from "@/hooks/useSupabaseQuery";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export default function SageDetail() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const sageId = parseInt(id || "0");
+  const { slug } = useParams<{ slug: string }>();
 
-  const { data: sage, isLoading, error } = useSage(sageId);
+  const { data: sage, isLoading, error } = useSageBySlug(slug || "");
   const { data: sageArticles = [] } = useBlogPostsByAuthor(sage?.name || "");
 
 
@@ -64,7 +63,7 @@ export default function SageDetail() {
     );
   }
 
-  const sageUrl = `https://www.thenirvanist.com/sages/${sageId}`;
+  const sageUrl = `https://www.thenirvanist.com/sages/${slug}`;
   
   const sageBreadcrumb = createBreadcrumbSchema([
     { name: "Home", url: "https://www.thenirvanist.com" },
@@ -84,7 +83,7 @@ export default function SageDetail() {
   return (
     <div className="min-h-screen">
       <Seo 
-        title={`${sage.name} - Biography & Teachings`}
+        title={`Biography of ${sage.name} | The Nirvanist`}
         description={sage.description || `Learn about ${sage.name}, their life story, spiritual teachings, and profound wisdom that continues to guide seekers on their spiritual journey.`}
         ogImage={sage.image}
         ogType="profile"
@@ -106,7 +105,7 @@ export default function SageDetail() {
             <div className="md:col-span-1">
               <img 
                 src={sage.image} 
-                alt={`Portrait of ${sage.name}, spiritual teacher`}
+                alt={`Portrait of ${sage.name}`}
                 className="w-full h-80 object-cover rounded-xl shadow-lg"
               />
             </div>

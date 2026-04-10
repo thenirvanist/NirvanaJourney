@@ -10,6 +10,7 @@ import SchemaOrg, { createBreadcrumbSchema } from "@/components/SchemaOrg";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { useSages } from "@/hooks/useSupabaseQuery";
+import { slugify } from "@/lib/slugify";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const sagesBreadcrumb = createBreadcrumbSchema([
@@ -215,11 +216,11 @@ export default function Sages() {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {filteredSages.map((sage) => (
-                <Link key={sage.id} href={`/sages/${sage.id}`} className="block">
+                <Link key={sage.id} href={`/sages/${slugify(sage.name)}`} className="block">
                   <Card className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 h-[620px] flex flex-col cursor-pointer">
                     <img 
                       src={sage.image} 
-                      alt={sage.name}
+                      alt={`Portrait of ${sage.name}`}
                       className="w-full h-48 object-cover flex-shrink-0"
                     />
                     <div className="p-5 flex flex-col justify-between h-full">

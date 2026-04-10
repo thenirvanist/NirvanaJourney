@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { slugify } from "@/lib/slugify";
 import { BookmarkButton } from "./BookmarkButton";
 import { useSages } from "@/hooks/useSupabaseQuery";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -66,7 +67,7 @@ export default function SimpleSagesSection() {
           {sages.slice(0, 3).map((sage) => (
             <Link 
               key={sage.id} 
-              href={`/sages/${sage.id}`} 
+              href={`/sages/${slugify(sage.name)}`} 
               onClick={() => window.scrollTo(0, 0)}
               className="block"
             >
