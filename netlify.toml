@@ -9,6 +9,10 @@
   path = "/sages/*"
   function = "sage-meta"
 
+[[edge_functions]]
+  path = "/sitemap.xml"
+  function = "sitemap"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"

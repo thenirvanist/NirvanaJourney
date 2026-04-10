@@ -1,0 +1,28 @@
+# Robots.txt for The Nirvanist - Spiritual Tourism Platform
+# https://www.thenirvanist.com
+
+User-agent: *
+Allow: /
+
+# Disallow authentication and private pages
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /auth/
+Disallow: /api/
+
+# Disallow admin and internal paths
+Disallow: /admin/
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /.git/
+
+# Crawl-delay for general bots
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://www.thenirvanist.com/sitemap.xml
+
+# Preferred domain
+Host: https://www.thenirvanist.com
