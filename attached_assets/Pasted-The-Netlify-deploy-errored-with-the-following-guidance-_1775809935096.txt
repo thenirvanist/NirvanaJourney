@@ -1,0 +1,68 @@
+The Netlify deploy errored, with the following guidance provided:
+
+Relevant log lines
+- [line 5](#L5) shows Netlify failing while resolving the config file: "When resolving config file /opt/build/repo/netlify.toml".
+- [line 6](#L6) shows the build failing because the configuration could not be parsed.
+
+Diagnosis — error type and cause
+- This is a Netlify configuration parsing error: netlify.toml is invalid TOML (syntax error or contains invalid / non‑UTF8 characters) or Netlify cannot read the file (file missing or not committed).
+- The truncated message "Could n..." in [line 5](#L5) is consistent with a TOML parse failure or a file-read failure during Netlify's config resolution.
+
+Solution — how to fix it
+1. Verify the file exists and is committed
+   - Confirm netlify.toml is present at the repository root and committed. Example file URL: https://github.com/thenirvanist/NirvanaJourney/blob/main/netlify.toml
+   - If the file is missing, either add a valid netlify.toml or remove any broken reference that expects it.
+
+2. Inspect and fix syntax errors in netlify.toml
+   - Open netlify.toml and look for common TOML issues: unclosed quotes, missing =, wrong table headers (should be [build], [[plugins]] etc.), stray non‑ASCII characters (Byte Order Mark), or JSON syntax instead of TOML.
+   - Replace or correct it with a minimal valid example for your project. Example minimal netlify.toml (adjust publish path and command to match your project):
+
+```toml
+[build]
+  command = "npm run build"
+  publish = "public"
+```
+
+   - If your project is a common framework, adjust publish and command accordingly (e.g., "npm run build" / "dist" or "next build" / ".next" etc.).
+
+3. Validate the TOML locally
+   - Use an online TOML validator or a local CLI tool to check syntax.
+   - You can also use Netlify CLI to see the parsing error locally:
+
+```bash
+# install netlify CLI if needed
+npm install -g netlify-cli
+
+# run a local build to see detailed errors
+netlify build
+```
+
+4. Remove hidden characters / normalize file encoding
+   - Ensure netlify.toml is saved as UTF‑8 without BOM. Some editors add a BOM which can cause parse failures.
+   - On Unix/macOS you can check and remove BOM:
+```bash
+# show BOM bytes if present
+xxd -g 1 netlify.toml | head
+
+# remove BOM
+tail -c +4 netlify.toml > netlify_fixed.toml && mv netlify_fixed.toml netlify.toml
+```
+
+5. Commit and push fixes
+   - git add netlify.toml && git commit -m "Fix netlify.toml syntax" && git push
+   - Trigger a new Netlify deploy.
+
+If you still get a parse error after these steps, paste the contents of netlify.toml here (or the exact full Netlify error) and I’ll point out the exact syntax problem.
+
+The relevant error logs are:
+
+Line 0: build-image version: 37c27078fd36bc14c3fa8836175bd77aa6640872 (noble-new-builds)
+Line 1: buildbot version: ee2c327a2718c921510fd736205acbb9fe49aa61
+Line 2: Building with cache
+Line 3: Starting to prepare the repo for build
+Line 4: Preparing Git Reference refs/heads/main
+Line 5: Failed during stage 'Reading and parsing configuration files': 
+When resolving config file /opt/build/repo/netlify.toml:
+Could n
+Line 6: Failing build: Failed to parse configuration
+Line 7: Finished processing build request in 3.099s
